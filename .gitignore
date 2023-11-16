@@ -1,0 +1,17 @@
+.DS_Store
+*.pyc
+*~
+~*.xlsx
+package-lock.json
+local_settings.py
+web.config
+wfastcgi.py
+
+.idea/
+.store/
+node_modules/
+bin/
+.venv/
+.env/
+.vscode/
+.store/

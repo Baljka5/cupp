@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>PP Management</title>
+    <link rel="shortcut icon" type="/static/images/favicon.png" href="/static/images/favicon.png"/>
+
+    <!-- Stylesheets -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet"
+          type="text/css">
+    <link href="/static/css/icons/icomoon/styles.css" rel="stylesheet" type="text/css">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="/static/css/bootstrap_limitless.min.css" rel="stylesheet" type="text/css">
+    <link href="/static/css/layout.min.css" rel="stylesheet" type="text/css">
+    <link href="/static/css/components.min.css" rel="stylesheet" type="text/css">
+    <link href="/static/css/colors.min.css" rel="stylesheet" type="text/css">
+    <link href="/static/css/custom.css" rel="stylesheet" type="text/css">
+    <!-- /stylesheets -->
+
+    <!-- Core JS files -->
+    <script src="/static/js/main/jquery.min.js"></script>
+    <script src="/static/js/main/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/plugins/loaders/blockui.min.js"></script>
+    <!-- /core JS files -->
+
+    <!-- Theme JS files -->
+    <script src="/static/js/plugins/visualization/d3/d3.min.js"></script>
+    <script src="/static/js/plugins/visualization/d3/d3_tooltip.js"></script>
+    <script src="/static/js/plugins/forms/styling/switchery.min.js"></script>
+    <script src="/static/js/plugins/forms/selects/bootstrap_multiselect.js"></script>
+    <script src="/static/js/plugins/ui/moment/moment.min.js"></script>
+    <script src="/static/js/plugins/pickers/anytime.min.js"></script>
+    <script src="/static/js/plugins/pickers/daterangepicker.js"></script>
+    <script src="/static/js/plugins/sliders/ion_rangeslider.min.js"></script>
+    <script src="/static/js/plugins/forms/styling/uniform.min.js"></script>
+    <script src="/static/js/plugins/forms/selects/select2.min.js"></script>
+    <script src="/static/js/plugins/media/fancybox.min.js"></script>
+
+    <script src="/static/js/app.js"></script>
+    <script src="/static/js/custom.js"></script>
+    <!-- /theme JS files -->
+</head>
+
+<body class="navbar-top">
+
+<!-- Main navbar -->
+<div class="navbar navbar-expand-md navbar-dark bg-purple fixed-top">
+    <div class="navbar-brand">
+        <a href="{% url 'map' %}" class="d-inline-block">
+            <img src="/static/images/logo.png" alt="xbook logo">
+        </a>
+    </div>
+
+    <div class="d-md-none">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-mobile"
+                aria-expanded="true">
+            <i class="icon-menu"></i>
+        </button>
+    </div>
+
+    <div class="collapse navbar-collapse" id="navbar-mobile">
+        {% if user.is_authenticated %}
+            <ul class="navbar-nav ml-md-auto">
+                <li class="nav-item">
+                    <a href="{% url 'map' %}" class="navbar-nav-link">
+                        <i class="icon-location4 mr-1"></i>
+                        <span>Points</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'point_create' %}" class="navbar-nav-link">
+                        <i class="icon-plus22 mr-1"></i>
+                        <span>Add Point</span>
+                    </a>
+                </li>
+                {% if user.is_superuser %}
+                    <li class="nav-item">
+                        <a href="/admin/auth/" class="navbar-nav-link">
+                            <i class="icon-cog mr-1"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a href="{% url 'password_change' %}" class="navbar-nav-link">
+                        <i class="icon-key mr-1"></i>
+                        <span>Change Password</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'logout' %}" class="navbar-nav-link">
+                        <i class="icon-switch2 mr-1"></i>
+                        <span>Sign out</span>
+                    </a>
+                </li>
+            </ul>
+        {% endif %}
+    </div>
+</div>
+<!-- /main navbar -->
+
+<!-- Page content -->
+<div class="page-content">
+    <!-- Main content -->
+    <div class="content-wrapper">
+        {% block header %}
+        {% endblock %}
+
+        {% block content %}
+        {% endblock %}
+
+        {% block footer %}
+        {% endblock %}
+    </div>
+</div>
+<!-- /page content -->
+
+</body>
+</html>

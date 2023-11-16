@@ -1,0 +1,310 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load humanize %}
+
+{% block header %}
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <div class="row">
+            <div class="col-md-5">
+                <div id="mapContainer" class="border-1 border-purple-300" data-lat="{{ object.lat }}"
+                     data-lng="{{ object.lon }}"></div>
+            </div>
+            <div class="col-md-7">
+                <div class="card shadow-none border-0 m-0">
+                    <div class="card-header header-elements-inline">
+                        <h5 class="card-title">
+                            Detail Point
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        {% if object.type == 'PP' %}
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Created by:</label>
+                                    <div class="form-control-plaintext pt-0">
+                                        {% if object.created_by.first_name and object.created_by.last_name %}
+                                            {{ object.created_by.last_name.0 }}.{{ object.created_by.first_name }}
+                                        {% elif object.created_by.first_name %}
+                                            {{ object.created_by.first_name }}
+                                        {% else %}
+                                            {{ object.created_by.username }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Created date:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.created_date|date:'Y/m/d'|default:'-' }}</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Modiffied date:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.modified_date|date:'Y/m/d'|default:'-' }}</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Type:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.get_type_display }}</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Address or Branch name:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.address|default:'-' }}</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Size:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.size|default:0 }}м2</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Landlord name:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.owner_name|default:'-' }}</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Landlord phone:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.owner_phone|default:'-' }}</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Landlord email:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.owner_email|default:'-' }}</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Location grade:</label>
+                                    <div class="form-control-plaintext pt-0">Grade {{ object.grade|default:'-' }}</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Base rent rate:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.base_rent_rate|default:0|intcomma }}₮</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Maximum rent rate:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.max_rent_rate|default:0|intcomma }}₮</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Availability:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.availability|default:'-' }}</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Availabile date:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.available_date|date:'Y/m/d'|default:'-' }}</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Turnover rent percentage:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.turnover_rent_percent|default:0 }}%</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Proposed layout:</label>
+                                    <div class="form-control-plaintext pt-0">
+                                        {% if object.proposed_layout %}
+                                            <a href="{{ object.proposed_layout.url }}" class="text-purple">
+                                                <i class="icon-file-download mr-1"></i>Download
+                                            </a>
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">ISR excel file:</label>
+                                    <div class="form-control-plaintext pt-0">
+                                        {% if object.isr_file %}
+                                            <a href="{{ object.isr_file.url }}" class="text-purple">
+                                                <i class="icon-file-download mr-1"></i>Download
+                                            </a>
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">P&L excel file:</label>
+                                    <div class="form-control-plaintext pt-0">
+                                        {% if object.pl_file %}
+                                            <a href="{{ object.pl_file.url }}" class="text-purple">
+                                                <i class="icon-file-download mr-1"></i>Download
+                                            </a>
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Deposit:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.deposit|default:0|intcomma }}₮</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Breakeven point:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.bep|default:0 }}</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Expected daily sales:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.expected_sales|default:0|intcomma }}₮</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Average passers an hour:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.passers|default:0 }}</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Households:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.hh|default:0 }}</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Office people:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.office|default:0 }}</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">School/University students:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.students|default:0 }}</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Radius by meter /limit 1km/:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.radius|default:0 }}м</div>
+                                </div>
+                            </div>
+
+                            <hr class="mt-0">
+
+                            <label class="font-weight-semibold mb-1">
+                                Photos:
+                            </label>
+                            <div class="row">
+                                {% for obj in object.photos.all %}
+                                    <div class="col-sm-4">
+                                        <div class="card mt-2 mb-0">
+                                            <div class="card-img-actions m-0">
+                                                <img class="card-img img-fluid"
+                                                     src="{{ obj.photo.url }}" alt="">
+                                                <div class="card-img-actions-overlay card-img">
+                                                    <a href="{{ obj.photo.url }}"
+                                                       class="btn btn-outline bg-white text-white border-white border-0 btn-icon rounded-round"
+                                                       data-popup="lightbox" rel="group">
+                                                        <i class="icon-zoomin3"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% elif object.type == 'CU' %}
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Type:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.get_type_display }}</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Address or Branch name:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.address|default:'-' }}</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Size:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.size|default:0 }}м2</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Expected daily sales:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.expected_sales|default:0|intcomma }}₮</div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Type:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.get_type_display }}</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Address or Branch name:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.address|default:'-' }}</div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer bg-transparent border-top-0 pt-0">
+                        <div align="right">
+                            <a href="{% url 'map' %}" class="btn btn-link text-purple-300">
+                                Back
+                            </a>
+                            <a href="{% url 'point_edit' object.id %}" class="btn btn-sm bg-purple mr-2">
+                                Edit
+                            </a>
+                            <a href="{% url 'point_delete' object.id %}" class="btn btn-sm bg-danger">
+                                Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+      var map;
+
+      function initMap() {
+        var position = {lat: 47.9156, lng: 106.8910};
+        var lat = $('#mapContainer').data('lat');
+        var lng = $('#mapContainer').data('lng')
+        if (lat && lng) {
+          position.lat = lat;
+          position.lng = lng;
+        }
+
+        var mapOptions = {
+          center: position,
+          zoom: 13,
+          scrollwheel: false,
+          zoom: 13,
+          mapTypeControl: true,
+          fullscreenControl: false,
+          mapTypeControlOptions: {
+            mapTypeIds: ['roadmap', 'satellite'],
+            position: google.maps.ControlPosition.TOP_LEFT
+          },
+          controlSize: 24,
+          styles: [{
+            "featureType": "landscape",
+            "stylers": [{"saturation": -100}, {"lightness": 65}, {"visibility": "on"}]
+          }, {
+            "featureType": "poi",
+            "stylers": [{"saturation": -100}, {"lightness": 51}, {"visibility": "simplified"}]
+          }, {
+            "featureType": "road.highway",
+            "stylers": [{"saturation": -100}, {"visibility": "simplified"}]
+          }, {
+            "featureType": "road.arterial",
+            "stylers": [{"saturation": -100}, {"lightness": 30}, {"visibility": "on"}]
+          }, {
+            "featureType": "road.local",
+            "stylers": [{"saturation": -100}, {"lightness": 40}, {"visibility": "on"}]
+          }, {
+            "featureType": "transit",
+            "stylers": [{"saturation": -100}, {"visibility": "simplified"}]
+          }, {"featureType": "administrative.province", "stylers": [{"visibility": "off"}]}, {
+            "featureType": "water",
+            "elementType": "labels",
+            "stylers": [{"visibility": "on"}, {"lightness": -25}, {"saturation": -100}]
+          }, {
+            "featureType": "water",
+            "elementType": "geometry",
+            "stylers": [{"hue": "#ffff00"}, {"lightness": -25}, {"saturation": -97}]
+          }]
+        };
+
+        map = new google.maps.Map(document.getElementById('mapContainer'), mapOptions);
+        var marker = new google.maps.Marker({
+          position: position,
+          map: map,
+          draggable: true,
+        });
+        google.maps.event.addListener(marker, 'dragend', function (event) {
+          $('#id_lat').val(event.latLng.lat());
+          $('#id_lon').val(event.latLng.lng());
+        });
+      }
+
+      $(function () {
+        $('[data-popup="lightbox"]').fancybox({
+          padding: 3
+        });
+      });
+    </script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBls3a4Jl1HY60FhdpaSPxBrVBg2D4EYAY&callback=initMap"
+            type="text/javascript"></script>
+{% endblock %}

@@ -1,0 +1,164 @@
+.form-group {
+  margin-bottom: 1rem;
+}
+
+label {
+  margin-bottom: .4rem;
+}
+
+.form-control:not(.border-bottom-1):not(.border-bottom-2):not(.border-bottom-3):focus {
+  border-color: #90a4ae;
+}
+
+.form-control:focus {
+  outline: 0;
+}
+
+.alert {
+  overflow: hidden;
+  padding: 12px 30px 12px 15px;
+}
+
+.alert ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 0px;
+}
+
+.alert ul li {
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.alert ul li:last-child {
+  margin-bottom: 0px;
+}
+
+.alert .close {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  opacity: .3;
+}
+
+.nav-tabs-bottom .nav-link.active:before {
+  background-color: #673ab7;
+}
+
+.select2-results__option[aria-selected=true] {
+  color: #fff;
+  background-color: #673ab7;
+}
+
+.daterangepicker td.active, .daterangepicker td.active:focus, .daterangepicker td.active:hover {
+  color: #fff;
+  background-color: #673ab7;
+  border-radius: .1875rem;
+}
+
+.irs-bar {
+  position: absolute;
+  display: block;
+  top: 2.6875rem;
+  left: 0;
+  width: 0;
+  height: .375rem;
+  background-color: #673ab7;
+  border-radius: 100px;
+}
+
+.irs-from, .irs-single, .irs-to {
+  top: 10px;
+  left: 0;
+  white-space: nowrap;
+  color: #000;
+  font-size: .4875rem;
+  line-height: 1;
+  padding: .3rem;
+  background-color: #eee;
+  border-radius: .1875rem;
+}
+
+.irs-from:after, .irs-single:after, .irs-to:after {
+  border-top-color: #eee;
+}
+
+.irs-max, .irs-min {
+  color: #777;
+  font-size: .4875rem;
+  line-height: 1;
+  top: 12px;
+  padding: .3em;
+  background-color: #eee;
+  border-radius: .1875rem;
+}
+
+.irs-slider:focus:after, .irs-slider:hover:after {
+    background-color: #673ab7;
+}
+
+@media (min-width: 576px) {
+  .login-form {
+    width: 19rem;
+  }
+}
+
+.sidebar {
+  width: 13.875rem;
+}
+
+.file-input {
+  padding: 6px 7px;
+  font-size: 12px;
+}
+
+.file-input::-webkit-file-upload-button {
+  visibility: hidden;
+}
+
+.file-input::before {
+  content: 'Choose file';
+  color: #666;
+  background: #eee;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 3px 6px;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+#id_type_filter {
+  position: absolute;
+  top: 57px;
+  left: 7px;
+  border-radius: 2px;
+  width: 185px;
+}
+
+#second_filter {
+  position: absolute;
+  top: 90px;
+  right: 7px;
+  border-radius: 2px
+}
+
+#third_filter {
+  position: absolute;
+  top: 365px;
+  right: 7px;
+  border-radius: 2px;
+  width: 220px;
+}
+
+#mapContainer {
+  height: 100%;
+  width: 100%;
+  border-radius: 3px;
+}
+
+#map_daterange {
+  width: 200px;
+}

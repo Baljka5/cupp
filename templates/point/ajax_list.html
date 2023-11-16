@@ -1,0 +1,10 @@
+{% for point in object_list %}
+    <ul data-lat="{{ point.lat }}"
+        data-lon="{{ point.lon }}"
+        data-title="{{ point.name }}"
+        data-id="{{ point.id }}"
+        data-type="{{ point.type }}"
+        data-radius="{{ point.radius|default:'' }}"
+        >
+    </ul>
+{% endfor %}

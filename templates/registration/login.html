@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block content %}
+    <div class="content d-flex justify-content-center mt-3">
+        <form class="login-form" method="post" autocomplete="off">
+            {% include 'includes/messages.html' %}
+            {% csrf_token %}
+            <div class="card mb-0 border-0">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>Хэрэглэгчийн нэр</label>
+                        {% render_field form.username class+="form-control" %}
+                    </div>
+
+                    <div class="form-group">
+                        <label>Нууц үг</label>
+                        {% render_field form.password class+="form-control" %}
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn bg-purple btn-block">
+                            Нэвтрэх
+                        </button>
+                    </div>
+
+                    <div class="text-center mb-0">
+                        <a href="{% url 'password_reset' %}" class="text-purple-300">Нууц үгээ мартсан?</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

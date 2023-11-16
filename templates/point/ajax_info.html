@@ -1,0 +1,95 @@
+{% load humanize %}
+
+<div style="width: 300px;" class="font-size-sm">
+    <div class="mb-2 mt-1">
+        <div class="text-muted font-size-xs">{{ object.get_type_display }}</div>
+        <div class="font-weight-semibold font-size-base">{{ object.address|default:'-----' }}</div>
+    </div>
+    {% if object.type == 'PP' %}
+        <div class="card border-0">
+            <div class="card-body bg-light p-2">
+                <div class="d-sm-flex flex-sm-wrap mb-2">
+                    <div class="font-weight-light">Created by:</div>
+                    <div class="ml-sm-auto mt-2 mt-sm-0">
+                        {% if object.created_by.first_name and object.created_by.last_name %}
+                            {{ object.created_by.last_name.0 }}.{{ object.created_by.first_name }}
+                        {% elif object.created_by.first_name %}
+                            {{ object.created_by.first_name }}
+                        {% else %}
+                            {{ object.created_by.username }}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="d-sm-flex flex-sm-wrap mb-2">
+                    <div class="font-weight-light">Registered date:</div>
+                    <div class="ml-sm-auto mt-2 mt-sm-0">
+                        {{ object.created_date|date:'Y/m/d' }}
+                    </div>
+                </div>
+                <div class="d-sm-flex flex-sm-wrap mb-2">
+                    <div class="font-weight-light">Landlord name:</div>
+                    <div class="ml-sm-auto mt-2 mt-sm-0">{{ object.owner_name|default:'-' }}</div>
+                </div>
+
+                <div class="d-sm-flex flex-sm-wrap mb-2">
+                    <div class="font-weight-light">Location grade:</div>
+                    <div class="ml-sm-auto mt-2 mt-sm-0">Grade {{ object.grade|default:'-' }}</div>
+                </div>
+
+                <div class="d-sm-flex flex-sm-wrap mb-2">
+                    <div class="font-weight-light">Size:</div>
+                    <div class="ml-sm-auto mt-2 mt-sm-0">{{ object.size }}м2</div>
+                </div>
+
+                <div class="d-sm-flex flex-sm-wrap mb-2">
+                    <div class="font-weight-light">Base rent:</div>
+                    <div class="ml-sm-auto mt-2 mt-sm-0">{{ object.base_rent_rate|default:0|intcomma }}₮</div>
+                </div>
+
+                <div class="d-sm-flex flex-sm-wrap mb-2">
+                    <div class="font-weight-light">Expected daily sales:</div>
+                    <div class="ml-sm-auto mt-2 mt-sm-0">{{ object.expected_sales|default:0|intcomma }}₮</div>
+                </div>
+
+                <div class="row mt-2">
+                    {% for obj in object.photos.all %}
+                        <div class="col-sm-6">
+                            <div class="card mt-2 mb-0">
+                                <div class="card-img-actions m-0">
+                                    <img class="card-img img-fluid"
+                                         src="{{ obj.photo.url }}" alt="">
+                                    <div class="card-img-actions-overlay card-img">
+                                        <a href="{{ obj.photo.url }}"
+                                           class="btn btn-outline bg-white text-white border-white border-0 btn-icon rounded-round"
+                                           data-popup="lightbox" rel="group">
+                                            <i class="icon-zoomin3"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% elif object.type == 'CU' %}
+        <div class="card border-0">
+            <div class="card-body bg-light p-2">
+                <div class="d-sm-flex flex-sm-wrap mb-2">
+                    <div class="font-weight-light">Size:</div>
+                    <div class="ml-sm-auto mt-2 mt-sm-0">{{ object.size }}м2</div>
+                </div>
+
+                <div class="d-sm-flex flex-sm-wrap mb-2">
+                    <div class="font-weight-light">Expected daily sales:</div>
+                    <div class="ml-sm-auto mt-2 mt-sm-0">{{ object.expected_sales|default:0|intcomma }}₮</div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <div align="right" class="mb-1 font-size-sm">
+        <a href="{% url 'point_detail' object.id %}" class="text-purple" target="_blank">
+            <i class="fa fa-pencil"></i> Дэлгэрэнгүй
+        </a>
+    </div>
+</div>

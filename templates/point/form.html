@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block header %}
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <form method="post" autocomplete="off" enctype="multipart/form-data" id="point_form">
+            {% csrf_token %}
+            {% render_field form.lat type="hidden" class+="form-control" %}
+            {% render_field form.lon type="hidden" class+="form-control" %}
+
+            <div class="row">
+                <div class="col-md-5">
+                    <div id="mapContainer" class="border-1 border-purple-300" data-lat="{{ object.lat }}"
+                         data-lng="{{ object.lon }}"></div>
+                </div>
+                <div class="col-md-7">
+                    <div class="card shadow-none border-0 m-0">
+                        <div class="card-header header-elements-inline">
+                            <h5 class="card-title">
+                                {% if object.id %}
+                                    Edit Point
+                                {% else %}
+                                    Add Point
+                                {% endif %}
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            {% include "includes/messages.html" %}
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Type: <span class="text-purple">*</span></label>
+                                    {% render_field form.type class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Address or Branch name:</label>
+                                    {% render_field form.address class+="form-control" %}
+                                </div>
+                            </div>
+                            <div id="id_pp_fields" class="row d-none">
+                                <div class="form-group col-md-3">
+                                    <label>Size:</label>
+                                    {% render_field form.size class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Landlord name:</label>
+                                    {% render_field form.owner_name class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Landlord phone:</label>
+                                    {% render_field form.owner_phone class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Landlord email:</label>
+                                    {% render_field form.owner_email class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Location grade:</label>
+                                    {% render_field form.grade class+="form-control select" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Base rent rate:</label>
+                                    {% render_field form.base_rent_rate class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Maximum rent rate:</label>
+                                    {% render_field form.max_rent_rate class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Availability:</label>
+                                    {% render_field form.availability class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Availabile date:</label>
+                                    {% render_field form.available_date class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Turnover rent percentage:</label>
+                                    {% render_field form.turnover_rent_percent class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Proposed layout:</label>
+                                    <div class="text-muted">
+                                        {% render_field form.proposed_layout class+="form-control file-input" %}
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>ISR excel file:</label>
+                                    <div class="text-muted">
+                                        {% render_field form.isr_file class+="form-control file-input" %}
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>P&L excel file:</label>
+                                    <div class="text-muted">
+                                        {% render_field form.pl_file class+="form-control file-input" %}
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Deposit:</label>
+                                    {% render_field form.deposit class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Breakeven point:</label>
+                                    {% render_field form.bep class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Expected daily sales:</label>
+                                    {% render_field form.expected_sales class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Average passers an hour:</label>
+                                    {% render_field form.passers class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Households:</label>
+                                    {% render_field form.hh class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Office people:</label>
+                                    {% render_field form.office class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>School/University students:</label>
+                                    {% render_field form.students class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Radius by meter /limit 1km/:</label>
+                                    {% render_field form.radius class+="form-control" %}
+                                </div>
+                            </div>
+
+                            <label>
+                                Photos:
+                                <a href="javascript:;" id="photo_reveal" class="text-purple right">
+                                    (+ Add photo)
+                                </a>
+                            </label>
+                            <div class="row">
+                                {{ photo_formset.management_form }}
+                                {% for pf in photo_formset.forms %}
+                                    <div class="form-group photo-groups col-md-6"
+                                         {% if forloop.counter > 4 and not pf.instance.id %}style="display:none"{% endif %}>
+                                        {{ pf.id }}
+                                        {% if pf.photo.value %}
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <a href="{{ pf.photo.value.url }}" target="_blank"
+                                                       class="btn btn-light p-0">
+                                                        <img src="{{ pf.photo.value.url }}" width="34px"
+                                                             height="34px"
+                                                             style="border-radius: 2px 0px 0px 2px;">
+                                                    </a>
+                                                </div>
+                                                <input type="file" name="{{ pf.prefix }}-photo" accept="image/*"
+                                                       class="form-control file-input"
+                                                       id="id_{{ pf.prefix }}-photo">
+                                                <div class="input-group-append">
+                                                    <div class="input-group-text">
+                                                        {{ pf.DELETE }}
+                                                        <label class="text-size-mini m-0 ml-1"
+                                                               for="id_{{ pf.prefix }}-DELETE">Delete</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <input type="file" name="{{ pf.prefix }}-photo" accept="image/*"
+                                                   class="form-control file-input" id="id_{{ pf.prefix }}-photo">
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0 pt-0">
+                            <div align="right">
+                                {% if object.id %}
+                                    <a href="{% url 'point_detail' object.id %}" class="btn btn-link text-purple-300">
+                                        Cancel
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'map' %}" class="btn btn-link text-purple-300">
+                                        Cancel
+                                    </a>
+                                {% endif %}
+                                <button type="submit" class="btn bg-purple ml-1">
+                                    Save
+                                </button>
+                                {% if not object %}
+                                    <button type="button" id="btn_save_and_new" class="btn bg-purple ml-1">
+                                        Save & New
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+      var map;
+
+      function initMap() {
+        var position = {lat: 47.9156, lng: 106.8910};
+        var lat = $('#mapContainer').data('lat');
+        var lng = $('#mapContainer').data('lng')
+        if (lat && lng) {
+          position.lat = lat;
+          position.lng = lng;
+        }
+
+        var mapOptions = {
+          center: position,
+          zoom: 13,
+          scrollwheel: false,
+          mapTypeControl: true,
+          fullscreenControl: false,
+          mapTypeControlOptions: {
+            mapTypeIds: ['roadmap', 'satellite'],
+            position: google.maps.ControlPosition.TOP_LEFT
+          },
+          controlSize: 24,
+          styles: [
+            {
+              "featureType": "administrative.country",
+              "elementType": "geometry",
+              "stylers": [
+                {
+                  "visibility": "simplified"
+                },
+                {
+                  "hue": "#ff0000"
+                }
+              ]
+            }
+          ]
+        };
+
+        map = new google.maps.Map(document.getElementById('mapContainer'), mapOptions);
+        var marker = new google.maps.Marker({
+          position: position,
+          map: map,
+          draggable: true,
+        });
+        google.maps.event.addListener(marker, 'dragend', function (event) {
+          $('#id_lat').val(event.latLng.lat());
+          $('#id_lon').val(event.latLng.lng());
+        });
+      }
+
+      $('#photo_reveal').click(function () {
+        $('.photo-groups:hidden').first().show();
+      });
+
+      $(function () {
+        $('.form-control-uniform').uniform();
+
+        $("#btn_save_and_new").click(function (evt) {
+          evt.preventDefault()
+          $('#point_form').append('<input type="hidden" name="next" value="new">');
+          $('#point_form').submit();
+        })
+
+        $('#id_available_date').daterangepicker({
+          singleDatePicker: true,
+          applyClass: 'bg-purple btn-sm',
+          cancelClass: 'btn-light btn-sm',
+          locale: {
+            format: 'YYYY/MM/DD'
+          }
+        });
+
+        $('#id_type').change(function () {
+          renderPPFileds();
+        });
+
+        renderPPFileds();
+      });
+
+      function renderPPFileds() {
+        var tp = $('#id_type').val();
+        if (tp == 'PP' || tp == 'CU') {
+          $('#id_pp_fields').removeClass('d-none');
+        } else {
+          $('#id_pp_fields').addClass('d-none');
+        }
+      }
+    </script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBls3a4Jl1HY60FhdpaSPxBrVBg2D4EYAY&callback=initMap"
+            type="text/javascript"></script>
+{% endblock %}
+

@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block header %}
+{% endblock %}
+
+{% block content %}
+    <div class="content p-0">
+
+        <div id="map" class="h-100"></div>
+        <form id="form_filter">
+            <div id="id_type_filter" class="bg-white p-2 shadow-sm font-size-sm d-none d-sm-block">
+                <a href="#" id="id_select_all">Select All</a> / <a href="#" id="id_unselect_all">Unselect All</a>
+                <hr class="mb-2 mt-2">
+                {% for k,v in types %}
+                    {% if k != 'PP' %}
+                        <label class="d-block">
+                            <input type="checkbox" value="{{ k }}" id="id_{{ k }}" name="type"
+                                   class="mr-1 type-checkbox"
+                                   checked>
+                            {{ v }}
+                        </label>
+                    {% endif %}
+                {% endfor %}
+
+                <hr class="mb-2 mt-2">
+                {% for k,v in grades %}
+                    <label class="d-block">
+                        <input type="checkbox" value="{{ k }}" name="grade" class="mr-1 type-checkbox" checked>
+                        Grade {{ v }}
+                    </label>
+                {% endfor %}
+
+                <hr class="mb-2 mt-2">
+                <label class="d-block">
+                    <input type="checkbox" value="radius" id="id_radius" class="mr-1 type-checkbox" checked>
+                    Show radius
+                </label>
+            </div>
+
+            <div id="second_filter" class="bg-white p-2 shadow-sm font-size-sm d-none d-md-block">
+                <label>
+                    <input type="checkbox" value="1" name="availability" class="mr-1 type-checkbox">
+                    Now available
+                </label>
+                <hr class="mb-2 mt-1">
+                <label>
+                    Available date:
+                </label>
+                <input type="text" id="map_daterange" name="available_date"
+                       class="form-control form-control-sm daterange-basic daterangefilter">
+                <label class="mt-2">
+                    Created date:
+                </label>
+                <input type="text" name="created_date"
+                       class="form-control form-control-sm daterange-basic daterangefilter">
+                <label class="mt-2">
+                    Created by:
+                </label>
+                <select name="created_by" id="filter_user" class="form-control form-control-sm select">
+                    <option value="">---------</option>
+                    {% for row in users %}
+                        <option value="{{ row.id }}">
+                            {% if row.first_name and row.last_name %}
+                                {{ row.last_name.0 }}.{{ row.first_name }}
+                            {% elif row.first_name %}
+                                {{ row.first_name }}
+                            {% else %}
+                                {{ row.username }}
+                            {% endif %}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div id="third_filter" class="bg-white p-2 shadow-sm font-size-sm d-none d-md-block">
+                <label class="d-block">
+                    <input type="text" id="id_filter_size" name="size"
+                           class="form-control ion-height-helper map-digit-filter" data-fouc>
+                    <div class="mt-1">Size</div>
+                </label>
+                <hr class="mb-1 mt-2">
+                <label class="d-block">
+                    <input type="text" id="id_filter_base_rent_rate" name="base_rent_rate"
+                           class="form-control ion-height-helper map-digit-filter"
+                           data-fouc>
+                    <div class="mt-1">Base rent rate</div>
+                </label>
+                <hr class="mb-1 mt-2">
+                <label class="d-block">
+                    <input type="text" id="id_filter_max_rent_rate" name="max_rent_rate"
+                           class="form-control ion-height-helper map-digit-filter"
+                           data-fouc>
+                    <div class="mt-1">Maximum rent rate</div>
+                </label>
+            </div>
+        </form>
+
+        <div id="id_map_data" class="d-none">
+            {% for point in points %}
+                <ul data-lat="{{ point.lat }}"
+                    data-lon="{{ point.lon }}"
+                    data-title="{{ point.name }}"
+                    data-id="{{ point.id }}"
+                    data-type="{{ point.type }}"
+                    data-radius="{{ point.radius|default:'' }}"
+                >
+                </ul>
+            {% endfor %}
+        </div>
+    </div>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBls3a4Jl1HY60FhdpaSPxBrVBg2D4EYAY&callback=initMap"
+            type="text/javascript"></script>
+    <script>
+      $(function () {
+        $('.type-checkbox, #map_daterange, #filter_user').change(function () {
+          maploadList(map, true);
+        });
+
+        $('#id_select_all').click(function () {
+          $('.type-checkbox[name="type"]').prop('checked', true);
+          maploadList(map, true);
+        });
+        $('#id_unselect_all').click(function () {
+          $('.type-checkbox[name="type"]').prop('checked', false);
+          maploadList(map, true);
+        });
+
+        $('.daterangefilter').daterangepicker({
+          applyClass: 'bg-purple btn-sm',
+          cancelClass: 'btn-light btn-sm',
+          autoUpdateInput: false,
+          locale: {
+            format: 'YYYY/MM/DD',
+            cancelLabel: 'Clear'
+          }
+        });
+
+        $('.daterangefilter').on('apply.daterangepicker', function (ev, picker) {
+          $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
+          maploadList(map, true);
+        });
+
+        $('.daterangefilter').on('cancel.daterangepicker', function (ev, picker) {
+          $(this).val('');
+          maploadList(map, true);
+        });
+
+        $('#id_filter_size').ionRangeSlider({
+          type: 'double',
+          min: 0,
+          max: 300,
+          from: 0,
+          to: 300,
+          onFinish: function (data) {
+            maploadList(map, true);
+          },
+        });
+
+        $('#id_filter_base_rent_rate').ionRangeSlider({
+          type: 'double',
+          min: 0,
+          max: 20000000,
+          from: 0,
+          to: 20000000,
+          onFinish: function (data) {
+            maploadList(map, true);
+          },
+        });
+
+        $('#id_filter_max_rent_rate').ionRangeSlider({
+          type: 'double',
+          min: 0,
+          max: 20000000,
+          from: 0,
+          to: 20000000,
+          onFinish: function (data) {
+            maploadList(map, true);
+          },
+        });
+      });
+    </script>
+{% endblock %}

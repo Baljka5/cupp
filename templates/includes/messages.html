@@ -1,0 +1,27 @@
+{% if messages %}
+  <div class="alert bg-green alert-styled-left border-0">
+    <ul class="errorlist">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
+{% if form.errors %}
+  <div class="alert alert-danger border-0">
+    <ul class="errorlist">
+      {% if form.non_field_errors %}
+        <li>{{ form.non_field_errors }}</li>
+      {% endif %}
+      {% for field in form %}
+        {% if field.errors %}
+          <li>
+            <b>{{ field.label }}</b> {% for error in field.errors %}
+            <span> - {{ error }}</span> {% endfor %}
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
