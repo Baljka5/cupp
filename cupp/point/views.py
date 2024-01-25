@@ -4,9 +4,10 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
+from django.http import JsonResponse
 
 from .forms import PointForm, PhotoFormset
-from .models import Point
+from .models import Point, District, City ,Type
 from .mixins import GroupMixin, StorePlannerMixin
 
 
@@ -135,3 +136,16 @@ class AjaxList(LoginRequiredMixin, g.ListView):
             qs = qs.filter(Q(created_by=user, type='PP') | Q(type__in=types))
 
         return qs
+
+def get_districts(request):
+    city_id = request.GET.get('city_id')
+    districts = list(District.objects.filter(city__id=city_id).values('id', 'district_name'))
+    return JsonResponse({'districts': districts})
+
+# def get_type_name(request):
+#     type_code = request.GET.get('type_code', '')
+#     try:
+#         type_obj = Type.objects.get(type_cd=type_code)
+#         return JsonResponse({'type_name': type_obj.type_name})
+#     except Type.DoesNotExist:
+#         return JsonResponse({'type_name': 'Not found'})

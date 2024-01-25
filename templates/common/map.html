@@ -11,6 +11,14 @@
             <div id="id_type_filter" class="bg-white p-2 shadow-sm font-size-sm d-none d-sm-block">
                 <a href="#" id="id_select_all">Select All</a> / <a href="#" id="id_unselect_all">Unselect All</a>
                 <hr class="mb-2 mt-2">
+{#                {% for type in types %}#}
+{#                    <label class="d-block">#}
+{#                        <input type="checkbox" value="{{ type.type_cd }}" id="id_{{ type.type_cd }}" name="type"#}
+{#                               class="mr-1 type-checkbox"#}
+{#                               checked>#}
+{#                        {{ type.type_name }}#}
+{#                    </label>#}
+{#                {% endfor %}#}
                 {% for k,v in types %}
                     {% if k != 'PP' %}
                         <label class="d-block">
@@ -112,72 +120,72 @@
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBls3a4Jl1HY60FhdpaSPxBrVBg2D4EYAY&callback=initMap"
             type="text/javascript"></script>
     <script>
-      $(function () {
-        $('.type-checkbox, #map_daterange, #filter_user').change(function () {
-          maploadList(map, true);
-        });
+        $(function () {
+            $('.type-checkbox, #map_daterange, #filter_user').change(function () {
+                maploadList(map, true);
+            });
 
-        $('#id_select_all').click(function () {
-          $('.type-checkbox[name="type"]').prop('checked', true);
-          maploadList(map, true);
-        });
-        $('#id_unselect_all').click(function () {
-          $('.type-checkbox[name="type"]').prop('checked', false);
-          maploadList(map, true);
-        });
+            $('#id_select_all').click(function () {
+                $('.type-checkbox[name="type"]').prop('checked', true);
+                maploadList(map, true);
+            });
+            $('#id_unselect_all').click(function () {
+                $('.type-checkbox[name="type"]').prop('checked', false);
+                maploadList(map, true);
+            });
 
-        $('.daterangefilter').daterangepicker({
-          applyClass: 'bg-purple btn-sm',
-          cancelClass: 'btn-light btn-sm',
-          autoUpdateInput: false,
-          locale: {
-            format: 'YYYY/MM/DD',
-            cancelLabel: 'Clear'
-          }
-        });
+            $('.daterangefilter').daterangepicker({
+                applyClass: 'bg-purple btn-sm',
+                cancelClass: 'btn-light btn-sm',
+                autoUpdateInput: false,
+                locale: {
+                    format: 'YYYY/MM/DD',
+                    cancelLabel: 'Clear'
+                }
+            });
 
-        $('.daterangefilter').on('apply.daterangepicker', function (ev, picker) {
-          $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
-          maploadList(map, true);
-        });
+            $('.daterangefilter').on('apply.daterangepicker', function (ev, picker) {
+                $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
+                maploadList(map, true);
+            });
 
-        $('.daterangefilter').on('cancel.daterangepicker', function (ev, picker) {
-          $(this).val('');
-          maploadList(map, true);
-        });
+            $('.daterangefilter').on('cancel.daterangepicker', function (ev, picker) {
+                $(this).val('');
+                maploadList(map, true);
+            });
 
-        $('#id_filter_size').ionRangeSlider({
-          type: 'double',
-          min: 0,
-          max: 300,
-          from: 0,
-          to: 300,
-          onFinish: function (data) {
-            maploadList(map, true);
-          },
-        });
+            $('#id_filter_size').ionRangeSlider({
+                type: 'double',
+                min: 0,
+                max: 300,
+                from: 0,
+                to: 300,
+                onFinish: function (data) {
+                    maploadList(map, true);
+                },
+            });
 
-        $('#id_filter_base_rent_rate').ionRangeSlider({
-          type: 'double',
-          min: 0,
-          max: 20000000,
-          from: 0,
-          to: 20000000,
-          onFinish: function (data) {
-            maploadList(map, true);
-          },
-        });
+            $('#id_filter_base_rent_rate').ionRangeSlider({
+                type: 'double',
+                min: 0,
+                max: 20000000,
+                from: 0,
+                to: 20000000,
+                onFinish: function (data) {
+                    maploadList(map, true);
+                },
+            });
 
-        $('#id_filter_max_rent_rate').ionRangeSlider({
-          type: 'double',
-          min: 0,
-          max: 20000000,
-          from: 0,
-          to: 20000000,
-          onFinish: function (data) {
-            maploadList(map, true);
-          },
+            $('#id_filter_max_rent_rate').ionRangeSlider({
+                type: 'double',
+                min: 0,
+                max: 20000000,
+                from: 0,
+                to: 20000000,
+                onFinish: function (data) {
+                    maploadList(map, true);
+                },
+            });
         });
-      });
     </script>
 {% endblock %}

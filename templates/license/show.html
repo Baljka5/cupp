@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block header %}
+{% endblock %}
+{% block content %}
+    <div class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <span><a href="/addnew" id="btn_save_and_new"
+                         class="btn bg-purple ml-1">Add New Record</a></span><br><br>
+
+                <div class="table-responsive">
+                    <table id="bootstrapdatatable" class="table table-striped table-bordered" width="100%">
+                        <thead>
+                        <th><input type="checkbox" id="checkall"/></th>
+                        <th>ID</th>
+                        <th>Store code</th>
+                        <th>Лицензийн төрөл</th>
+                        <th>Лицензийн төрлийн нэр</th>
+                        <th>Лицензтэй эсэх</th>
+                        <th>Лиценз авсан огноо</th>
+                        <th>Лиценз дуусах огноо</th>
+                        <th>Лиценз авсан ажилтан</th>
+                        <th>Лиценз олгосон газрын нэр ID</th>
+                        <th>Лиценз олгосон газар</th>
+                        <th>Лицензийн код</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                        </thead>
+                        <tbody>
+                        {% for model in models %}
+                            <tr>
+                                <td><input type="checkbox" class="checkthis"/></td>
+                                <td>{{ model.id }}</td>
+                                <td>{{ model.store_id }}</td>
+                                <td>{{ model.lic_id }}</td>
+                                <td>{{ model.lic_id_nm }}</td>
+                                <td>{{ model.lic_yn }}</td>
+                                <td>{{ model.st_dt }}</td>
+                                <td>{{ model.ed_dt }}</td>
+                                <td>{{ model.lic_owner }}</td>
+                                <td>{{ model.lic_prov_ID }}</td>
+                                <td>{{ model.lic_prov_name }}</td>
+                                <td>{{ model.lic_no }}</td>
+                                <td><a href="/edit/{{ model.id }}" class="btn btn-primary">Edit</a></td>
+                                <td><a href="/delete/{{ model.id }}" class="btn btn-danger">Delete</a></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.datatables.net/1.12.0/js/jquery.dataTables.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#bootstrapdatatable').DataTable({
+                        "aLengthMenu": [[3, 5, 10, 25, -1], [3, 5, 10, 25, "All"]],
+                        "iDisplayLength": 10
+                    }
+                );
+            });
+        </script>
+
+    </div>{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block header %}
+{% endblock %}
+{% block content %}
+    <div class="col-md-12">
+        <form method="POST" class="post-form" action="{% url 'event_update' model.id %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="container">
+                <div class="col-12">
+                    <h3>Update Details</h3>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>ID: </label>
+                    <input type="text" class="form-control" name="id" id="id_id" required readonly
+                           value="{{ model.id }}"/>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Огноо: </label>
+                    <input type="date" class="form-control" name="date" id="id_date" required
+                           value="{{ model.date|date:"Y-m-d" }}"/>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Store No:</label>
+                    <input type="text" class="form-control" name="store_no" id="id_store_no" required maxlength="100"
+                           value="{{ model.store_no }}"/>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Store Name:</label>
+                    <input type="text" class="form-control" name="store_name" id="id_store_name" required
+                           maxlength="255" value="{{ model.store_name }}"/>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Тайлбар: </label>
+                    <input type="text" class="form-control" name="activ_desc" id="id_activ_desc" required
+                           value="{{ model.activ_desc }}"/>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Ангилал: </label>
+                    <select name="activ_cat" id="id_activ_cat" class="form-control" required>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}"
+                                    {% if category.id == model.activ_cat.id %}selected{% endif %}>
+                                {{ category.activ_cat }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Үйл явдал: </label>
+                    <input type="text" class="form-control" name="resp_action" id="id_resp_action" required
+                           maxlength="255"
+                           value="{{ model.resp_action }}"/>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Хариуцагч: </label>
+                    <select name="action_owner" id="id_action_owner" class="form-control" required>
+                        {% for owner in owners %}
+                            <option value="{{ owner.id }}"
+                                    {% if owner.id == model.action_owner.own_id %}selected{% endif %}>
+                                {{ owner.own_pos }} - {{ owner.own_dep }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <button type="submit" class="btn btn-success btn-lg">Update</button>
+                </div>
+            </div>
+        </form>
+    </div>{% endblock content %}

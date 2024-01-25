@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block header %}
+{% endblock %}
+{% block content %}
+    <div class="content">
+        <form method="post" autocomplete="off" enctype="multipart/form-data" id="type_form" class="post-form"
+              action="/">
+            {% csrf_token %}
+
+            <div class="row">
+
+                <div class="container">
+                    <div class="col-12">
+                        <h3>Enter Details</h3>
+                    </div>
+
+
+                    <div class="form-group col-md-6">
+                        <label>Огноо: <span class="text-purple">*</span></label>
+                        {% render_field form.date class+="form-control" %}
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label>Store No: </label>
+                        {% render_field form.store_no class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Store Name: </label>
+                        {% render_field form.store_name class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Тайлбар: </label>
+                        {% render_field form.activ_desc class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Ангилал: </label>
+                        {% render_field form.activ_cat class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Үйл явдал: </label>
+                        {% render_field form.resp_action class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Хариуцагч: </label>
+                        {% render_field form.action_owner class+="form-control" %}
+                    </div>
+                    <div class="mb-3">
+                        <a href="{% url 'index' %}" class="btn btn-link text-purple-300">
+                            Cancel
+                        </a>
+                        {% if not object %}
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        </form>
+<script>
+            $(function () {
+                $('.form-control-uniform').uniform();
+
+                $("#btn_save_and_new").click(function (evt) {
+                    evt.preventDefault()
+                    $('#type_form').append('<input type="hidden" name="next" value="new">');
+                    $('#type_form').submit();
+                })
+
+                $('#id_st_dt, #id_ed_dt').daterangepicker({
+                    singleDatePicker: true,
+                    applyClass: 'bg-purple btn-sm',
+                    cancelClass: 'btn-light btn-sm',
+                    locale: {
+                        format: 'YYYY/MM/DD'
+                    }
+                });
+
+                renderPPFileds();
+            });
+
+
+        </script>
+
+
+    </div>{% endblock %}

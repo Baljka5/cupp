@@ -34,12 +34,21 @@
                                     <label>Type: <span class="text-purple">*</span></label>
                                     {% render_field form.type class+="form-control" %}
                                 </div>
+
                                 <div class="form-group col-md-6">
                                     <label>Address or Branch name:</label>
                                     {% render_field form.address class+="form-control" %}
                                 </div>
                             </div>
                             <div id="id_pp_fields" class="row d-none">
+                                <div class="form-group col-md-6">
+                                    <label>City&Province: <span class="text-purple">*</span></label>
+                                    {% render_field form.addr1_prov class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>District&Sum: <span class="text-purple">*</span></label>
+                                    {% render_field form.addr2_dist class+="form-control" %}
+                                </div>
                                 <div class="form-group col-md-3">
                                     <label>Size:</label>
                                     {% render_field form.size class+="form-control" %}
@@ -130,6 +139,62 @@
                                     <label>Radius by meter /limit 1km/:</label>
                                     {% render_field form.radius class+="form-control" %}
                                 </div>
+                                <div class="form-group col-md-3">
+                                    <label>Дэлгэрэнгүй хаяг:</label>
+                                    {% render_field form.address_det class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Хариуцсан SP:</label>
+                                    {% render_field form.sp_name class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>300 метр дотор GS25-н тоо:</label>
+                                    {% render_field form.near_gs_cvs class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>300 метр дотор сургуулийн тоо:</label>
+                                    {% render_field form.near_gs_cvs class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Зогсоолын тоо:</label>
+                                    {% render_field form.park_slot class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Давхарын тоо:</label>
+                                    {% render_field form.park_slot class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Түрээсийн гэрээ эхлэх хугацаа:</label>
+                                    {% render_field form.cont_st_dt class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Түрээсийн гэрээ дуусах хугацаа:</label>
+                                    {% render_field form.cont_ed_dt class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Zip code:</label>
+                                    {% render_field form.zip_code class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Түрээсийн гэрээний төрөл:</label>
+                                    {% render_field form.rent_tp class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Дамжуулж буй компани:</label>
+                                    {% render_field form.rent_near class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Байршлын давуу тал:</label>
+                                    {% render_field form.adv class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Байршлын сул тал:</label>
+                                    {% render_field form.disadv class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Байршлыг сайжруулах санал:</label>
+                                    {% render_field form.propose class+="form-control" %}
+                                </div>
                             </div>
 
                             <label>
@@ -200,93 +265,123 @@
         </form>
     </div>
     <script>
-      var map;
+        document.addEventListener('DOMContentLoaded', function () {
+            var cityField = document.querySelector('#id_addr1_prov');
+            var districtField = document.querySelector('#id_addr2_dist');
 
-      function initMap() {
-        var position = {lat: 47.9156, lng: 106.8910};
-        var lat = $('#mapContainer').data('lat');
-        var lng = $('#mapContainer').data('lng')
-        if (lat && lng) {
-          position.lat = lat;
-          position.lng = lng;
-        }
-
-        var mapOptions = {
-          center: position,
-          zoom: 13,
-          scrollwheel: false,
-          mapTypeControl: true,
-          fullscreenControl: false,
-          mapTypeControlOptions: {
-            mapTypeIds: ['roadmap', 'satellite'],
-            position: google.maps.ControlPosition.TOP_LEFT
-          },
-          controlSize: 24,
-          styles: [
-            {
-              "featureType": "administrative.country",
-              "elementType": "geometry",
-              "stylers": [
-                {
-                  "visibility": "simplified"
-                },
-                {
-                  "hue": "#ff0000"
+            cityField.addEventListener('change', function () {
+                // Empty the districtField dropdown
+                while (districtField.firstChild) {
+                    districtField.removeChild(districtField.firstChild);
                 }
-              ]
+
+                // Get the selected city ID
+                var cityId = this.value;
+
+                // Make the AJAX call to the Django view
+                fetch(`/ajax/get_districts/?city_id=${cityId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Populate the districtField dropdown with new options
+                        data.districts.forEach(function (district) {
+                            var option = document.createElement('option');
+                            option.value = district.id;
+                            option.text = district.district_name;
+                            districtField.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching district data:', error));
+            });
+        });
+    </script>
+    <script>
+        var map;
+
+        function initMap() {
+            var position = {lat: 47.9156, lng: 106.8910};
+            var lat = $('#mapContainer').data('lat');
+            var lng = $('#mapContainer').data('lng')
+            if (lat && lng) {
+                position.lat = lat;
+                position.lng = lng;
             }
-          ]
-        };
 
-        map = new google.maps.Map(document.getElementById('mapContainer'), mapOptions);
-        var marker = new google.maps.Marker({
-          position: position,
-          map: map,
-          draggable: true,
-        });
-        google.maps.event.addListener(marker, 'dragend', function (event) {
-          $('#id_lat').val(event.latLng.lat());
-          $('#id_lon').val(event.latLng.lng());
-        });
-      }
+            var mapOptions = {
+                center: position,
+                zoom: 13,
+                scrollwheel: false,
+                mapTypeControl: true,
+                fullscreenControl: false,
+                mapTypeControlOptions: {
+                    mapTypeIds: ['roadmap', 'satellite'],
+                    position: google.maps.ControlPosition.TOP_LEFT
+                },
+                controlSize: 24,
+                styles: [
+                    {
+                        "featureType": "administrative.country",
+                        "elementType": "geometry",
+                        "stylers": [
+                            {
+                                "visibility": "simplified"
+                            },
+                            {
+                                "hue": "#ff0000"
+                            }
+                        ]
+                    }
+                ]
+            };
 
-      $('#photo_reveal').click(function () {
-        $('.photo-groups:hidden').first().show();
-      });
-
-      $(function () {
-        $('.form-control-uniform').uniform();
-
-        $("#btn_save_and_new").click(function (evt) {
-          evt.preventDefault()
-          $('#point_form').append('<input type="hidden" name="next" value="new">');
-          $('#point_form').submit();
-        })
-
-        $('#id_available_date').daterangepicker({
-          singleDatePicker: true,
-          applyClass: 'bg-purple btn-sm',
-          cancelClass: 'btn-light btn-sm',
-          locale: {
-            format: 'YYYY/MM/DD'
-          }
-        });
-
-        $('#id_type').change(function () {
-          renderPPFileds();
-        });
-
-        renderPPFileds();
-      });
-
-      function renderPPFileds() {
-        var tp = $('#id_type').val();
-        if (tp == 'PP' || tp == 'CU') {
-          $('#id_pp_fields').removeClass('d-none');
-        } else {
-          $('#id_pp_fields').addClass('d-none');
+            map = new google.maps.Map(document.getElementById('mapContainer'), mapOptions);
+            var marker = new google.maps.Marker({
+                position: position,
+                map: map,
+                draggable: true,
+            });
+            google.maps.event.addListener(marker, 'dragend', function (event) {
+                $('#id_lat').val(event.latLng.lat());
+                $('#id_lon').val(event.latLng.lng());
+            });
         }
-      }
+
+        $('#photo_reveal').click(function () {
+            $('.photo-groups:hidden').first().show();
+        });
+
+        $(function () {
+            $('.form-control-uniform').uniform();
+
+            $("#btn_save_and_new").click(function (evt) {
+                evt.preventDefault()
+                $('#point_form').append('<input type="hidden" name="next" value="new">');
+                $('#point_form').submit();
+            })
+
+            $('#id_available_date, #id_cont_st_dt, #id_cont_ed_dt').daterangepicker({
+                singleDatePicker: true,
+                applyClass: 'bg-purple btn-sm',
+                cancelClass: 'btn-light btn-sm',
+                locale: {
+                    format: 'YYYY/MM/DD'
+                }
+            });
+
+            $('#id_type').change(function () {
+                renderPPFileds();
+            });
+
+            renderPPFileds();
+        });
+
+        function renderPPFileds() {
+            var tp = $('#id_type').val();
+            if (tp == 'PP' || tp == 'CU') {
+                $('#id_pp_fields').removeClass('d-none');
+            } else {
+                $('#id_pp_fields').addClass('d-none');
+            }
+        }
     </script>
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBls3a4Jl1HY60FhdpaSPxBrVBg2D4EYAY&callback=initMap"

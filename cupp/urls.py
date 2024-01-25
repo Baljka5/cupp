@@ -24,9 +24,27 @@ from django.contrib.auth import views as auth_views
 
 from cupp.common import views as common_views
 from cupp.point import views as point_views
+from cupp.point.views import get_districts
+from cupp.license import views_lic as license_views
+from cupp.event import views_event as event_views
 
 urlpatterns = [
+
+    path('ajax/get_districts/', get_districts, name='ajax_get_districts'),
     path('', auth_views.LoginView.as_view(redirect_authenticated_user=True), name='login'),
+
+    # path('register-license/', license_views.MainTableCreateView, name='register_license'),
+    path('event-index/', event_views.index, name='event_index'),
+    path('event-create', event_views.event_addnew, name='event-create'),
+    path('event-edit/<int:id>', event_views.edit, name='event-edit'),
+    path('event-update/<int:id>', event_views.update, name='event_update'),
+    path('event-delete/<int:id>', event_views.destroy, name='event_destroy'),
+
+    path('register-license/', license_views.index, name='index'),
+    path('addnew', license_views.addnew, name='addnew'),
+    path('edit/<int:id>', license_views.edit, name='edit'),
+    path('update/<int:id>', license_views.update, name='update'),
+    path('delete/<int:id>', license_views.destroy, name='destroy'),
 
     path('map/', common_views.Map.as_view(), name='map'),
     path('my-settings/', common_views.MySettings.as_view(), name='my_settings'),

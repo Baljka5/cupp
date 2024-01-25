@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block header %}
+{% endblock %}
+{% block content %}
+    <div class="content">
+        <form method="post" autocomplete="off" enctype="multipart/form-data" id="type_form" class="post-form"
+              action="/addnew">
+            {% csrf_token %}
+
+            <div class="row">
+
+                <div class="container">
+                    <div class="col-12">
+                        <h3>Enter Details</h3>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label>Store code: </label>
+                        {% render_field form.store_id class+="form-control" %}
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label>Лицензийн төрөл: <span class="text-purple">*</span></label>
+                        {% render_field form.lic_id class+="form-control" %}
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label>Лицензийн төрлийн нэр: </label>
+                        {% render_field form.lic_id_nm class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Лицензтэй эсэх: </label>
+                        {% render_field form.lic_yn class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Лиценз авсан огноо: </label>
+                        {% render_field form.st_dt class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Лиценз дуусах огноо: </label>
+                        {% render_field form.ed_dt class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Лиценз авсан ажилтан: </label>
+                        {% render_field form.lic_owner class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Лиценз олгосон газрын нэр ID: </label>
+                        {% render_field form.lic_prov_ID class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Лиценз олгосон газар: </label>
+                        {% render_field form.lic_prov_name class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Лицензийн код: </label>
+                        {% render_field form.lic_no class+="form-control" %}
+                    </div>
+                    <div class="mb-3">
+                        <a href="{% url 'index' %}" class="btn btn-link text-purple-300">
+                            Cancel
+                        </a>
+                        {% if not object %}
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        </form>
+        <script>
+            $(function () {
+                $('.form-control-uniform').uniform();
+
+                $("#btn_save_and_new").click(function (evt) {
+                    evt.preventDefault()
+                    $('#type_form').append('<input type="hidden" name="next" value="new">');
+                    $('#type_form').submit();
+                })
+
+                $('#id_st_dt, #id_ed_dt').daterangepicker({
+                    singleDatePicker: true,
+                    applyClass: 'bg-purple btn-sm',
+                    cancelClass: 'btn-light btn-sm',
+                    locale: {
+                        format: 'YYYY/MM/DD'
+                    }
+                });
+
+                renderPPFileds();
+            });
+
+
+        </script>
+
+    </div>{% endblock %}

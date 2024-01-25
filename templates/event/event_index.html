@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block header %}
+{% endblock %}
+{% block content %}
+    <div class="content">
+        <form method="post" autocomplete="off" enctype="multipart/form-data" id="type_form" class="post-form"
+              action="/event-create">
+            {% csrf_token %}
+
+            <div class="row">
+
+                <div class="container">
+                    <div class="col-12">
+                        <h3>Enter Details</h3>
+                    </div>
+                    {% if messages %}
+                        <ul>
+                            {% for message in messages %}
+                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+
+                    <div class="form-group col-md-6">
+                        <label>Огноо: </label>
+                        {% render_field form.date class+="form-control" %}
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label>Store No: </label>
+                        {% render_field form.store_no class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Store Name: </label>
+                        {% render_field form.store_name class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Тайлбар: </label>
+                        {% render_field form.activ_desc class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Ангилал: <span class="text-purple">*</span></label>
+                        {% render_field form.activ_cat class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Үйл явдал: </label>
+                        {% render_field form.resp_action class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Хариуцагч: <span class="text-purple">*</span></label>
+                        {% render_field form.action_owner class+="form-control" %}
+                    </div>
+                    <div class="mb-3">
+                        <a href="{% url 'event_index' %}" class="btn btn-link text-purple-300">
+                            Cancel
+                        </a>
+                        {% if not object %}
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-primary">Add</button>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        </form>
+        <script>
+            $(function () {
+                $('.form-control-uniform').uniform();
+
+                $("#btn_save_and_new").click(function (evt) {
+                    evt.preventDefault()
+                    $('#type_form').append('<input type="hidden" name="next" value="new">');
+                    $('#type_form').submit();
+                })
+
+                $('#id_date, #id_date').daterangepicker({
+                    singleDatePicker: true,
+                    applyClass: 'bg-purple btn-sm',
+                    cancelClass: 'btn-light btn-sm',
+                    locale: {
+                        format: 'YYYY/MM/DD'
+                    }
+                });
+
+                renderPPFileds();
+            });
+
+
+        </script>
+
+
+    </div>{% endblock %}

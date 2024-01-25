@@ -1,13 +1,17 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>PP Management</title>
     <link rel="shortcut icon" type="/static/images/favicon.png" href="/static/images/favicon.png"/>
-
-    <!-- Stylesheets -->
+    {#    <link rel="stylesheet" type="text/css"#}
+    {#          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"/>#}
+    {#    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.0/css/jquery.dataTables.min.css"/>#}
+    {#    <!-- Stylesheets -->#}
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet"
           type="text/css">
     <link href="/static/css/icons/icomoon/styles.css" rel="stylesheet" type="text/css">
@@ -37,6 +41,18 @@
     <script src="/static/js/plugins/forms/styling/uniform.min.js"></script>
     <script src="/static/js/plugins/forms/selects/select2.min.js"></script>
     <script src="/static/js/plugins/media/fancybox.min.js"></script>
+    {#    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>#}
+    {#    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>#}
+    {#    <script src="https://cdn.datatables.net/1.12.0/js/jquery.dataTables.min.js"></script>#}
+    {#    <script>#}
+    {#        $(document).ready(function () {#}
+    {#            $('#bootstrapdatatable').DataTable({#}
+    {#                    "aLengthMenu": [[3, 5, 10, 25, -1], [3, 5, 10, 25, "All"]],#}
+    {#                    "iDisplayLength": 10#}
+    {#                }#}
+    {#            );#}
+    {#        });#}
+    {#    </script>#}
 
     <script src="/static/js/app.js"></script>
     <script src="/static/js/custom.js"></script>
@@ -62,7 +78,19 @@
 
     <div class="collapse navbar-collapse" id="navbar-mobile">
         {% if user.is_authenticated %}
+
             <ul class="navbar-nav ml-md-auto">
+                <a href="{% url 'event_index' %}" class="navbar-nav-link">
+                    <i class="icon-location4 mr-1"></i>
+                    <span>Event</span>
+                </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'index' %}" class="navbar-nav-link">
+                        <i class="icon-location4 mr-1"></i>
+                        <span>License</span>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="{% url 'map' %}" class="navbar-nav-link">
                         <i class="icon-location4 mr-1"></i>

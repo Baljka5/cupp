@@ -6,6 +6,7 @@ MSG_ERROR = 'Системд алдаа гарлаа!'
 MSG_ACCESS_DENIED = 'Хандах эрхгүй байна.'
 MSG_UNSUCCESSFUL = 'Амжилтгүй боллоо, түр хүлээгээд дахин оролдоно уу.'
 
+
 CHOICES_POINT_TYPE = (
     ('PP', 'Potential Point'),
     ('CU', 'CU Store'),
@@ -25,6 +26,7 @@ CHOICES_POINT_TYPE = (
     ('NA', 'Naran Supermarket'),
     ('SS', 'Sansar Supermarket'),
     ('TC', 'Ta Chi mart'),
+    ('GS', 'GS25')
 )
 
 CHOICES_POINT_GRADE = (

@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block header %}
+{% endblock %}
+{% block content %}
+    <div class="content">
+        <form method="post" autocomplete="off" enctype="multipart/form-data" id="type_form">
+            {% csrf_token %}
+
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="card shadow-none border-0 m-0">
+                        <div class="card-body">
+                            {% include "includes/messages.html" %}
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Store code: <span class="text-purple"></span></label>
+                                    {% render_field form.store_id class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Лицензийн төрөл:</label>
+                                    {% render_field form.lic_id class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Лицензийн төрлийн нэр: <span class="text-purple"></span></label>
+                                    {% render_field form.lic_id_nm class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Лицензтэй эсэх:</label>
+                                    {% render_field form.lic_yn class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Лиценз авсан огноо:</label>
+                                    {% render_field form.st_dt class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Лиценз дуусах огноо:</label>
+                                    {% render_field form.ed_dt class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Лиценз авсан ажилтан: <span class="text-purple"></span></label>
+                                    {% render_field form.lic_owner class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Лиценз олгосон газрын нэр ID: <span class="text-purple"></span></label>
+                                    {% render_field form.lic_prov_ID class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Лиценз олгосон газар: <span class="text-purple"></span></label>
+                                    {% render_field form.lic_prov_name class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Лицензийн код: <span class="text-purple"></span></label>
+                                    {% render_field form.lic_no class+="form-control" %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-footer bg-transparent border-top-0 pt-0">
+                            <div align="right">
+                                {% if object.id %}
+                                    <a href="{% url 'point_detail' object.id %}" class="btn btn-link text-purple-300">
+                                        Cancel
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'map' %}" class="btn btn-link text-purple-300">
+                                        Cancel
+                                    </a>
+                                {% endif %}
+                                <button type="submit" class="btn bg-purple ml-1">
+                                    Save
+                                </button>
+                                {% if not object %}
+                                    <button type="button" id="btn_save_and_new" class="btn bg-purple ml-1">
+                                        Save & New
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    <script>
+        var map;
+
+        function initMap() {
+            var position = {lat: 47.9156, lng: 106.8910};
+            var lat = $('#mapContainer').data('lat');
+            var lng = $('#mapContainer').data('lng')
+            if (lat && lng) {
+                position.lat = lat;
+                position.lng = lng;
+            }
+
+            var mapOptions = {
+                center: position,
+                zoom: 13,
+                scrollwheel: false,
+                mapTypeControl: true,
+                fullscreenControl: false,
+                mapTypeControlOptions: {
+                    mapTypeIds: ['roadmap', 'satellite'],
+                    position: google.maps.ControlPosition.TOP_LEFT
+                },
+                controlSize: 24,
+                styles: [
+                    {
+                        "featureType": "administrative.country",
+                        "elementType": "geometry",
+                        "stylers": [
+                            {
+                                "visibility": "simplified"
+                            },
+                            {
+                                "hue": "#ff0000"
+                            }
+                        ]
+                    }
+                ]
+            };
+
+            map = new google.maps.Map(document.getElementById('mapContainer'), mapOptions);
+            var marker = new google.maps.Marker({
+                position: position,
+                map: map,
+                draggable: true,
+            });
+            google.maps.event.addListener(marker, 'dragend', function (event) {
+                $('#id_lat').val(event.latLng.lat());
+                $('#id_lon').val(event.latLng.lng());
+            });
+        }
+
+        $('#photo_reveal').click(function () {
+            $('.photo-groups:hidden').first().show();
+        });
+
+        $(function () {
+            $('.form-control-uniform').uniform();
+
+            $("#btn_save_and_new").click(function (evt) {
+                evt.preventDefault()
+                $('#point_form').append('<input type="hidden" name="next" value="new">');
+                $('#point_form').submit();
+            })
+
+            $('#id_st_dt, #id_ed_dt').daterangepicker({
+                singleDatePicker: true,
+                applyClass: 'bg-purple btn-sm',
+                cancelClass: 'btn-light btn-sm',
+                locale: {
+                    format: 'YYYY/MM/DD'
+                }
+            });
+
+            $('#id_type').change(function () {
+                renderPPFileds();
+            });
+
+            renderPPFileds();
+        });
+
+        function renderPPFileds() {
+            var tp = $('#id_type').val();
+            if (tp == 'PP' || tp == 'CU') {
+                $('#id_pp_fields').removeClass('d-none');
+            } else {
+                $('#id_pp_fields').addClass('d-none');
+            }
+        }
+    </script>
+    </div>{% endblock %}

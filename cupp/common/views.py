@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 
 from cupp import constants as c
+from cupp.point.models import Type
+
 from cupp.common.forms import MySettingsForm
 
 
@@ -13,6 +15,7 @@ class Map(LoginRequiredMixin, g.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # context['types'] = Type.objects.all()
         context['types'] = c.CHOICES_POINT_TYPE
         context['grades'] = c.CHOICES_POINT_GRADE
 

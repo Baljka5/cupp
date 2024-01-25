@@ -59,6 +59,8 @@ INSTALLED_APPS = [
 
     'cupp.common',
     'cupp.point',
+    'cupp.license',
+    'cupp.event',
 ]
 
 MIDDLEWARE = [
@@ -109,7 +111,7 @@ DATABASES = {
 
 # Login
 
-SESSION_COOKIE_AGE = 1800
+SESSION_COOKIE_AGE = 3600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 LOGIN_URL = '/'

@@ -158,6 +158,62 @@
                                     <label class="font-weight-semibold mb-1">Radius by meter /limit 1km/:</label>
                                     <div class="form-control-plaintext pt-0">{{ object.radius|default:0 }}м</div>
                                 </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Дэлгэрэнгүй хаяг:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.address_det|default:0 }}м</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Хариуцсан SP:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.sp_name|default:0 }}м</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">300 метр дотор GS25-н тоо:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.near_gs_cvs|default:0 }}м</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">300 метр дотор сургуулийн тоо:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.near_school|default:0 }}м</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Зогсоолын тоо:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.park_slot|default:0 }}м</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Давхарын тоо:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.floor|default:0 }}м</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Түрээсийн гэрээ эхлэх хугацаа:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.cont_st_dt|date:'Y/m/d'|default:'-' }}</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Түрээсийн гэрээ дуусах хугацаа:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.cont_ed_dt|date:'Y/m/d'|default:'-' }}</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Zip code:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.zip_code|default:0 }}м</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Түрээсийн гэрээний төрөл:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.rent_tp|default:0 }}м</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Дамжуулж буй компани:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.rent_near|default:0 }}м</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Байршлын давуу тал:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.adv|default:0 }}м</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Байршлын сул тал:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.disadv|default:0 }}м</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="font-weight-semibold mb-1">Байршлыг сайжруулах санал:</label>
+                                    <div class="form-control-plaintext pt-0">{{ object.disadv|default:0 }}м</div>
+                                </div>
                             </div>
 
                             <hr class="mt-0">
@@ -234,75 +290,75 @@
         </div>
     </div>
     <script>
-      var map;
+        var map;
 
-      function initMap() {
-        var position = {lat: 47.9156, lng: 106.8910};
-        var lat = $('#mapContainer').data('lat');
-        var lng = $('#mapContainer').data('lng')
-        if (lat && lng) {
-          position.lat = lat;
-          position.lng = lng;
+        function initMap() {
+            var position = {lat: 47.9156, lng: 106.8910};
+            var lat = $('#mapContainer').data('lat');
+            var lng = $('#mapContainer').data('lng')
+            if (lat && lng) {
+                position.lat = lat;
+                position.lng = lng;
+            }
+
+            var mapOptions = {
+                center: position,
+                zoom: 13,
+                scrollwheel: false,
+                zoom: 13,
+                mapTypeControl: true,
+                fullscreenControl: false,
+                mapTypeControlOptions: {
+                    mapTypeIds: ['roadmap', 'satellite'],
+                    position: google.maps.ControlPosition.TOP_LEFT
+                },
+                controlSize: 24,
+                styles: [{
+                    "featureType": "landscape",
+                    "stylers": [{"saturation": -100}, {"lightness": 65}, {"visibility": "on"}]
+                }, {
+                    "featureType": "poi",
+                    "stylers": [{"saturation": -100}, {"lightness": 51}, {"visibility": "simplified"}]
+                }, {
+                    "featureType": "road.highway",
+                    "stylers": [{"saturation": -100}, {"visibility": "simplified"}]
+                }, {
+                    "featureType": "road.arterial",
+                    "stylers": [{"saturation": -100}, {"lightness": 30}, {"visibility": "on"}]
+                }, {
+                    "featureType": "road.local",
+                    "stylers": [{"saturation": -100}, {"lightness": 40}, {"visibility": "on"}]
+                }, {
+                    "featureType": "transit",
+                    "stylers": [{"saturation": -100}, {"visibility": "simplified"}]
+                }, {"featureType": "administrative.province", "stylers": [{"visibility": "off"}]}, {
+                    "featureType": "water",
+                    "elementType": "labels",
+                    "stylers": [{"visibility": "on"}, {"lightness": -25}, {"saturation": -100}]
+                }, {
+                    "featureType": "water",
+                    "elementType": "geometry",
+                    "stylers": [{"hue": "#ffff00"}, {"lightness": -25}, {"saturation": -97}]
+                }]
+            };
+
+            map = new google.maps.Map(document.getElementById('mapContainer'), mapOptions);
+            var marker = new google.maps.Marker({
+                position: position,
+                map: map,
+                draggable: true,
+            });
+            google.maps.event.addListener(marker, 'dragend', function (event) {
+                $('#id_lat').val(event.latLng.lat());
+                $('#id_lon').val(event.latLng.lng());
+            });
         }
 
-        var mapOptions = {
-          center: position,
-          zoom: 13,
-          scrollwheel: false,
-          zoom: 13,
-          mapTypeControl: true,
-          fullscreenControl: false,
-          mapTypeControlOptions: {
-            mapTypeIds: ['roadmap', 'satellite'],
-            position: google.maps.ControlPosition.TOP_LEFT
-          },
-          controlSize: 24,
-          styles: [{
-            "featureType": "landscape",
-            "stylers": [{"saturation": -100}, {"lightness": 65}, {"visibility": "on"}]
-          }, {
-            "featureType": "poi",
-            "stylers": [{"saturation": -100}, {"lightness": 51}, {"visibility": "simplified"}]
-          }, {
-            "featureType": "road.highway",
-            "stylers": [{"saturation": -100}, {"visibility": "simplified"}]
-          }, {
-            "featureType": "road.arterial",
-            "stylers": [{"saturation": -100}, {"lightness": 30}, {"visibility": "on"}]
-          }, {
-            "featureType": "road.local",
-            "stylers": [{"saturation": -100}, {"lightness": 40}, {"visibility": "on"}]
-          }, {
-            "featureType": "transit",
-            "stylers": [{"saturation": -100}, {"visibility": "simplified"}]
-          }, {"featureType": "administrative.province", "stylers": [{"visibility": "off"}]}, {
-            "featureType": "water",
-            "elementType": "labels",
-            "stylers": [{"visibility": "on"}, {"lightness": -25}, {"saturation": -100}]
-          }, {
-            "featureType": "water",
-            "elementType": "geometry",
-            "stylers": [{"hue": "#ffff00"}, {"lightness": -25}, {"saturation": -97}]
-          }]
-        };
-
-        map = new google.maps.Map(document.getElementById('mapContainer'), mapOptions);
-        var marker = new google.maps.Marker({
-          position: position,
-          map: map,
-          draggable: true,
+        $(function () {
+            $('[data-popup="lightbox"]').fancybox({
+                padding: 3
+            });
         });
-        google.maps.event.addListener(marker, 'dragend', function (event) {
-          $('#id_lat').val(event.latLng.lat());
-          $('#id_lon').val(event.latLng.lng());
-        });
-      }
-
-      $(function () {
-        $('[data-popup="lightbox"]').fancybox({
-          padding: 3
-        });
-      });
     </script>
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBls3a4Jl1HY60FhdpaSPxBrVBg2D4EYAY&callback=initMap"
