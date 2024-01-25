@@ -43,11 +43,6 @@ class StoreDailyLog(m.Model):
         db_table = 'store_daily_log'
         verbose_name = 'Store Daily Logs'
 
-    def save(self, *args, **kwargs):
-        if not self.created_date:
-            self.created_date = self.created_by.date_joined  # or any other date field from the User model
-        super().save(*args, **kwargs)
-
 
 class ActionCategory(m.Model):
     activ_id = m.CharField(max_length=100, primary_key=True)
