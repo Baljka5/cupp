@@ -5,6 +5,7 @@ from django.db import models as m
 from django.contrib.auth.models import User
 from django.conf import settings
 from uuid import uuid4
+from django.core.validators import RegexValidator
 
 
 class ActionOwner(m.Model):
@@ -24,12 +25,14 @@ class ActionOwner(m.Model):
 
 
 class StoreDailyLog(m.Model):
+    five_digit_validator = RegexValidator(r'^\d{5}$', 'Store number must be a 5-digit number')
+
     date = m.DateField()
-    store_no = m.CharField(max_length=100)
+    store_no = m.CharField(max_length=5, validators=[five_digit_validator])
     store_name = m.CharField(max_length=255)
     activ_desc = m.TextField()
     activ_cat = m.ForeignKey('ActionCategory', on_delete=m.CASCADE)
-    resp_action = m.TextField()
+    resp_action = m.TextField(null=True, blank=True)
     action_owner = m.ForeignKey('ActionOwner', on_delete=m.CASCADE)
     created_date = m.DateTimeField('Created date', auto_now_add=True)
     modified_date = m.DateTimeField('Modified date', auto_now=True)

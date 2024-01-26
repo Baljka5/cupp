@@ -23,7 +23,7 @@ from django.conf import settings
 from django.contrib.auth import views as auth_views
 from cupp.common import views as common_views
 from cupp.point import views as point_views
-from cupp.point.views import get_districts
+from cupp.point.views import get_districts, custom_login_redirect
 from cupp.license import views_lic as license_views
 from cupp.event import views_event as event_views
 
@@ -32,9 +32,12 @@ urlpatterns = [
     path('ajax/get_districts/', get_districts, name='ajax_get_districts'),
     path('', auth_views.LoginView.as_view(redirect_authenticated_user=True), name='login'),
 
+    path('custom-login-redirect/', custom_login_redirect, name='custom_login_redirect'),
+
     path('groups/', point_views.display_groups, name='display-groups'),
     path('', point_views.index, name='event_index'),
     # path('register-license/', license_views.MainTableCreateView, name='register_license'),
+
     path('event-index/', event_views.index, name='event_index'),
     path('event-create', event_views.event_addnew, name='event-create'),
     path('event-edit/<int:id>', event_views.edit, name='event-edit'),

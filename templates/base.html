@@ -71,7 +71,11 @@
     <div class="navbar-brand">
         {% if user.is_authenticated %}
             {% is_in_event_group as user_in_event_group %}
-            {% if user_in_event_group %}
+            {% if user.is_superuser %}
+                <a href="{% url 'map' %}" class="d-inline-block">
+                    <img src="/static/images/logo.png" alt="xbook logo">
+                </a>
+            {% elif user_in_event_group %}
                 <a href="{% url 'event_index' %}" class="d-inline-block">
                     <img src="/static/images/logo.png" alt="xbook logo">
                 </a>
@@ -81,9 +85,7 @@
                 </a>
             {% endif %}
         {% else %}
-            <a href="{% url 'map' %}" class="d-inline-block">
-                <img src="/static/images/logo.png" alt="xbook logo">
-            </a>
+            <!-- Your code for non-authenticated users -->
         {% endif %}
     </div>
 

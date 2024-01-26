@@ -15,7 +15,10 @@ class Map(LoginRequiredMixin, g.TemplateView):
     template_name = 'common/map.html'
 
     def get_template_names(self):
-        if self.request.user.groups.filter(name='Event').exists() or self.request.user.is_superuser:
+        # Check if the user is a superuser
+        if self.request.user.is_superuser:
+            return [self.template_name]
+        elif self.request.user.groups.filter(name='Event').exists():
             return ['event/show.html']
         return [self.template_name]
 

@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 from .forms import PointForm, PhotoFormset
 from .models import Point, District, City, Type
@@ -162,3 +163,13 @@ def display_groups(request):
 def index(request):
     is_event_user = request.user.groups.filter(name='Event').exists() or request.user.is_superuser
     return render(request, 'base.html', {'user': request.user, 'is_event_user': is_event_user})
+
+
+@login_required
+def custom_login_redirect(request):
+    if request.user.is_superuser:
+        return redirect('/map/')
+    elif request.user.groups.filter(name='Event').exists():
+        return redirect('/event-index/')
+    else:
+        return redirect('/default-redirect/')
