@@ -1,4 +1,5 @@
 from .forms import StoreDailyLogForm
+from django.views import generic as g
 from .models import StoreDailyLog, ActionCategory, ActionOwner
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -12,7 +13,7 @@ def event_addnew(request):
             try:
                 form.save()
                 messages.success(request, "Event added successfully!")
-                return redirect('/')
+                return redirect('/event-index')
             except Exception as e:
                 messages.error(request, f"Error saving event: {e}")
         else:
@@ -59,11 +60,21 @@ def update(request, id):
     form = StoreDailyLogForm(request.POST, instance=model)
     if form.is_valid():
         form.save()
-        return redirect("/")
+        return redirect("/event-index")
     return render(request, 'event/edit.html', {'model': model})
 
 
 def destroy(request, id):
     model = StoreDailyLog.objects.get(id=id)
     model.delete()
-    return redirect("/")
+    return redirect("/event-index")
+
+class EventView(g.TemplateView):
+    template_name = 'base.html'
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in the is_event_member variable
+        context['is_event_member'] = self.request.user.groups.filter(name='Event').exists()
+        return context

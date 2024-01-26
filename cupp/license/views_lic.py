@@ -14,7 +14,7 @@ def addnew(request):
         if form.is_valid():
             try:
                 form.save()
-                return redirect('/')
+                return redirect('/register-license')
             except:
                 pass
     else:
@@ -37,11 +37,11 @@ def update(request, id):
     form = MainTableForm(request.POST, instance=model)
     if form.is_valid():
         form.save()
-        return redirect("/")
+        return redirect("/register-license")
     return render(request, 'license/edit.html', {'model': model})
 
 
 def destroy(request, id):
     model = MainTable.objects.get(id=id)
     model.delete()
-    return redirect("/")
+    return redirect("/register-license")

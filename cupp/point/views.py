@@ -1,14 +1,16 @@
 from datetime import datetime, timedelta
 from django.views import generic as g
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import JsonResponse
 
 from .forms import PointForm, PhotoFormset
-from .models import Point, District, City ,Type
+from .models import Point, District, City, Type
 from .mixins import GroupMixin, StorePlannerMixin
+from django.contrib.auth.models import Group, User
+from django import template
 
 
 class FormBase(GroupMixin):
@@ -137,10 +139,17 @@ class AjaxList(LoginRequiredMixin, g.ListView):
 
         return qs
 
+
 def get_districts(request):
     city_id = request.GET.get('city_id')
     districts = list(District.objects.filter(city__id=city_id).values('id', 'district_name'))
     return JsonResponse({'districts': districts})
+
+
+def display_groups(request):
+    users = User.objects.prefetch_related('groups').all()
+    return render(request, 'point/test.html', {'users': users})
+
 
 # def get_type_name(request):
 #     type_code = request.GET.get('type_code', '')
@@ -149,3 +158,11 @@ def get_districts(request):
 #         return JsonResponse({'type_name': type_obj.type_name})
 #     except Type.DoesNotExist:
 #         return JsonResponse({'type_name': 'Not found'})
+
+def index(request):
+    return render(request, 'base.html', {'user': request.user})
+
+
+register = template.Library()
+
+
