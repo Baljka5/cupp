@@ -1,3 +1,4 @@
+{% load event_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,10 +63,28 @@
 
 <!-- Main navbar -->
 <div class="navbar navbar-expand-md navbar-dark bg-purple fixed-top">
+    {#    <div class="navbar-brand">#}
+    {#        <a href="{% url 'map' %}" class="d-inline-block">#}
+    {#            <img src="/static/images/logo.png" alt="xbook logo">#}
+    {#        </a>#}
+    {#    </div>#}
     <div class="navbar-brand">
-        <a href="{% url 'map' %}" class="d-inline-block">
-            <img src="/static/images/logo.png" alt="xbook logo">
-        </a>
+        {% if user.is_authenticated %}
+            {% is_in_event_group as user_in_event_group %}
+            {% if user_in_event_group %}
+                <a href="{% url 'event_index' %}" class="d-inline-block">
+                    <img src="/static/images/logo.png" alt="xbook logo">
+                </a>
+            {% else %}
+                <a href="{% url 'map' %}" class="d-inline-block">
+                    <img src="/static/images/logo.png" alt="xbook logo">
+                </a>
+            {% endif %}
+        {% else %}
+            <a href="{% url 'map' %}" class="d-inline-block">
+                <img src="/static/images/logo.png" alt="xbook logo">
+            </a>
+        {% endif %}
     </div>
 
     <div class="d-md-none">
@@ -79,30 +98,39 @@
         {% if user.is_authenticated %}
 
             <ul class="navbar-nav ml-md-auto">
-                <li>
-                    <a href="{% url 'event_index' %}" class="navbar-nav-link">
-                        <i class="icon-location4 mr-1"></i>
-                        <span>Event</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'index' %}" class="navbar-nav-link">
-                        <i class="icon-location4 mr-1"></i>
-                        <span>License</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'map' %}" class="navbar-nav-link">
-                        <i class="icon-location4 mr-1"></i>
-                        <span>Points</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'point_create' %}" class="navbar-nav-link">
-                        <i class="icon-plus22 mr-1"></i>
-                        <span>Add Point</span>
-                    </a>
-                </li>
+                {% is_in_event_group as user_in_event_group %}
+                {% if user_in_event_group %}
+                    <li>
+                        <a href="{% url 'event_index' %}" class="navbar-nav-link">
+                            <i class="icon-calendar mr-1"></i>
+                            <span>Daily Log</span>
+                        </a>
+                    </li>
+                {% endif %}
+                {% is_in_license_group as user_in_license_group %}
+                {% if user_in_license_group %}
+                    <li class="nav-item">
+                        <a href="{% url 'index' %}" class="navbar-nav-link">
+                            <i class="icon-location4 mr-1"></i>
+                            <span>License</span>
+                        </a>
+                    </li>
+                {% endif %}
+                {% is_in_store_planner_group as user_in_store_planner_group %}
+                {% if user_in_store_planner_group %}
+                    <li class="nav-item">
+                        <a href="{% url 'map' %}" class="navbar-nav-link">
+                            <i class="icon-location4 mr-1"></i>
+                            <span>Points</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'point_create' %}" class="navbar-nav-link">
+                            <i class="icon-plus22 mr-1"></i>
+                            <span>Add Point</span>
+                        </a>
+                    </li>
+                {% endif %}
                 {% if user.is_superuser %}
                     <li class="nav-item">
                         <a href="/admin/auth/" class="navbar-nav-link">

@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib.auth.models import Group
 
 from cupp import constants as c
 from cupp.point.models import Type
@@ -12,6 +13,11 @@ from cupp.common.forms import MySettingsForm
 
 class Map(LoginRequiredMixin, g.TemplateView):
     template_name = 'common/map.html'
+
+    def get_template_names(self):
+        if self.request.user.groups.filter(name='Event').exists() or self.request.user.is_superuser:
+            return ['event/show.html']
+        return [self.template_name]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

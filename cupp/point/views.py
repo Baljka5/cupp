@@ -160,9 +160,5 @@ def display_groups(request):
 #         return JsonResponse({'type_name': 'Not found'})
 
 def index(request):
-    return render(request, 'base.html', {'user': request.user})
-
-
-register = template.Library()
-
-
+    is_event_user = request.user.groups.filter(name='Event').exists() or request.user.is_superuser
+    return render(request, 'base.html', {'user': request.user, 'is_event_user': is_event_user})
