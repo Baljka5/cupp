@@ -13,7 +13,7 @@ def event_addnew(request):
             try:
                 form.save()
                 messages.success(request, "Event added successfully!")
-                return redirect('/event-index')
+                return redirect('/log-index')
             except Exception as e:
                 messages.error(request, f"Error saving event: {e}")
         else:
@@ -60,14 +60,14 @@ def update(request, id):
     form = StoreDailyLogForm(request.POST, instance=model)
     if form.is_valid():
         form.save()
-        return redirect("/event-index")
+        return redirect("/log-index")
     return render(request, 'event/edit.html', {'model': model})
 
 
 def destroy(request, id):
     model = StoreDailyLog.objects.get(id=id)
     model.delete()
-    return redirect("/event-index")
+    return redirect("/log-index")
 
 class EventView(g.TemplateView):
     template_name = 'base.html'

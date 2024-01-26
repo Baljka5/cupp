@@ -170,6 +170,6 @@ def custom_login_redirect(request):
     if request.user.is_superuser:
         return redirect('/map/')
     elif request.user.groups.filter(name='Event').exists():
-        return redirect('/event-index/')
+        return redirect('/log-index/')
     else:
         return redirect('/default-redirect/')

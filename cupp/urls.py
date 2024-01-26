@@ -38,11 +38,11 @@ urlpatterns = [
     path('', point_views.index, name='event_index'),
     # path('register-license/', license_views.MainTableCreateView, name='register_license'),
 
-    path('event-index/', event_views.index, name='event_index'),
-    path('event-create', event_views.event_addnew, name='event-create'),
-    path('event-edit/<int:id>', event_views.edit, name='event-edit'),
-    path('event-update/<int:id>', event_views.update, name='event_update'),
-    path('event-delete/<int:id>', event_views.destroy, name='event_destroy'),
+    path('log-index/', event_views.index, name='event_index'),
+    path('log-create', event_views.event_addnew, name='event-create'),
+    path('log-edit/<int:id>', event_views.edit, name='event-edit'),
+    path('log-update/<int:id>', event_views.update, name='event_update'),
+    path('log-delete/<int:id>', event_views.destroy, name='event_destroy'),
 
     path('register-license/', license_views.index, name='index'),
     path('addnew', license_views.addnew, name='addnew'),

@@ -9,7 +9,7 @@
     <div class="content">
         <div class="row">
             <div class="col-md-12">
-                <span><a href="/event-create" id="btn_save_and_new"
+                <span><a href="/log-create" id="btn_save_and_new"
                          class="btn bg-purple ml-1">Add New Record</a></span><br><br>
 
                 <div class="table-responsive">
@@ -46,11 +46,11 @@
                             <td>{{ model.activ_cat }}</td>
                             <td>{{ model.resp_action }}</td>
                             <td>{{ model.action_owner }}</td>
-                            <td><a href="/event-edit/{{ model.id }}" class="btn btn-primary">Edit</a></td>
+                            <td><a href="/log-edit/{{ model.id }}" class="btn btn-primary">Edit</a></td>
                             {% if user.is_authenticated %}
                                 {% is_in_event_group as user_in_event_group %}
                                 {% if user.is_superuser %}
-                                    <td><a href="/event-delete/{{ model.id }}" class="btn btn-danger">Delete</a></td>
+                                    <td><a href="/log-delete/{{ model.id }}" class="btn btn-danger">Delete</a></td>
                                 {% elif user_in_event_group %}
 
                                 {% endif %}
