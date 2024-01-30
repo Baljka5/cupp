@@ -171,5 +171,9 @@ def custom_login_redirect(request):
         return redirect('/map/')
     elif request.user.groups.filter(name='Event').exists():
         return redirect('/log-index/')
+    elif request.user.groups.filter(name='license').exists():
+        return redirect('/register-license/')
+    elif request.user.groups.filter(name='Store planner').exists():
+        return redirect('/map/')
     else:
         return redirect('/default-redirect/')

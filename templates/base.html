@@ -71,6 +71,7 @@
     <div class="navbar-brand">
         {% if user.is_authenticated %}
             {% is_in_event_group as user_in_event_group %}
+            {% is_in_license_group as user_in_license_group %}
             {% if user.is_superuser %}
                 <a href="{% url 'map' %}" class="d-inline-block">
                     <img src="/static/images/logo.png" alt="xbook logo">
@@ -79,8 +80,12 @@
                 <a href="{% url 'event_index' %}" class="d-inline-block">
                     <img src="/static/images/logo.png" alt="xbook logo">
                 </a>
+            {% elif user_in_license_group %}
+                <a href="{% url 'index' %}" class="d-inline-block">
+                    <img src="/static/images/logo.png" alt="xbook logo">
+                </a>
             {% else %}
-                <a href="{% url 'map' %}" class="d-inline-block">
+                <a href="{% url 'default_redirect' %}" class="d-inline-block">
                     <img src="/static/images/logo.png" alt="xbook logo">
                 </a>
             {% endif %}
@@ -113,7 +118,7 @@
                 {% if user_in_license_group %}
                     <li class="nav-item">
                         <a href="{% url 'index' %}" class="navbar-nav-link">
-                            <i class="icon-location4 mr-1"></i>
+                            <i class="icon-add mr-1"></i>
                             <span>License</span>
                         </a>
                     </li>

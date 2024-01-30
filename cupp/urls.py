@@ -27,10 +27,14 @@ from cupp.point.views import get_districts, custom_login_redirect
 from cupp.license import views_lic as license_views
 from cupp.event import views_event as event_views
 
+# from cupp.ajax_table_list import ajax_table_list
+
 urlpatterns = [
 
     path('ajax/get_districts/', get_districts, name='ajax_get_districts'),
     path('', auth_views.LoginView.as_view(redirect_authenticated_user=True), name='login'),
+
+    # path('ajax/table-data/', ajax_table_list.get_table_data, name='ajax_table_data'),
 
     path('custom-login-redirect/', custom_login_redirect, name='custom_login_redirect'),
 

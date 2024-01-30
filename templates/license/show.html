@@ -1,4 +1,8 @@
+<link rel="stylesheet" type="text/css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.0/css/jquery.dataTables.min.css"/>
 {% extends "base.html" %}
+{% load event_tags %}
 {% load widget_tweaks %}
 
 {% block header %}
@@ -26,7 +30,14 @@
                         <th>Лиценз олгосон газар</th>
                         <th>Лицензийн код</th>
                         <th>Edit</th>
-                        <th>Delete</th>
+                        {% if user.is_authenticated %}
+                            {% is_in_license_group as user_in_license_group %}
+                            {% if user.is_superuser %}
+                                <th>Delete</th>
+                            {% elif user_in_license_group %}
+
+                            {% endif %}
+                        {% endif %}
                         </thead>
                         <tbody>
                         {% for model in models %}
@@ -44,7 +55,14 @@
                                 <td>{{ model.lic_prov_name }}</td>
                                 <td>{{ model.lic_no }}</td>
                                 <td><a href="/edit/{{ model.id }}" class="btn btn-primary">Edit</a></td>
-                                <td><a href="/delete/{{ model.id }}" class="btn btn-danger">Delete</a></td>
+                                {% if user.is_authenticated %}
+                                    {% is_in_license_group as user_in_event_group %}
+                                    {% if user.is_superuser %}
+                                        <td><a href="/delete{{ model.id }}" class="btn btn-danger">Delete</a></td>
+                                    {% elif user_in_event_group %}
+
+                                    {% endif %}
+                                {% endif %}
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -55,14 +73,17 @@
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.datatables.net/1.12.0/js/jquery.dataTables.min.js"></script>
+
         <script>
             $(document).ready(function () {
                 $('#bootstrapdatatable').DataTable({
                         "aLengthMenu": [[3, 5, 10, 25, -1], [3, 5, 10, 25, "All"]],
-                        "iDisplayLength": 10
+                        "iDisplayLength": 1
                     }
                 );
             });
+
         </script>
+
 
     </div>{% endblock %}

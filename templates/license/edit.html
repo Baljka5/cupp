@@ -1,38 +1,83 @@
 {% extends "base.html" %}
+{% load widget_tweaks %}
 
-{% block title %}Add New Employee Records{% endblock title %}
-
+{% block header %}
+{% endblock %}
 {% block content %}
     <div class="col-md-12">
-        <form method="POST" class="post-form" action="/update/{{ employee.id }}">
+        <form method="POST" class="post-form" action="{% url 'update' model.id %}">
             {% csrf_token %}
+            {{ form.as_p }}
             <div class="container">
                 <div class="col-12">
                     <h3>Update Details</h3>
                 </div>
-                <div class="mb-3">
-                    <label>Employee ID:</label>
-                    <input type="text" class="form-control" name="id" id="id_id" required maxlength="20"
-                           value="{{ employee.id }}"/>
+                <div class="form-group col-md-6">
+                    <label>Дугаар: </label>
+                    <input type="text" class="form-control" name="id" id="id_id" required readonly
+                           value="{{ model.id }}"/>
                 </div>
-                <div class="mb-3">
-                    <label>Name:</label>
-                    <input type="text" class="form-control" name="name" id="id_name" required maxlength="100"
-                           value="{{ employee.name }}"/>
+                <div class="form-group col-md-6">
+                    <label>Лицензийн төрөл: </label>
+                    <select name="lic_id" id="id_lic_id" class="form-control" required>
+                        {% for type in types %}
+                            <option value="{{ type.id }}"
+                                    {% if type.id == model.lic_id.id %}selected{% endif %}>
+                                {{ type.lic_id }}
+                            </option>
+                        {% endfor %}
+                    </select>
                 </div>
-                <div class="mb-3">
-                    <label>Email:</label>
-                    <input type="email" class="form-control" name="email" id="id_email" required maxlength="254"
-                           value="{{ employee.email }}"/>
+                <div class="form-group col-md-6">
+                    <label>Лицензийн төрлийн нэр:</label>
+                    <input type="text" class="form-control" name="lic_id_nm" id="id_lic_id_nm" required
+                           maxlength="255" value="{{ model.lic_id_nm }}"/>
                 </div>
-                <div class="mb-3">
-                    <label>Contact:</label>
-                    <input type="text" class="form-control" name="contact" id="id_contact" required maxlength="15"
-                           value="{{ employee.contact }}"/>
+                <div class="form-group col-md-6">
+                    <label>Лицензтэй эсэх: </label>
+                    <select class="form-control" name="lic_yn" id="id_lic_yn" required>
+                        <option value="True" {% if model.lic_yn %}selected{% endif %}>Тийм</option>
+                        <option value="False" {% if not model.lic_yn %}selected{% endif %}>Үгүй</option>
+                    </select>
                 </div>
-                <div class="mb-3">
+                <div class="form-group col-md-6">
+                    <label>Лиценз авсан огноо: </label>
+                    <input type="date" class="form-control" name="st_dt" id="id_st_dt" required
+                           value="{{ model.st_dt|date:"Y-m-d" }}"/>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Лиценз дуусах огноо: </label>
+                    <input type="date" class="form-control" name="ed_dt" id="id_ed_dt" required
+                           value="{{ model.ed_dt|date:"Y-m-d" }}"/>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Лиценз авсан ажилтан:</label>
+                    <input type="text" class="form-control" name="lic_owner" id="id_lic_owner" required
+                           maxlength="255" value="{{ model.lic_owner }}"/>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Лиценз олгосон газрын нэр ID:</label>
+                    <input type="text" class="form-control" name="lic_prov_ID" id="id_lic_prov_ID" required
+                           maxlength="255" value="{{ model.lic_prov_ID }}"/>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Лиценз олгосон газар:</label>
+                    <input type="text" class="form-control" name="lic_prov_name" id="id_lic_prov_name" required
+                           maxlength="255" value="{{ model.lic_prov_name }}"/>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Лицензийн код:</label>
+                    <input type="text" class="form-control" name="lic_no" id="id_lic_no" required
+                           maxlength="255" value="{{ model.lic_no }}"/>
+                </div>
+                <div class="form-group col-md-6">
+                    <a href="{% url 'index' %}" class="btn btn-link text-purple-300">
+                        Cancel
+                    </a>
+                </div>
+                <div class="form-group col-md-6">
                     <button type="submit" class="btn btn-success btn-lg">Update</button>
                 </div>
             </div>
         </form>
-{% endblock content %}
+    </div>{% endblock content %}

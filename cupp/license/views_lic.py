@@ -1,14 +1,12 @@
+from django.core.paginator import Paginator
+from django.http import JsonResponse
+
 from .forms import MainTableForm
-from .models import MainTable
+from .models import MainTable, DimensionTable
 from django.shortcuts import render, redirect
-from cupp.point.models import Point
 
 
 def addnew(request):
-    # model = MainTable
-    # form_class = MainTableForm
-    # template_name = 'license/show.html'
-    # success_url = reverse_lazy('map')
     if request.method == "POST":
         form = MainTableForm(request.POST)
         if form.is_valid():
@@ -34,11 +32,12 @@ def edit(request, id):
 
 def update(request, id):
     model = MainTable.objects.get(id=id)
+    types = DimensionTable.objects.all()
     form = MainTableForm(request.POST, instance=model)
     if form.is_valid():
         form.save()
         return redirect("/register-license")
-    return render(request, 'license/edit.html', {'model': model})
+    return render(request, 'license/edit.html', {'model': model, 'types': types})
 
 
 def destroy(request, id):

@@ -176,6 +176,8 @@ DATETIME_INPUT_FORMATS = [
     '%Y/%m/%d %H:%M:%S'
 ]
 
+# ITEMS_PER_PAGE = 10
+
 # Logging
 
 LOGGING = {

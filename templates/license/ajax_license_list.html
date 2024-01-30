@@ -1,0 +1,16 @@
+{% for license in object_list %}
+    <ul data-id="{{ license.id }}"
+        data-store_id="{{ point.store_id }}"
+        data-lic_id="{{ point.lic_id }}"
+        data-lic_id_nm="{{ point.lic_id_nm }}"
+        data-lic_yn="{{ point.lic_yn }}"
+        data-st_dt="{{ point.st_dt}}"
+        data-ed_dt="{{ point.ed_dt}}"
+        data-lic_owner="{{ point.lic_owner}}"
+        data-lic_prov_ID="{{ point.lic_prov_ID}}"
+        data-lic_prov_name="{{ point.lic_prov_name}}"
+        data-lic_no="{{ point.lic_no}}"
+
+        >
+    </ul>
+{% endfor %}

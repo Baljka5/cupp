@@ -1,3 +1,6 @@
+<link rel="stylesheet" type="text/css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.0/css/jquery.dataTables.min.css"/>
 {% extends "base.html" %}
 {% load event_tags %}
 {% load widget_tweaks %}
@@ -68,7 +71,7 @@
             $(document).ready(function () {
                 $('#bootstrapdatatable').DataTable({
                         "aLengthMenu": [[3, 5, 10, 25, -1], [3, 5, 10, 25, "All"]],
-                        "iDisplayLength": 25
+                        "iDisplayLength": 10
                     }
                 );
             });
