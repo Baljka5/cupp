@@ -1,176 +1,125 @@
+{#<link rel="stylesheet" type="text/css"#}
+{#      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"/>#}
+{#<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.0/css/jquery.dataTables.min.css"/>#}
 {% extends "base.html" %}
+{% load event_tags %}
 {% load widget_tweaks %}
 
 {% block header %}
 {% endblock %}
 {% block content %}
     <div class="content">
-        <form method="post" autocomplete="off" enctype="multipart/form-data" id="type_form">
-            {% csrf_token %}
+        <div class="row">
+            <div class="col-md-12">
+                <span><a href="/addnew" id="btn_save_and_new"
+                         class="btn bg-purple ml-1">Add New Record</a></span><br><br>
 
-            <div class="row">
-                <div class="col-md-7">
-                    <div class="card shadow-none border-0 m-0">
-                        <div class="card-body">
-                            {% include "includes/messages.html" %}
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label>Store code: <span class="text-purple"></span></label>
-                                    {% render_field form.store_id class+="form-control" %}
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label>Лицензийн төрөл:</label>
-                                    {% render_field form.lic_id class+="form-control" %}
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label>Лицензийн төрлийн нэр: <span class="text-purple"></span></label>
-                                    {% render_field form.lic_id_nm class+="form-control" %}
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label>Лицензтэй эсэх:</label>
-                                    {% render_field form.lic_yn class+="form-control" %}
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label>Лиценз авсан огноо:</label>
-                                    {% render_field form.st_dt class+="form-control" %}
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label>Лиценз дуусах огноо:</label>
-                                    {% render_field form.ed_dt class+="form-control" %}
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label>Лиценз авсан ажилтан: <span class="text-purple"></span></label>
-                                    {% render_field form.lic_owner class+="form-control" %}
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label>Лиценз олгосон газрын нэр ID: <span class="text-purple"></span></label>
-                                    {% render_field form.lic_prov_ID class+="form-control" %}
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label>Лиценз олгосон газар: <span class="text-purple"></span></label>
-                                    {% render_field form.lic_prov_name class+="form-control" %}
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label>Лицензийн код: <span class="text-purple"></span></label>
-                                    {% render_field form.lic_no class+="form-control" %}
-                                </div>
-                            </div>
-                        </div>
+                <div class="table-responsive">
+                    <table id="bootstrapdatatable" class="table table-striped table-bordered" width="100%">
+                        <thead>
+                        <th><input type="checkbox" id="checkall"/></th>
+                        <th>ID</th>
+                        <th>Store code</th>
+                        <th>Лицензийн төрөл</th>
+                        <th>Лицензийн төрлийн нэр</th>
+                        <th>Лицензтэй эсэх</th>
+                        <th>Лиценз авсан огноо</th>
+                        <th>Лиценз дуусах огноо</th>
+                        <th>Лиценз авсан ажилтан</th>
+                        <th>Лиценз олгосон газрын нэр ID</th>
+                        <th>Лиценз олгосон газар</th>
+                        <th>Лицензийн код</th>
+                        <th>Edit</th>
+                        {% if user.is_authenticated %}
+                            {% is_in_license_group as user_in_license_group %}
+                            {% if user.is_superuser %}
+                                <th>Delete</th>
+                            {% elif user_in_license_group %}
 
-                        <div class="card-footer bg-transparent border-top-0 pt-0">
-                            <div align="right">
-                                {% if object.id %}
-                                    <a href="{% url 'point_detail' object.id %}" class="btn btn-link text-purple-300">
-                                        Cancel
-                                    </a>
-                                {% else %}
-                                    <a href="{% url 'map' %}" class="btn btn-link text-purple-300">
-                                        Cancel
-                                    </a>
+                            {% endif %}
+                        {% endif %}
+                        </thead>
+                        <tbody>
+                        {% for model in models %}
+                            <tr>
+                                <td><input type="checkbox" class="checkthis"/></td>
+                                <td>{{ model.id }}</td>
+                                <td>{{ model.store_id }}</td>
+                                <td>{{ model.lic_id }}</td>
+                                <td>{{ model.lic_id_nm }}</td>
+                                <td>{{ model.lic_yn }}</td>
+                                <td>{{ model.st_dt }}</td>
+                                <td>{{ model.ed_dt }}</td>
+                                <td>{{ model.lic_owner }}</td>
+                                <td>{{ model.lic_prov_ID }}</td>
+                                <td>{{ model.lic_prov_name }}</td>
+                                <td>{{ model.lic_no }}</td>
+                                <td><a href="/edit/{{ model.id }}" class="btn btn-primary">Edit</a></td>
+                                {% if user.is_authenticated %}
+                                    {% is_in_license_group as user_in_event_group %}
+                                    {% if user.is_superuser %}
+                                        <td><a href="/delete{{ model.id }}" class="btn btn-danger">Delete</a></td>
+                                    {% elif user_in_event_group %}
+
+                                    {% endif %}
                                 {% endif %}
-                                <button type="submit" class="btn bg-purple ml-1">
-                                    Save
-                                </button>
-                                {% if not object %}
-                                    <button type="button" id="btn_save_and_new" class="btn bg-purple ml-1">
-                                        Save & New
-                                    </button>
-                                {% endif %}
-                            </div>
-                        </div>
-
-                    </div>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
-
             </div>
-        </form>
-    <script>
-        var map;
+        </div>
+{#        <nav aria-label="Page navigation">#}
+{#            <ul class="pagination">#}
+{#                {% if page_obj.has_previous %}#}
+{#                    <li class="page-item">#}
+{#                        <a class="page-link" href="?page=1" aria-label="First">#}
+{#                            <span aria-hidden="true">&laquo;&laquo;</span>#}
+{#                        </a>#}
+{#                    </li>#}
+{#                    <li class="page-item">#}
+{#                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">#}
+{#                            <span aria-hidden="true">&laquo;</span>#}
+{#                        </a>#}
+{#                    </li>#}
+{#                {% endif %}#}
+{##}
+{#                {% for num in page_obj.paginator.page_range %}#}
+{#                    {% if page_obj.number == num %}#}
+{#                        <li class="page-item active"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>#}
+{#                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}#}
+{#                        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>#}
+{#                    {% endif %}#}
+{#                {% endfor %}#}
+{##}
+{#                {% if page_obj.has_next %}#}
+{#                    <li class="page-item">#}
+{#                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">#}
+{#                            <span aria-hidden="true">&raquo;</span>#}
+{#                        </a>#}
+{#                    </li>#}
+{#                    <li class="page-item">#}
+{#                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">#}
+{#                            <span aria-hidden="true">&raquo;&raquo;</span>#}
+{#                        </a>#}
+{#                    </li>#}
+{#                {% endif %}#}
+{#            </ul>#}
+{#        </nav>#}
+{#        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>#}
+{#        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>#}
+{#        <script src="https://cdn.datatables.net/1.12.0/js/jquery.dataTables.min.js"></script>#}
+{##}
+{#        <script>#}
+{#            $(document).ready(function () {#}
+{#                $('#bootstrapdatatable').DataTable({#}
+{#                    "paging": false,#}
+{#                    // other options#}
+{#                });#}
+{#            });#}
+{##}
+{#        </script>#}
 
-        function initMap() {
-            var position = {lat: 47.9156, lng: 106.8910};
-            var lat = $('#mapContainer').data('lat');
-            var lng = $('#mapContainer').data('lng')
-            if (lat && lng) {
-                position.lat = lat;
-                position.lng = lng;
-            }
 
-            var mapOptions = {
-                center: position,
-                zoom: 13,
-                scrollwheel: false,
-                mapTypeControl: true,
-                fullscreenControl: false,
-                mapTypeControlOptions: {
-                    mapTypeIds: ['roadmap', 'satellite'],
-                    position: google.maps.ControlPosition.TOP_LEFT
-                },
-                controlSize: 24,
-                styles: [
-                    {
-                        "featureType": "administrative.country",
-                        "elementType": "geometry",
-                        "stylers": [
-                            {
-                                "visibility": "simplified"
-                            },
-                            {
-                                "hue": "#ff0000"
-                            }
-                        ]
-                    }
-                ]
-            };
-
-            map = new google.maps.Map(document.getElementById('mapContainer'), mapOptions);
-            var marker = new google.maps.Marker({
-                position: position,
-                map: map,
-                draggable: true,
-            });
-            google.maps.event.addListener(marker, 'dragend', function (event) {
-                $('#id_lat').val(event.latLng.lat());
-                $('#id_lon').val(event.latLng.lng());
-            });
-        }
-
-        $('#photo_reveal').click(function () {
-            $('.photo-groups:hidden').first().show();
-        });
-
-        $(function () {
-            $('.form-control-uniform').uniform();
-
-            $("#btn_save_and_new").click(function (evt) {
-                evt.preventDefault()
-                $('#point_form').append('<input type="hidden" name="next" value="new">');
-                $('#point_form').submit();
-            })
-
-            $('#id_st_dt, #id_ed_dt').daterangepicker({
-                singleDatePicker: true,
-                applyClass: 'bg-purple btn-sm',
-                cancelClass: 'btn-light btn-sm',
-                locale: {
-                    format: 'YYYY/MM/DD'
-                }
-            });
-
-            $('#id_type').change(function () {
-                renderPPFileds();
-            });
-
-            renderPPFileds();
-        });
-
-        function renderPPFileds() {
-            var tp = $('#id_type').val();
-            if (tp == 'PP' || tp == 'CU') {
-                $('#id_pp_fields').removeClass('d-none');
-            } else {
-                $('#id_pp_fields').addClass('d-none');
-            }
-        }
-    </script>
     </div>{% endblock %}

@@ -20,10 +20,25 @@ def addnew(request):
     return render(request, 'license/test_form.html', {'form': form})
 
 
-def index(request):
-    models = MainTable.objects.all()
-    return render(request, "license/show.html", {'models': models})
+# def index(request):
+#     models = MainTable.objects.all()
+#     return render(request, "license/show.html", {'models': models})
 
+def index(request):
+    search_query = request.GET.get('search', '')  # Get the search query parameter
+    if search_query:
+        models = MainTable.objects.filter(
+            # Add your search logic here, e.g., filtering by store_id
+            store_id__icontains=search_query
+        )
+    else:
+        models = MainTable.objects.all()
+
+    paginator = Paginator(models, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "license/show.html", {'page_obj': page_obj, 'search_query': search_query})
 
 def edit(request, id):
     model = MainTable.objects.get(id=id)

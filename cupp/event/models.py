@@ -17,7 +17,7 @@ class ActionOwner(m.Model):
     created_by = m.ForeignKey(User, verbose_name='Creadted by', related_name='action_owners', on_delete=m.PROTECT)
 
     def __str__(self):
-        return self.own_pos
+        return self.own_dep
 
     class Meta:
         db_table = 'action_owners'
@@ -40,7 +40,7 @@ class StoreDailyLog(m.Model):
                               null=True)
 
     def __str__(self):
-        return self.action_owner.own_pos
+        return self.action_owner.own_dep
 
     class Meta:
         db_table = 'store_daily_log'

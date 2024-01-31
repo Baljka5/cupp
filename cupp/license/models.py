@@ -22,6 +22,7 @@ class DimensionTable(m.Model):
         db_table = 'lic_type'
         verbose_name = 'Dimenstion table'
 
+
 class MainTable(models.Model):
     store_id = models.CharField('Store ID', max_length=50)
     lic_id = models.ForeignKey(DimensionTable, on_delete=models.CASCADE, verbose_name='License type')
@@ -33,6 +34,10 @@ class MainTable(models.Model):
     lic_prov_ID = models.CharField('License Provider ID', max_length=50)
     lic_prov_name = models.CharField('License Provider Name', max_length=50)
     lic_no = models.CharField('License Code', max_length=50, blank=True, null=True)
+    alc_opentime = models.TimeField('Time to start selling alcohol', null=True)
+    alc_closetime = models.TimeField('Time to sell out alchohol', null=True)
+    lic_sqrm = models.DecimalField('Licensed area', max_digits=5, decimal_places=1, null=True)
+    camera_cnt = models.IntegerField('Total number of cameras', blank=True, null=True, default=0)
 
     class Meta:
         db_table = 'str_license'

@@ -39,10 +39,10 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label>Ангилал: </label>
-                    <select name="activ_cat" id="id_activ_cat" class="form-control" required>
+                    <select name="activ_cat" id="id_activ_cat" class="form-control">
                         {% for category in categories %}
-                            <option value="{{ category.id }}"
-                                    {% if category.id == model.activ_cat.id %}selected{% endif %}>
+                            <option value="{{ category.activ_id }}"
+                                    {% if category.activ_id == model.activ_cat.activ_id %}selected{% endif %}>
                                 {{ category.activ_cat }}
                             </option>
                         {% endfor %}
@@ -50,16 +50,16 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label>Хариу арга хэмжээний тухай: </label>
-                    <input type="text" class="form-control" name="resp_action" id="id_resp_action" required
+                    <input type="text" class="form-control" name="resp_action" id="id_resp_action"
                            maxlength="255"
                            value="{{ model.resp_action }}"/>
                 </div>
                 <div class="form-group col-md-6">
                     <label>Хариуцагч: </label>
-                    <select name="action_owner" id="id_action_owner" class="form-control" required>
+                    <select name="action_owner" id="id_action_owner" class="form-control">
                         {% for owner in owners %}
-                            <option value="{{ owner.id }}"
-                                    {% if owner.id == model.action_owner.own_id %}selected{% endif %}>
+                            <option value="{{ owner.own_id }}"
+                                    {% if owner.own_id == model.action_owner.own_id %}selected{% endif %}>
                                 {{ owner.own_pos }} - {{ owner.own_dep }}
                             </option>
                         {% endfor %}
