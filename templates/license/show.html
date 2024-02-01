@@ -68,7 +68,7 @@
                                 {% if user.is_authenticated %}
                                     {% is_in_license_group as user_in_event_group %}
                                     {% if user.is_superuser %}
-                                        <td><a href="/delete{{ model.id }}" class="btn btn-danger">Delete</a></td>
+                                        <td><a href="{% url 'lic-delete' model.id %}" class="btn btn-danger">Delete</a></td>
                                     {% elif user_in_event_group %}
 
                                     {% endif %}

@@ -46,13 +46,13 @@ urlpatterns = [
     path('log-create', event_views.event_addnew, name='event-create'),
     path('log-edit/<int:id>', event_views.edit, name='event-edit'),
     path('log-update/<int:id>', event_views.update, name='event_update'),
-    path('log-delete/<int:id>', event_views.destroy, name='event_destroy'),
+    path('log-delete/<int:id>', event_views.destroy, name='log-delete'),
 
     path('register-license/', license_views.index, name='index'),
     path('addnew', license_views.addnew, name='addnew'),
     path('edit/<int:id>', license_views.edit, name='edit'),
     path('update/<int:id>', license_views.update, name='update'),
-    path('delete/<int:id>', license_views.destroy, name='destroy'),
+    path('lic-delete/<int:id>', license_views.destroy, name='lic-delete'),
 
     path('map/', common_views.Map.as_view(), name='map'),
     path('my-settings/', common_views.MySettings.as_view(), name='my_settings'),

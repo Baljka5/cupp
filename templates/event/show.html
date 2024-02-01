@@ -62,7 +62,7 @@
                             {% if user.is_authenticated %}
                                 {% is_in_event_group as user_in_event_group %}
                                 {% if user.is_superuser %}
-                                    <td><a href="/log-delete/{{ model.id }}" class="btn btn-danger">Delete</a></td>
+                                    <td><a href="{% url 'log-delete' model.id %}" class="btn btn-danger">Delete</a></td>
                                 {% elif user_in_event_group %}
 
                                 {% endif %}
