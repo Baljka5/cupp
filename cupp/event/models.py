@@ -14,10 +14,18 @@ class ActionOwner(m.Model):
     own_dep = m.CharField(max_length=255)
     created_date = m.DateTimeField('Created date', auto_now_add=True)
     modified_date = m.DateTimeField('Modified date', auto_now=True)
-    created_by = m.ForeignKey(User, verbose_name='Creadted by', related_name='action_owners', on_delete=m.PROTECT)
+    created_by = m.ForeignKey(User, verbose_name='Created by', related_name='action_owners_created',
+                              on_delete=m.PROTECT, null=True)
+    modified_by = m.ForeignKey(User, verbose_name='Modified by', related_name='action_owners_modified',
+                               on_delete=m.PROTECT, null=True)
 
     def __str__(self):
         return self.own_dep
+
+    def save(self, *args, **kwargs):
+        if not self.pk and not self.created_by:
+            self.created_by = self.modified_by
+        super(ActionOwner, self).save(*args, **kwargs)
 
     class Meta:
         db_table = 'action_owners'
@@ -36,11 +44,18 @@ class StoreDailyLog(m.Model):
     action_owner = m.ForeignKey('ActionOwner', on_delete=m.CASCADE)
     created_date = m.DateTimeField('Created date', auto_now_add=True)
     modified_date = m.DateTimeField('Modified date', auto_now=True)
-    created_by = m.ForeignKey(User, verbose_name='Creadted by', related_name='store_daily_logs', on_delete=m.PROTECT,
-                              null=True)
+    created_by = m.ForeignKey(User, verbose_name='Created by', related_name='store_daily_logs_created',
+                              on_delete=m.PROTECT, null=True)
+    modified_by = m.ForeignKey(User, verbose_name='Modified by', related_name='store_daily_logs_modified',
+                               on_delete=m.PROTECT, null=True)
 
     def __str__(self):
         return self.action_owner.own_dep
+
+    def save(self, *args, **kwargs):
+        if not self.pk and not self.created_by:
+            self.created_by = self.modified_by
+        super(StoreDailyLog, self).save(*args, **kwargs)
 
     class Meta:
         db_table = 'store_daily_log'
@@ -53,10 +68,18 @@ class ActionCategory(m.Model):
     activ_desc = m.TextField()
     created_date = m.DateTimeField('Created date', auto_now_add=True)
     modified_date = m.DateTimeField('Modified date', auto_now=True)
-    created_by = m.ForeignKey(User, verbose_name='Creadted by', related_name='action_categories', on_delete=m.PROTECT)
+    created_by = m.ForeignKey(User, verbose_name='Created by', related_name='action_categories_created',
+                              on_delete=m.PROTECT, null=True)
+    modified_by = m.ForeignKey(User, verbose_name='Modified by', related_name='action_categories_modified',
+                               on_delete=m.PROTECT, null=True)
 
     def __str__(self):
         return self.activ_cat
+
+    def save(self, *args, **kwargs):
+        if not self.pk and not self.created_by:
+            self.created_by = self.modified_by
+        super(ActionCategory, self).save(*args, **kwargs)
 
     class Meta:
         db_table = 'action_category'

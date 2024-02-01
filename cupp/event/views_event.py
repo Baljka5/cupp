@@ -13,6 +13,8 @@ def event_addnew(request):
         form = StoreDailyLogForm(request.POST)
         if form.is_valid():
             try:
+                form.instance.created_by = request.user if not form.instance.pk else form.instance.created_by
+                form.instance.modified_by = request.user
                 form.save()
                 messages.success(request, "Event added successfully!")
                 return redirect('/log-index')
@@ -60,6 +62,8 @@ def index(request):
     page_obj = paginator.get_page(page_number)
 
     return render(request, "event/show.html", {'page_obj': page_obj, 'search_query': search_query})
+
+
 # def index(request):
 #     models = StoreDailyLog.objects.all()
 #     return render(request, "event/show.html", {'models': models})
@@ -76,6 +80,7 @@ def update(request, id):
     model = StoreDailyLog.objects.get(id=id)
     form = StoreDailyLogForm(request.POST, instance=model)
     if form.is_valid():
+        form.instance.modified_by = request.user
         form.save()
         return redirect("/log-index")
     return render(request, 'event/edit.html', {'model': model})
@@ -85,6 +90,7 @@ def destroy(request, id):
     model = StoreDailyLog.objects.get(id=id)
     model.delete()
     return redirect("/log-index")
+
 
 class EventView(g.TemplateView):
     template_name = 'base.html'

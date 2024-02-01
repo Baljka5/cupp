@@ -53,7 +53,7 @@ class DimensionTableLicenseProvider(models.Model):
     org_emp_em = models.CharField('Name of concerned employee email', max_length=50)
 
     def __str__(self):
-        return self.lic_prov_id
+        return self.lic_id.lic_prov_ID
 
     class Meta:
         db_table = 'lic_provider'
