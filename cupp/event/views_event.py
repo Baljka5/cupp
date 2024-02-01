@@ -1,3 +1,5 @@
+from django.core.paginator import Paginator
+
 from .forms import StoreDailyLogForm
 from django.views import generic as g
 from .models import StoreDailyLog, ActionCategory, ActionOwner
@@ -44,8 +46,23 @@ def event_addnew(request):
 
 
 def index(request):
-    models = StoreDailyLog.objects.all()
-    return render(request, "event/show.html", {'models': models})
+    search_query = request.GET.get('search', '')  # Get the search query parameter
+    if search_query:
+        models = StoreDailyLog.objects.filter(
+            # Add your search logic here, e.g., filtering by store_id
+            store_no__icontains=search_query
+        )
+    else:
+        models = StoreDailyLog.objects.all()
+
+    paginator = Paginator(models, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "event/show.html", {'page_obj': page_obj, 'search_query': search_query})
+# def index(request):
+#     models = StoreDailyLog.objects.all()
+#     return render(request, "event/show.html", {'models': models})
 
 
 def edit(request, id):

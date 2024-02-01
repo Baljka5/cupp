@@ -42,7 +42,8 @@ def index(request):
 
 def edit(request, id):
     model = MainTable.objects.get(id=id)
-    return render(request, 'license/edit.html', {'model': model})
+    types = DimensionTable.objects.all()
+    return render(request, 'license/edit.html', {'model': model, 'types': types})
 
 
 def update(request, id):

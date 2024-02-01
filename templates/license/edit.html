@@ -19,10 +19,10 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label>Лицензийн төрөл: </label>
-                    <select name="lic_id" id="id_lic_id" class="form-control" required>
+                    <select name="lic_id" id="id_lic_id" class="form-control">
                         {% for type in types %}
-                            <option value="{{ type.id }}"
-                                    {% if type.id == model.lic_id.id %}selected{% endif %}>
+                            <option value="{{ type.lic_id }}"
+                                    {% if type.lic_id == model.lic_id %}selected{% endif %}>
                                 {{ type.lic_id }}
                             </option>
                         {% endfor %}
