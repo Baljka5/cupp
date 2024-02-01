@@ -10,6 +10,8 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from uuid import uuid4
 
+from django.db.models import Count
+
 
 class DimensionTable(m.Model):
     lic_id = m.CharField('License type', blank=False, default='', max_length=50)
@@ -39,6 +41,9 @@ class MainTable(models.Model):
     lic_sqrm = models.DecimalField('Licensed area', max_digits=5, decimal_places=1, null=True)
     camera_cnt = models.IntegerField('Total number of cameras', blank=True, null=True, default=0)
 
+    def __str__(self):
+        return self.lic_prov_ID
+
     class Meta:
         db_table = 'str_license'
         verbose_name = 'MainTable'
@@ -57,6 +62,7 @@ class DimensionTableLicenseProvider(models.Model):
 
     class Meta:
         db_table = 'lic_provider'
-        verbose_name = 'Dimenstion table'
+        verbose_name = 'Dimenstion Table License Provider'
+
 
 # lic_id_nm = m.ForeignKey(dimension_table.lic_id_nm, on_delete=m.CASCADE, related_name='License name')

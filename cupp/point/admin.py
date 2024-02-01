@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
 from .models import Point, City, District, Type
-from cupp.license.models import DimensionTable
+from cupp.license.models import DimensionTable, DimensionTableLicenseProvider
 from cupp.event.models import ActionOwner, ActionCategory, StoreDailyLog
 
 admin.site.register(Point)
@@ -15,6 +15,9 @@ admin.site.register(DimensionTable)
 admin.site.register(ActionOwner)
 admin.site.register(ActionCategory)
 admin.site.register(StoreDailyLog)
+
+
+admin.site.register(DimensionTableLicenseProvider)
 
 
 @admin.register(User)

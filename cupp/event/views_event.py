@@ -101,3 +101,5 @@ class EventView(g.TemplateView):
         # Add in the is_event_member variable
         context['is_event_member'] = self.request.user.groups.filter(name='Event').exists()
         return context
+
+
