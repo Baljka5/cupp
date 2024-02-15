@@ -20,14 +20,14 @@
 {#                    </label>#}
 {#                {% endfor %}#}
                 {% for k,v in types %}
-                    {% if k != 'PP' %}
+{#                    {% if k != 'PP' %}#}
                         <label class="d-block">
                             <input type="checkbox" value="{{ k }}" id="id_{{ k }}" name="type"
                                    class="mr-1 type-checkbox"
                                    checked>
                             {{ v }}
                         </label>
-                    {% endif %}
+{#                    {% endif %}#}
                 {% endfor %}
 
                 <hr class="mb-2 mt-2">

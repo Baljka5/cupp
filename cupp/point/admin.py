@@ -1,9 +1,11 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-
+from django import forms
+from django.contrib import messages
+from django import forms
 from .models import Point, City, District, Type
-from cupp.license.models import DimensionTable, DimensionTableLicenseProvider
+from cupp.license.models import DimensionTable, DimensionTableLicenseProvider, MainTable
 from cupp.event.models import ActionOwner, ActionCategory, StoreDailyLog
 
 admin.site.register(Point)
@@ -15,9 +17,8 @@ admin.site.register(DimensionTable)
 admin.site.register(ActionOwner)
 admin.site.register(ActionCategory)
 admin.site.register(StoreDailyLog)
-
-
 admin.site.register(DimensionTableLicenseProvider)
+
 
 
 @admin.register(User)
@@ -35,3 +36,6 @@ class CUPPUserAdmin(UserAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         return qs.exclude(username='su')
+
+
+

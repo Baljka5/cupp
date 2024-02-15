@@ -2,6 +2,7 @@ from django import forms as f
 from django.conf import settings
 
 from cupp.common.fields import ClearableFileInput
+from cupp.store_planning.models import StorePlanning
 
 from .models import Point, PointPhoto
 
@@ -21,16 +22,28 @@ class PointForm(f.ModelForm):
                   'availability', 'available_date', 'size', 'grade',
                   'deposit', 'bep', 'expected_sales', 'passers', 'hh',
                   'office', 'students', 'turnover_rent_percent', 'radius',
-                  'isr_file', 'pl_file', 'address', 'addr1_prov', 'addr2_dist',
-                  'address_det', 'sp_name', 'near_gs_cvs', 'near_school', 'park_slot',
-                  'floor', 'cont_st_dt', 'cont_ed_dt', 'zip_code', 'rent_tp', 'rent_near',
-                  'adv', 'disadv', 'propose'
+                  'isr_file', 'pl_file', 'address', 'store_id', 'store_name'
                   )
         widgets = {
             'proposed_layout': ClearableFileInput(),
             'isr_file': ClearableFileInput(),
             'pl_file': ClearableFileInput(),
         }
+        lic_model = StorePlanning
+        lic_fields = ('addr1_prov', 'addr2_dist', 'address_det', 'sp_name', 'near_gs_cvs', 'near_school', 'park_slot',
+                      'floor', 'cont_st_dt', 'cont_ed_dt', 'zip_code', 'rent_tp', 'rent_near', 'adv', 'disadv',
+                      'propose',
+                      )
 
 
 PhotoFormset = f.inlineformset_factory(Point, PointPhoto, fields=['photo'], extra=6)
+
+# class StorePlanningForm(f.ModelForm):
+#     cont_st_dt = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
+#     cont_ed_dt = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
+#
+#     class Meta:
+#         model = StorePlanning
+#         fields = ('addr1_prov', 'addr2_dist', 'address_det', 'sp_name', 'near_gs_cvs', 'near_school', 'park_slot',
+#                   'floor', 'cont_st_dt', 'cont_ed_dt', 'zip_code', 'rent_tp', 'rent_near', 'adv', 'disadv', 'propose',
+#                   )

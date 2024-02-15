@@ -7,10 +7,9 @@ import uuid
 
 from django.db import models as m
 from django.contrib.auth.models import User
+from django.core.validators import RegexValidator
 from django.conf import settings
 from uuid import uuid4
-
-from django.db.models import Count
 
 
 class DimensionTable(m.Model):
@@ -26,19 +25,20 @@ class DimensionTable(m.Model):
 
 
 class MainTable(models.Model):
-    store_id = models.CharField('Store ID', max_length=50)
-    lic_id = models.ForeignKey(DimensionTable, on_delete=models.CASCADE, verbose_name='License type')
-    lic_id_nm = models.CharField('License Type Name', max_length=50, blank=True)
+    five_digit_validator = RegexValidator(r'^\d{5}$', 'Store number must be a 5-digit number')
+    store_id = models.CharField(max_length=5, validators=[five_digit_validator])
+    lic_id = models.ForeignKey(DimensionTable, on_delete=models.CASCADE, verbose_name='License type', null=True)
+    lic_id_nm = models.CharField('License Type Name', max_length=50, blank=True, null=True)
     lic_yn = models.BooleanField('Type of rent agreement', blank=True, null=True)
     st_dt = models.DateField('Rent agreement start date', blank=True, null=True)
     ed_dt = models.DateField('License Ended Date', blank=True, null=True)
-    lic_owner = models.CharField('Licensed Employee', max_length=50)
-    lic_prov_ID = models.CharField('License Provider ID', max_length=50)
-    lic_prov_name = models.CharField('License Provider Name', max_length=50)
+    lic_owner = models.CharField('Licensed Employee', max_length=50, blank=True, null=True)
+    lic_prov_ID = models.CharField('License Provider ID', max_length=50, blank=True, null=True)
+    lic_prov_name = models.CharField('License Provider Name', max_length=50, blank=True, null=True)
     lic_no = models.CharField('License Code', max_length=50, blank=True, null=True)
-    alc_opentime = models.TimeField('Time to start selling alcohol', null=True)
-    alc_closetime = models.TimeField('Time to sell out alchohol', null=True)
-    lic_sqrm = models.DecimalField('Licensed area', max_digits=5, decimal_places=1, null=True)
+    alc_opentime = models.TimeField('Time to start selling alcohol', null=True, blank=True)
+    alc_closetime = models.TimeField('Time to sell out alchohol', null=True, blank=True)
+    lic_sqrm = models.DecimalField('Licensed area', max_digits=5, decimal_places=1, null=True, blank=True)
     camera_cnt = models.IntegerField('Total number of cameras', blank=True, null=True, default=0)
 
     def __str__(self):
@@ -58,7 +58,7 @@ class DimensionTableLicenseProvider(models.Model):
     org_emp_em = models.CharField('Name of concerned employee email', max_length=50)
 
     def __str__(self):
-        return self.lic_id.lic_prov_ID
+        return self.lic_id
 
     class Meta:
         db_table = 'lic_provider'

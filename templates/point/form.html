@@ -6,7 +6,7 @@
 
 {% block content %}
     <div class="content">
-        <form method="post" autocomplete="off" enctype="multipart/form-data" id="point_form">
+        <form method="post" autocomplete="off" enctype="multipart/form-data" id="type_form">
             {% csrf_token %}
             {% render_field form.lat type="hidden" class+="form-control" %}
             {% render_field form.lon type="hidden" class+="form-control" %}
@@ -41,6 +41,14 @@
                                 </div>
                             </div>
                             <div id="id_pp_fields" class="row d-none">
+                                <div class="form-group col-md-6" id="store_fields">
+                                    <label>Store ID:</label>
+                                    {% render_field form.store_id class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-6" id="store_fields">
+                                    <label>Store Name:</label>
+                                    {% render_field form.store_name class+="form-control" %}
+                                </div>
                                 <div class="form-group col-md-6">
                                     <label>City&Province: <span class="text-purple">*</span></label>
                                     {% render_field form.addr1_prov class+="form-control" %}
@@ -378,10 +386,24 @@
             var tp = $('#id_type').val();
             if (tp == 'PP' || tp == 'CU') {
                 $('#id_pp_fields').removeClass('d-none');
+                if (tp == 'CU') {
+                    $('#store_fields').removeClass('d-none');
+                } else {
+                    $('#store_fields').addClass('d-none');
+                }
             } else {
                 $('#id_pp_fields').addClass('d-none');
+                $('#store_fields').addClass('d-none');
             }
         }
+
+        {#function renderPPFileds() {#}
+        {#    var tp = $('#id_type').val();#}
+        {#    if (tp == 'PP' || tp == 'CU') {#}
+        {#        $('#id_pp_fields').removeClass('d-none');#}
+        {#    } else {#}
+        {#        $('#id_pp_fields').addClass('d-none');#}
+        {#    }}#}
     </script>
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBls3a4Jl1HY60FhdpaSPxBrVBg2D4EYAY&callback=initMap"

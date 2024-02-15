@@ -17,7 +17,9 @@ def addnew(request):
                 pass
     else:
         form = MainTableForm()
-    return render(request, 'license/test_form.html', {'form': form})
+    lic_id_to_name = {dimension.lic_id: dimension.lic_id_nm for dimension in DimensionTable.objects.all()}
+    return render(request, 'license/test_form.html', {'form': form, 'lic_id_to_name': lic_id_to_name})
+
 
 
 # def index(request):
@@ -28,11 +30,11 @@ def index(request):
     search_query = request.GET.get('search', '')  # Get the search query parameter
     if search_query:
         models = MainTable.objects.filter(
-            # Add your search logic here, e.g., filtering by store_id
+            # Your search logic here, e.g., filtering by store_id
             store_id__icontains=search_query
-        )
+        ).order_by('id')  # Add an order_by clause here
     else:
-        models = MainTable.objects.all()
+        models = MainTable.objects.all().order_by('id')  # And here as well
 
     paginator = Paginator(models, 10)
     page_number = request.GET.get('page')

@@ -12,12 +12,14 @@ from .models import Point, District, City, Type
 from .mixins import GroupMixin, StorePlannerMixin
 from django.contrib.auth.models import Group, User
 from django import template
+from cupp.store_planning.models import StorePlanning
 
 
 class FormBase(GroupMixin):
     model = Point
     template_name = 'point/form.html'
     form_class = PointForm
+
     success_url = reverse_lazy('map')
 
     def form_valid(self, form):

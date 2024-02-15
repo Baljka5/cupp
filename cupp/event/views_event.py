@@ -51,11 +51,11 @@ def index(request):
     search_query = request.GET.get('search', '')  # Get the search query parameter
     if search_query:
         models = StoreDailyLog.objects.filter(
-            # Add your search logic here, e.g., filtering by store_id
-            store_no__icontains=search_query
-        )
+            # Your search logic here, e.g., filtering by store_id
+            store_id__icontains=search_query
+        ).order_by('id')  # Add an order_by clause here
     else:
-        models = StoreDailyLog.objects.all()
+        models = StoreDailyLog.objects.all().order_by('id')  # And here as well
 
     paginator = Paginator(models, 10)
     page_number = request.GET.get('page')

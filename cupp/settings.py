@@ -61,6 +61,10 @@ INSTALLED_APPS = [
     'cupp.point',
     'cupp.license',
     'cupp.event',
+    'cupp.store_trainer',
+    'cupp.store_consultant',
+    'cupp.store_planning',
+
 ]
 
 MIDDLEWARE = [

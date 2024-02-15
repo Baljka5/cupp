@@ -27,7 +27,6 @@ class Map(LoginRequiredMixin, g.TemplateView):
         # context['types'] = Type.objects.all()
         context['types'] = c.CHOICES_POINT_TYPE
         context['grades'] = c.CHOICES_POINT_GRADE
-
         context['users'] = User.objects.all()
         return context
 

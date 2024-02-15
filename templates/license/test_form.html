@@ -23,12 +23,16 @@
 
                     <div class="form-group col-md-6">
                         <label>Лицензийн төрөл: <span class="text-purple">*</span></label>
-                        {% render_field form.lic_id class+="form-control" %}
+                        <select id="id_lic_id" class="form-control" name="lic_id">
+                            {% for lic_id, lic_id_nm in lic_id_to_name.items %}
+                                <option value="{{ lic_id }}" data-name="{{ lic_id_nm }}">{{ lic_id }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
 
                     <div class="form-group col-md-6">
                         <label>Лицензийн төрлийн нэр: </label>
-                        {% render_field form.lic_id_nm class+="form-control" %}
+                        <input id="id_lic_id_nm" class="form-control" name="lic_id_nm" readonly type="text">
                     </div>
                     <div class="form-group col-md-6">
                         <label>Лицензтэй эсэх: </label>
@@ -72,6 +76,15 @@
                 </div>
             </div>
         </form>
+        <script>
+            $(document).ready(function () {
+                $('#id_lic_id').change(function () {
+                    var selectedName = $(this).find('option:selected').data('name');
+                    $('#id_lic_id_nm').val(selectedName);
+                    $('#id_lic_id_nm').prop('readonly', true);
+                });
+            });
+        </script>
         <script>
             $(function () {
                 $('.form-control-uniform').uniform();

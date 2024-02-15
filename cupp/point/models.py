@@ -7,6 +7,8 @@ from django.conf import settings
 from uuid import uuid4
 
 from cupp.constants import CHOICES_POINT_TYPE, CHOICES_POINT_GRADE
+
+
 # from cupp.choices import get_point_type_choices
 
 
@@ -54,6 +56,7 @@ class Type(m.Model):
         db_table = 'cupp_type'
         verbose_name = 'Type'
 
+
 # def get_type_choices():
 #     return [(type.type_cd, type.type_name) for type in Type.objects.all()]
 
@@ -64,6 +67,8 @@ class Point(m.Model):
     created_by = m.ForeignKey(User, verbose_name='Creadted by', related_name='points', on_delete=m.PROTECT)
 
     # type = m.CharField('Type', max_length=10, choices=get_type_choices())
+    store_id = m.IntegerField('Store ID', blank=True, null=True, default=0)
+    store_name = m.CharField('Store name', blank=True, null=True, max_length=500)
     type = m.CharField('Type', max_length=10, choices=CHOICES_POINT_TYPE)
     lat = m.CharField('Latitude', max_length=50, default='47.9116')
     lon = m.CharField('Longitude', max_length=50, default='106.9057')
@@ -96,27 +101,18 @@ class Point(m.Model):
     hh = m.IntegerField('Households in the direct area', blank=True, null=True, default=0)
     office = m.IntegerField('Office people in the direct area', blank=True, null=True, default=0)
     students = m.IntegerField('School/University students in the direct area', blank=True, null=True, default=0)
-
-    addr1_prov = m.ForeignKey(City, on_delete=m.SET_NULL, null=True, blank=True, verbose_name='City and Aimag')
-    addr2_dist = m.ForeignKey(District, on_delete=m.SET_NULL, null=True, blank=True, verbose_name='District and Sum')
-    address_det = m.CharField('Address detail', blank=True, default='', max_length=500)
-    sp_name = m.CharField('SP name', blank=True, default='', max_length=50)
-    near_gs_cvs = m.IntegerField('GS25 number', blank=True, null=True, default=0)
-    near_school = m.IntegerField('School number', blank=True, null=True, default=0)
-    park_slot = m.IntegerField('Park number', blank=True, default=0)
-    floor = m.IntegerField('Floor number', blank=True, default=0)
-    cont_st_dt = m.DateField('Rent agreement start date', blank=True, null=True)
-    cont_ed_dt = m.DateField('Rent agreement end date', blank=True, null=True)
-    zip_code = m.CharField('Zip code', blank=True, default='', max_length=100)
-    rent_tp = m.BooleanField('Type of rent agreement', blank=True, null=True)
-    rent_near = m.CharField('Company name', blank=True, default='', max_length=50)
-    adv = m.CharField('Advantage', blank=True, default='', max_length=100)
-    disadv = m.CharField('Disadvantage', blank=True, default='', max_length=100)
-    propose = m.CharField('Suggestions for improvement', blank=True, default='', max_length=100)
-
+    # created_by_id = m.ForeignKey(User, verbose_name='Created by', related_name='store_planning_created',
+    #                           on_delete=m.PROTECT, null=True)
+    modified_by = m.ForeignKey(User, verbose_name='Modified by', related_name='points_modified',
+                               on_delete=m.PROTECT, null=True)
 
     def __str__(self):
         return '%s - %s' % (self.get_type_display(), self.address)
+
+    def save(self, *args, **kwargs):
+        if not self.pk and not self.created_by:
+            self.created_by = self.modified_by
+        super(Point, self).save(*args, **kwargs)
 
     class Meta:
         db_table = 'cupp_point'
