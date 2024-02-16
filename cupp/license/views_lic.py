@@ -1,4 +1,5 @@
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.http import JsonResponse
 
 from .forms import MainTableForm
@@ -29,9 +30,10 @@ def index(request):
     search_query = request.GET.get('search', '')  # Get the search query parameter
     if search_query:
         models = MainTable.objects.filter(
-            # Your search logic here, e.g., filtering by store_id
-            store_id__icontains=search_query
-        ).order_by('id')  # Add an order_by clause here
+            Q(store_id__icontains=search_query) |
+            Q(lic_id__lic_id__icontains=search_query) |
+            Q(lic_id__lic_id_nm__icontains=search_query)
+        ).distinct().order_by('id')  # Add an order_by clause here
     else:
         models = MainTable.objects.all().order_by('id')  # And here as well
 
