@@ -21,7 +21,6 @@ def addnew(request):
     return render(request, 'license/test_form.html', {'form': form, 'lic_id_to_name': lic_id_to_name})
 
 
-
 # def index(request):
 #     models = MainTable.objects.all()
 #     return render(request, "license/show.html", {'models': models})
@@ -41,6 +40,7 @@ def index(request):
     page_obj = paginator.get_page(page_number)
 
     return render(request, "license/show.html", {'page_obj': page_obj, 'search_query': search_query})
+
 
 def edit(request, id):
     model = MainTable.objects.get(id=id)

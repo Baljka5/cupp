@@ -51,8 +51,8 @@ urlpatterns = [
 
     path('register-license/', license_views.index, name='index'),
     path('addnew', license_views.addnew, name='addnew'),
-    path('edit/<int:id>', license_views.edit, name='edit'),
-    path('update/<int:id>', license_views.update, name='update'),
+    path('lic-edit/<int:id>', license_views.edit, name='lic-edit'),
+    path('lic-update/<int:id>', license_views.update, name='lic-update'),
     path('lic-delete/<int:id>', license_views.destroy, name='lic-delete'),
 
     path('map/', common_views.Map.as_view(), name='map'),

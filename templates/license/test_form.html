@@ -17,37 +17,48 @@
                     </div>
 
                     <div class="form-group col-md-6">
-                        <label>Store code: </label>
+                        <label>Store code: <span class="text-purple">*</span></label>
                         {% render_field form.store_id class+="form-control" %}
                     </div>
 
                     <div class="form-group col-md-6">
                         <label>Лицензийн төрөл: <span class="text-purple">*</span></label>
                         <select id="id_lic_id" class="form-control" name="lic_id">
+                            <!-- Placeholder option -->
+                            <option value="" disabled selected>------</option>
                             {% for lic_id, lic_id_nm in lic_id_to_name.items %}
                                 <option value="{{ lic_id }}" data-name="{{ lic_id_nm }}">{{ lic_id }}</option>
                             {% endfor %}
                         </select>
                     </div>
 
+                    {#                    <div class="form-group col-md-6">#}
+                    {#                        <label>Лицензийн төрөл: <span class="text-purple">*</span></label>#}
+                    {#                        <select id="id_lic_id" class="form-control" name="lic_id">#}
+                    {#                            {% for lic_id, lic_id_nm in lic_id_to_name.items %}#}
+                    {#                                <option value="{{ lic_id }}" data-name="{{ lic_id_nm }}">{{ lic_id }}</option>#}
+                    {#                            {% endfor %}#}
+                    {#                        </select>#}
+                    {#                    </div>#}
+
                     <div class="form-group col-md-6">
-                        <label>Лицензийн төрлийн нэр: </label>
+                        <label>Лицензийн төрлийн нэр: <span class="text-purple">*</span></label>
                         <input id="id_lic_id_nm" class="form-control" name="lic_id_nm" readonly type="text">
                     </div>
                     <div class="form-group col-md-6">
-                        <label>Лицензтэй эсэх: </label>
+                        <label>Лицензтэй эсэх: <span class="text-purple">*</span></label>
                         {% render_field form.lic_yn class+="form-control" %}
                     </div>
                     <div class="form-group col-md-6">
-                        <label>Лиценз авсан огноо: </label>
+                        <label>Лиценз авсан огноо: <span class="text-purple">*</span></label>
                         {% render_field form.st_dt class+="form-control" %}
                     </div>
                     <div class="form-group col-md-6">
-                        <label>Лиценз дуусах огноо: </label>
+                        <label>Лиценз дуусах огноо: <span class="text-purple">*</span></label>
                         {% render_field form.ed_dt class+="form-control" %}
                     </div>
                     <div class="form-group col-md-6">
-                        <label>Лиценз авсан ажилтан: </label>
+                        <label>Лиценз авсан ажилтан: <span class="text-purple">*</span></label>
                         {% render_field form.lic_owner class+="form-control" %}
                     </div>
                     <div class="form-group col-md-6">
