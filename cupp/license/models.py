@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.conf import settings
 from uuid import uuid4
+from django.utils import timezone
 
 
 class DimensionTable(m.Model):
@@ -36,10 +37,10 @@ class MainTable(models.Model):
     lic_prov_ID = models.CharField('License Provider ID', max_length=50, blank=True, null=True)
     lic_prov_name = models.CharField('License Provider Name', max_length=50, blank=True, null=True)
     lic_no = models.CharField('License Code', max_length=50, blank=True, null=True)
-    alc_opentime = models.TimeField('Time to start selling alcohol', null=True, blank=True)
-    alc_closetime = models.TimeField('Time to sell out alchohol', null=True, blank=True)
+    alc_opentime = models.TimeField('Time to start selling alcohol', null=True, default=timezone.now, blank=True)
+    alc_closetime = models.TimeField('Time to sell out alchohol', null=True, default=timezone.now, blank=True)
     lic_sqrm = models.DecimalField('Licensed area', max_digits=5, decimal_places=1, null=True, blank=True)
-    camera_cnt = models.IntegerField('Total number of cameras', blank=True, null=True, default=0)
+    camera_cnt = models.IntegerField('Total number of cameras', default=0, blank=True, null=True)
 
     def __str__(self):
         return self.lic_prov_ID

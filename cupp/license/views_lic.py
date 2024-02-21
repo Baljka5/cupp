@@ -5,21 +5,35 @@ from django.http import JsonResponse
 from .forms import MainTableForm
 from .models import MainTable, DimensionTable
 from django.shortcuts import render, redirect
+from django.contrib import messages
 
 
 def addnew(request):
+    lic_id_to_name = {dimension.lic_id: dimension.lic_id_nm for dimension in DimensionTable.objects.all()}
     if request.method == "POST":
         form = MainTableForm(request.POST)
         if form.is_valid():
             try:
+                # Save the form and redirect to a new URL
                 form.save()
+                messages.success(request, 'Form submission successful.')
                 return redirect('/register-license')
-            except:
-                pass
+            except Exception as e:
+                # If save fails, add an error message and print the exception
+                messages.error(request, 'Form could not be saved. Please try again.')
+                print(f"Error saving form: {e}")
+        else:
+            # If form is not valid, show errors
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"Error in {field}: {error}")
     else:
         form = MainTableForm()
-    lic_id_to_name = {dimension.lic_id: dimension.lic_id_nm for dimension in DimensionTable.objects.all()}
-    return render(request, 'license/test_form.html', {'form': form, 'lic_id_to_name': lic_id_to_name})
+
+    return render(request, 'license/test_form.html', {
+        'form': form,
+        'lic_id_to_name': lic_id_to_name,
+    })
 
 
 # def index(request):
@@ -27,21 +41,29 @@ def addnew(request):
 #     return render(request, "license/show.html", {'models': models})
 
 def index(request):
-    search_query = request.GET.get('search', '')  # Get the search query parameter
-    if search_query:
-        models = MainTable.objects.filter(
-            Q(store_id__icontains=search_query) |
-            Q(lic_id__lic_id__icontains=search_query) |
-            Q(lic_id__lic_id_nm__icontains=search_query)
-        ).distinct().order_by('id')  # Add an order_by clause here
-    else:
-        models = MainTable.objects.all().order_by('id')  # And here as well
+    # Retrieve filter values from GET request
+    store_id_query = request.GET.get('store_id', '')
+    lic_id_nm_query = request.GET.get('lic_id_nm', '')
+
+    # Build the query based on presence of filter values
+    query = Q()
+    if store_id_query:
+        query &= Q(store_id__icontains=store_id_query)
+    if lic_id_nm_query:
+        # Assuming 'lic_id' is a ForeignKey to 'DimensionTable' and 'lic_id_nm' is a field in 'DimensionTable'
+        query &= Q(lic_id__lic_id_nm__icontains=lic_id_nm_query)
+
+    models = MainTable.objects.filter(query).distinct().order_by('id')
 
     paginator = Paginator(models, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, "license/show.html", {'page_obj': page_obj, 'search_query': search_query})
+    return render(request, "license/show.html", {
+        'page_obj': page_obj,
+        'store_id_query': store_id_query,
+        'lic_id_nm_query': lic_id_nm_query
+    })
 
 
 def edit(request, id):

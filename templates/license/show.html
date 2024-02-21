@@ -15,12 +15,13 @@
                 <div class="search-section mb-3">
                     <form method="get" action="." class="form-inline float-right">
                         <div class="input-group">
-                            <input type="text" name="search" value="{{ search_query }}" placeholder="Store code/License name"
+                            <input type="text" name="search" value="{{ search_query }}" placeholder="Store code..."
                                    class="form-control">
                             <button type="submit" class="btn btn bg-purple ml-1">Search</button>
                         </div>
                     </form>
-                </div><br>
+                </div>
+                <br>
 
                 <div class="table-responsive">
                     <table id="bootstrapdatatable" class="table table-striped table-bordered" width="100%">
@@ -39,6 +40,10 @@
                         <th>Лиценз олгосон газрын нэр ID</th>
                         <th>Лиценз олгосон газар</th>
                         <th>Лицензийн код</th>
+                        <th>Архи зарж эхлэх цаг</th>
+                        <th>Архи зарж дуусах цаг</th>
+                        <th>Камерын тоо</th>
+                        <th>Талбайн хэмжээ</th>
                         <th>Edit</th>
                         {% if user.is_authenticated %}
                             {% is_in_license_group as user_in_license_group %}
@@ -64,11 +69,16 @@
                                 <td>{{ model.lic_prov_ID }}</td>
                                 <td>{{ model.lic_prov_name }}</td>
                                 <td>{{ model.lic_no }}</td>
-                                <td><a href="/lic-edit/{{ model.id }}" class="btn btn-primary">Edit</a></td>
+                                <td>{{ model.alc_opentime }}</td>
+                                <td>{{ model.alc_closetime }}</td>
+                                <td>{{ model.camera_cnt }}</td>
+                                <td>{{ model.lic_sqrm }}</td>
+                                <td><a href="/edit/{{ model.id }}" class="btn btn-primary">Edit</a></td>
                                 {% if user.is_authenticated %}
                                     {% is_in_license_group as user_in_event_group %}
                                     {% if user.is_superuser %}
-                                        <td><a href="{% url 'lic-delete' model.id %}" class="btn btn-danger">Delete</a></td>
+                                        <td><a href="{% url 'lic-delete' model.id %}" class="btn btn-danger">Delete</a>
+                                        </td>
                                     {% elif user_in_event_group %}
 
                                     {% endif %}
