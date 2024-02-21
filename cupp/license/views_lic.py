@@ -50,7 +50,6 @@ def index(request):
     if store_id_query:
         query &= Q(store_id__icontains=store_id_query)
     if lic_id_nm_query:
-        # Assuming 'lic_id' is a ForeignKey to 'DimensionTable' and 'lic_id_nm' is a field in 'DimensionTable'
         query &= Q(lic_id__lic_id_nm__icontains=lic_id_nm_query)
 
     models = MainTable.objects.filter(query).distinct().order_by('id')
