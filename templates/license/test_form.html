@@ -75,6 +75,11 @@
                         {% render_field form.lic_owner class+="form-control" %}
                     </div>
                     <div class="form-group col-md-6 liquor-time" style="display: none;">
+                        <label>Архи зарж эхлэх цаг: <span class="text-purple">*</span></label>
+                        <input type="time" id="id_alc_opentime" name="alc_opentime" class="form-control"
+                               value="{{ form.alc_opentime.value|default_if_none:"" }}">
+                    </div>
+                    <div class="form-group col-md-6 liquor-time" style="display: none;">
                         <label>Архи зарж дуусах цаг: <span class="text-purple">*</span></label>
                         <input type="time" id="id_alc_closetime" name="alc_closetime" class="form-control"
                                value="{{ form.alc_closetime.value|default_if_none:"" }}">
@@ -101,11 +106,7 @@
                         <label>Лицензийн код: </label>
                         {% render_field form.lic_no class+="form-control" %}
                     </div>
-                    <div class="form-group col-md-6 liquor-time" style="display: none;">
-                        <label>Архи зарж эхлэх цаг: <span class="text-purple">*</span></label>
-                        <input type="time" id="id_alc_opentime" name="alc_opentime" class="form-control"
-                               value="{{ form.alc_opentime.value|default_if_none:"" }}">
-                    </div>
+
 
                     <div class="mb-3">
                         <a href="{% url 'index' %}" class="btn btn-link text-purple-300">
@@ -150,7 +151,7 @@
                         $('.field-size').show();
                         $('#id_lic_sqrm').prop('required', true);
                     } else {
-                        $('.camera-count').hide();
+                        $('.field-size').hide();
                         $('#id_lic_sqrm').prop('required', false).val('');// Clear value if not type '07'
                     }
                 }
