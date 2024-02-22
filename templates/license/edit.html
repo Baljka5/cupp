@@ -14,15 +14,20 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label>Дугаар: </label>
-                    <input type="text" class="form-control" name="id" id="id_id" required readonly
+                    <input type="text" class="form-control" name="id" id="id_id" readonly
                            value="{{ model.id }}"/>
                 </div>
                 <div class="form-group col-md-6">
-                    <label>Лицензийн төрөл: </label>
+                    <label>Store code: </label>
+                    <input type="number" class="form-control" name="store_id" id="id_store_code"
+                           value="{{ model.store_id }}"/>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Лицензийн төрөл:</label>
                     <select name="lic_id" id="id_lic_id" class="form-control">
                         {% for type in types %}
                             <option value="{{ type.lic_id }}"
-                                    {% if type.lic_id == model.lic_id %}selected{% endif %}>
+                                    {% if type.lic_id == model.lic_id.lic_id %}selected{% endif %}>
                                 {{ type.lic_id }}
                             </option>
                         {% endfor %}
@@ -30,44 +35,70 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label>Лицензийн төрлийн нэр:</label>
-                    <input type="text" class="form-control" name="lic_id_nm" id="id_lic_id_nm" required
-                           maxlength="255" value="{{ model.lic_id_nm }}"/>
+                    <select name="lic_id_nm" id="id_lic_id_nm" class="form-control">
+                        {% for type in types %}
+                            <option value="{{ type.lic_id_nm }}"
+                                    {% if type.lic_id_nm == model.lic_id_nm %}selected{% endif %}>
+                                {{ type.lic_id_nm }}
+                            </option>
+                        {% endfor %}
+                    </select>
                 </div>
                 <div class="form-group col-md-6">
                     <label>Лицензтэй эсэх: </label>
-                    <select class="form-control" name="lic_yn" id="id_lic_yn" required>
+                    <select class="form-control" name="lic_yn" id="id_lic_yn">
                         <option value="True" {% if model.lic_yn %}selected{% endif %}>Тийм</option>
                         <option value="False" {% if not model.lic_yn %}selected{% endif %}>Үгүй</option>
                     </select>
                 </div>
                 <div class="form-group col-md-6">
                     <label>Лиценз авсан огноо: </label>
-                    <input type="date" class="form-control" name="st_dt" id="id_st_dt" required
+                    <input type="date" class="form-control" name="st_dt" id="id_st_dt"
                            value="{{ model.st_dt|date:"Y-m-d" }}"/>
                 </div>
                 <div class="form-group col-md-6">
                     <label>Лиценз дуусах огноо: </label>
-                    <input type="date" class="form-control" name="ed_dt" id="id_ed_dt" required
+                    <input type="date" class="form-control" name="ed_dt" id="id_ed_dt"
                            value="{{ model.ed_dt|date:"Y-m-d" }}"/>
                 </div>
                 <div class="form-group col-md-6">
                     <label>Лиценз авсан ажилтан:</label>
-                    <input type="text" class="form-control" name="lic_owner" id="id_lic_owner" required
+                    <input type="text" class="form-control" name="lic_owner" id="id_lic_owner"
                            maxlength="255" value="{{ model.lic_owner }}"/>
+                </div>
+                <div class="form-group col-md-6 liquor-time">
+                    <label>Архи зарж эхлэх цаг: </label>
+                    <input type="time" id="id_alc_opentime" name="alc_opentime" class="form-control"
+                           value="{{ model.alc_opentime }}">
+                </div>
+                <div class="form-group col-md-6 liquor-time">
+                    <label>Архи зарж дуусах цаг:</label>
+                    <input type="time" id="id_alc_closetime" name="alc_closetime" class="form-control"
+                           value="{{ model.alc_closetime }}">
+                </div>
+                <div class="form-group col-md-6 camera-count">
+                    <label>Камерын тоо:</label>
+                    <input type="number" id="id_camera_cnt" name="camera_cnt" class="form-control"
+                           value="{{ model.camera_cnt }}">
+                </div>
+                <div class="form-group col-md-6 field-size">
+                    <label>Талбайн хэмжээ:</label>
+                    <input type="number" id="id_lic_sqrm" name="lic_sqrm" class="form-control"
+                           value="{{ model.lic_sqrm }}">
                 </div>
                 <div class="form-group col-md-6">
                     <label>Лиценз олгосон газрын нэр ID:</label>
-                    <input type="text" class="form-control" name="lic_prov_ID" id="id_lic_prov_ID" required
+                    <input type="text" class="form-control" name="lic_prov_ID" id="id_lic_prov_ID"
                            maxlength="255" value="{{ model.lic_prov_ID }}"/>
                 </div>
                 <div class="form-group col-md-6">
                     <label>Лиценз олгосон газар:</label>
-                    <input type="text" class="form-control" name="lic_prov_name" id="id_lic_prov_name" required
+                    <input type="text" class="form-control" name="lic_prov_name" id="id_lic_prov_name"
                            maxlength="255" value="{{ model.lic_prov_name }}"/>
                 </div>
                 <div class="form-group col-md-6">
                     <label>Лицензийн код:</label>
-                    <input type="text" class="form-control" name="lic_no" id="id_lic_no" required
+                    <input type="text" class="form-control" name="lic_no" id="id_lic_no"
                            maxlength="255" value="{{ model.lic_no }}"/>
                 </div>
                 <div class="form-group col-md-6">

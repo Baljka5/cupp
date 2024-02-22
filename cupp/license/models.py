@@ -27,10 +27,11 @@ class DimensionTable(m.Model):
 
 class MainTable(models.Model):
     five_digit_validator = RegexValidator(r'^\d{5}$', 'Store number must be a 5-digit number')
-    store_id = models.CharField(max_length=5, validators=[five_digit_validator])
-    lic_id = models.ForeignKey(DimensionTable, on_delete=models.CASCADE, verbose_name='License type', null=True)
-    lic_id_nm = models.CharField('License Type Name', max_length=50, null=True)
-    lic_yn = models.BooleanField('Type of rent agreement', null=True)
+    store_id = models.CharField(max_length=5, validators=[five_digit_validator], blank=True, null=True)
+    lic_id = models.ForeignKey(DimensionTable, on_delete=models.CASCADE, verbose_name='License type', null=True,
+                               blank=True)
+    lic_id_nm = models.CharField('License Type Name', max_length=50, null=True, blank=True)
+    lic_yn = models.BooleanField('Type of rent agreement', null=True, blank=True)
     st_dt = models.DateField('Rent agreement start date', null=True)
     ed_dt = models.DateField('License Ended Date', null=True)
     lic_owner = models.CharField('Licensed Employee', max_length=50, null=True)
@@ -64,6 +65,5 @@ class DimensionTableLicenseProvider(models.Model):
     class Meta:
         db_table = 'lic_provider'
         verbose_name = 'Dimenstion Table License Provider'
-
 
 # lic_id_nm = m.ForeignKey(dimension_table.lic_id_nm, on_delete=m.CASCADE, related_name='License name')
