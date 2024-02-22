@@ -49,6 +49,14 @@
                     </select>
                 </div>
                 <div class="form-group col-md-6">
+                    <label>Нөлөө: <span class="text-purple">*</span></label>
+                    <select name="consequences" id="id_consequences" class="form-control" required>
+                        <option value="">{{ consequences }}</option>
+                        <option value="True" {% if model.consequences %}selected{% endif %}>Сайн</option>
+                        <option value="False" {% if model.consequences == False %}selected{% endif %}>Муу</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
                     <label>Хариу арга хэмжээний тухай: </label>
                     <input type="text" class="form-control" name="resp_action" id="id_resp_action"
                            maxlength="255"
