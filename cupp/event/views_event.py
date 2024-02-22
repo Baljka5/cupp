@@ -1,4 +1,5 @@
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 from .forms import StoreDailyLogForm
 from django.views import generic as g
@@ -48,20 +49,22 @@ def event_addnew(request):
 
 
 def index(request):
-    search_query = request.GET.get('search', '')  # Get the search query parameter
-    if search_query:
-        models = StoreDailyLog.objects.filter(
-            # Your search logic here, e.g., filtering by store_id
-            store_id__icontains=search_query
-        ).order_by('id')  # Add an order_by clause here
-    else:
-        models = StoreDailyLog.objects.all().order_by('id')  # And here as well
+    store_no_query = request.GET.get('store_no', '')
+    activ_cat_query = request.GET.get('activ_cat', '')  # Get the search query parameter
+    query = Q()
+    if store_no_query:
+        query &= Q(store_no__icontains=store_no_query)
+    if activ_cat_query:
+        query &= Q(activ_cat__activ_cat__icontains=activ_cat_query)
+
+    models = StoreDailyLog.objects.filter(query).distinct().order_by('id')  # And here as well
 
     paginator = Paginator(models, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, "event/show.html", {'page_obj': page_obj, 'search_query': search_query})
+    return render(request, "event/show.html",
+                  {'page_obj': page_obj, 'store_no_query': store_no_query, 'activ_cat_query': activ_cat_query})
 
 
 # def index(request):
@@ -101,5 +104,3 @@ class EventView(g.TemplateView):
         # Add in the is_event_member variable
         context['is_event_member'] = self.request.user.groups.filter(name='Event').exists()
         return context
-
-
