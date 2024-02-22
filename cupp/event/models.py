@@ -48,6 +48,7 @@ class StoreDailyLog(m.Model):
                               on_delete=m.PROTECT, null=True)
     modified_by = m.ForeignKey(User, verbose_name='Modified by', related_name='store_daily_logs_modified',
                                on_delete=m.PROTECT, null=True)
+    consequences = m.BooleanField('Consequences of events', null=True, blank=True)
 
     def __str__(self):
         return self.action_owner.own_dep

@@ -46,6 +46,10 @@
                         {% render_field form.activ_cat class+="form-control" %}
                     </div>
                     <div class="form-group col-md-6">
+                        <label>Нөлөө: <span class="text-purple">*</span></label>
+                        {% render_field form.consequences class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6">
                         <label>Хариу арга хэмжээний тухай: </label>
                         {% render_field form.resp_action class+="form-control" %}
                     </div>
@@ -53,6 +57,16 @@
                         <label>Хариуцагч: <span class="text-purple">*</span></label>
                         {% render_field form.action_owner class+="form-control" %}
                     </div>
+
+                    {#                    <div class="form-group col-md-6">#}
+                    {#                        <label>Үр дагавар: <span class="text-purple">*</span></label>#}
+                    {#                        <select class="form-control" name="consequences" id="id_consequences">#}
+                    {#                            <option value="" disabled selected>------</option>#}
+                    {#                            <option value="True" {% form.consequences %}>Сайн</option>#}
+                    {#                            <option value="False" {% form.consequences %}>Муу</option>#}
+                    {#                        </select>#}
+                    {#                        {% render_field form.consequences class+="form-control" %}#}
+                    {#                    </div>#}
                     <div class="mb-3">
                         <a href="{% url 'event_index' %}" class="btn btn-link text-purple-300">
                             Cancel

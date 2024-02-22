@@ -41,6 +41,7 @@
                         <th>Дэлгүүрийн нэр</th>
                         <th>Үйл явдлын тайлбар:</th>
                         <th>Ангилал</th>
+                        <th>Нөлөө</th>
                         <th>Хариу арга хэмжээний тухай:</th>
                         <th>Хариуцагч</th>
                         <th>Edit</th>
@@ -63,6 +64,15 @@
                             <td>{{ model.store_name }}</td>
                             <td>{{ model.activ_desc }}</td>
                             <td>{{ model.activ_cat }}</td>
+                            <td>
+                                {% if model.consequences is True %}
+                                    Сайн
+                                {% elif model.consequences is False %}
+                                    Муу
+                                {% else %}
+                                    None
+                                {% endif %}
+                            </td>
                             <td>{{ model.resp_action }}</td>
                             <td>{{ model.action_owner }}</td>
                             <td><a href="/log-edit/{{ model.id }}" class="btn btn-primary">Edit</a></td>

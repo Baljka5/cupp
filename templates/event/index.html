@@ -46,6 +46,10 @@
                         <label>Хариуцагч: </label>
                         {% render_field form.action_owner class+="form-control" %}
                     </div>
+                    <div class="form-group col-md-6">
+                        <label>Үр дагавар: <span class="text-purple">*</span></label>
+                        {% render_field form.consequences class+="form-control" %}
+                    </div>
                     <div class="mb-3">
                         <a href="{% url 'index' %}" class="btn btn-link text-purple-300">
                             Cancel
@@ -60,7 +64,7 @@
                 </div>
             </div>
         </form>
-<script>
+        <script>
             $(function () {
                 $('.form-control-uniform').uniform();
 
