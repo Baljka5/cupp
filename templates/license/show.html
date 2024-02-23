@@ -51,10 +51,11 @@
                         <th>Архи зарж дуусах цаг</th>
                         <th>Камерын тоо</th>
                         <th>Талбайн хэмжээ</th>
-                        <th>Edit</th>
+
                         {% if user.is_authenticated %}
                             {% is_in_license_group as user_in_license_group %}
                             {% if user.is_superuser %}
+                                <th>Edit</th>
                                 <th>Delete</th>
                             {% elif user_in_license_group %}
 
@@ -80,10 +81,10 @@
                                 <td>{{ model.alc_closetime }}</td>
                                 <td>{{ model.camera_cnt }}</td>
                                 <td>{{ model.lic_sqrm }}</td>
-                                <td><a href="/lic-edit/{{ model.id }}" class="btn btn-primary">Edit</a></td>
                                 {% if user.is_authenticated %}
                                     {% is_in_license_group as user_in_event_group %}
                                     {% if user.is_superuser %}
+                                        <td><a href="/lic-edit/{{ model.id }}" class="btn btn-primary">Edit</a></td>
                                         <td><a href="{% url 'lic-delete' model.id %}" class="btn btn-danger">Delete</a>
                                         </td>
                                     {% elif user_in_event_group %}
