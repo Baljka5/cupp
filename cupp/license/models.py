@@ -42,9 +42,20 @@ class MainTable(models.Model):
     alc_closetime = models.TimeField('Time to sell out alchohol', null=True, default=timezone.now, blank=True)
     lic_sqrm = models.DecimalField('Licensed area', max_digits=5, decimal_places=1, null=True, blank=True)
     camera_cnt = models.IntegerField('Total number of cameras', default=0, blank=True, null=True)
+    created_date = models.DateTimeField('Created date', auto_now_add=True, null=True)
+    modified_date = models.DateTimeField('Modified date', auto_now=True, null=True)
+    modified_by = models.ForeignKey(User, verbose_name='Modified by', related_name='licenses_modified',
+                                    on_delete=models.PROTECT, null=True)
+    created_by = models.ForeignKey(User, verbose_name='Created by', related_name='licenses_created',
+                                   on_delete=models.PROTECT, null=True)
 
     def __str__(self):
         return self.lic_prov_ID
+
+    def save(self, *args, **kwargs):
+        if not self.pk and not self.created_by:
+            self.created_by = self.modified_by
+        super(MainTable, self).save(*args, **kwargs)
 
     class Meta:
         db_table = 'str_license'
