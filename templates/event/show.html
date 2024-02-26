@@ -35,7 +35,17 @@
                     <table id="bootstrapdatatable" class="table table-striped table-bordered" width="100%">
                         <thead>
                         <th><input type="checkbox" id="checkall"/></th>
-                        <th>Дугаар</th>
+                        <th>
+                            <a href="?sort=id{% if request.GET.sort == 'id' and request.GET.order != 'desc' %}&order=desc{% else %}&order=asc{% endif %}{{ '&store_no='|add:store_no_query|add:'&activ_cat='|add:activ_cat_query }}">
+                                Дугаар
+                                {% if request.GET.sort == 'id' and request.GET.order != 'desc' %}
+                                    <span>&darr;</span>
+                                    <!-- Indicates current order is ascending, so show descending icon -->
+                                {% else %}
+                                    <span>&uarr;</span> <!-- Default or when desc, show ascending icon -->
+                                {% endif %}
+                            </a>
+                        </th>
                         <th>Огноо</th>
                         <th>Дэлгүүрийн дугаар</th>
                         <th>Дэлгүүрийн нэр</th>

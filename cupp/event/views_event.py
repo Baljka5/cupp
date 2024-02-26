@@ -51,13 +51,24 @@ def event_addnew(request):
 def index(request):
     store_no_query = request.GET.get('store_no', '')
     activ_cat_query = request.GET.get('activ_cat', '')  # Get the search query parameter
+    sort = request.GET.get('sort', 'id')  # Default sort is by 'id'
+    order = request.GET.get('order', 'desc')  # Default order is ascending
+
     query = Q()
     if store_no_query:
         query &= Q(store_no__icontains=store_no_query)
     if activ_cat_query:
         query &= Q(activ_cat__activ_cat__icontains=activ_cat_query)
 
-    models = StoreDailyLog.objects.filter(query).distinct().order_by('id')  # And here as well
+    if sort:
+        if order == 'asc':
+            sort_field = sort
+        else:  # Default or if 'desc'
+            sort_field = f'-{sort}'
+    else:
+        sort_field = '-id'  # Default sorting if none specified
+
+    models = StoreDailyLog.objects.filter(query).distinct().order_by(sort_field)
 
     paginator = Paginator(models, 10)
     page_number = request.GET.get('page')
