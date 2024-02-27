@@ -26,7 +26,8 @@ CHOICES_POINT_TYPE = (
     ('NA', 'Naran Supermarket'),
     ('SS', 'Sansar Supermarket'),
     ('TC', 'Ta Chi mart'),
-    ('GS', 'GS25')
+    ('GS', 'GS25'),
+    ('TE', 'TEST'),
 )
 
 CHOICES_POINT_GRADE = (

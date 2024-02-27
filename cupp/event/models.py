@@ -29,7 +29,7 @@ class ActionOwner(m.Model):
 
     class Meta:
         db_table = 'action_owners'
-        verbose_name = 'Action owners'
+        verbose_name = 'Action owner'
 
 
 class StoreDailyLog(m.Model):
@@ -60,7 +60,7 @@ class StoreDailyLog(m.Model):
 
     class Meta:
         db_table = 'store_daily_log'
-        verbose_name = 'Store Daily Logs'
+        verbose_name = 'Store Daily Log'
 
 
 class ActionCategory(m.Model):
@@ -84,4 +84,4 @@ class ActionCategory(m.Model):
 
     class Meta:
         db_table = 'action_category'
-        verbose_name = 'Action Category'
+        verbose_name = 'Action Categorie'

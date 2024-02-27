@@ -29,21 +29,17 @@ class PointForm(f.ModelForm):
             'isr_file': ClearableFileInput(),
             'pl_file': ClearableFileInput(),
         }
-        lic_model = StorePlanning
-        lic_fields = ('addr1_prov', 'addr2_dist', 'address_det', 'sp_name', 'near_gs_cvs', 'near_school', 'park_slot',
-                      'floor', 'cont_st_dt', 'cont_ed_dt', 'zip_code', 'rent_tp', 'rent_near', 'adv', 'disadv',
-                      'propose',
-                      )
 
 
 PhotoFormset = f.inlineformset_factory(Point, PointPhoto, fields=['photo'], extra=6)
 
-# class StorePlanningForm(f.ModelForm):
-#     cont_st_dt = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
-#     cont_ed_dt = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
-#
-#     class Meta:
-#         model = StorePlanning
-#         fields = ('addr1_prov', 'addr2_dist', 'address_det', 'sp_name', 'near_gs_cvs', 'near_school', 'park_slot',
-#                   'floor', 'cont_st_dt', 'cont_ed_dt', 'zip_code', 'rent_tp', 'rent_near', 'adv', 'disadv', 'propose',
-#                   )
+
+class StorePlanningForm(f.ModelForm):
+    cont_st_dt = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
+    cont_ed_dt = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
+
+    class Meta:
+        model = StorePlanning
+        fields = ('addr1_prov', 'addr2_dist', 'address_det', 'sp_name', 'near_gs_cvs', 'near_school', 'park_slot',
+                  'floor', 'cont_st_dt', 'cont_ed_dt', 'zip_code', 'rent_tp', 'rent_near', 'adv', 'disadv', 'propose',
+                  )

@@ -8,6 +8,8 @@
     <div class="content">
         <form method="post" autocomplete="off" enctype="multipart/form-data" id="type_form">
             {% csrf_token %}
+            {{ point_form.as_p }}
+            {{ store_planning_form.as_p }}
             {% render_field form.lat type="hidden" class+="form-control" %}
             {% render_field form.lon type="hidden" class+="form-control" %}
 

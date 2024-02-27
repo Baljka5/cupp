@@ -47,7 +47,8 @@ class District(m.Model):
 class Type(m.Model):
     type_name = m.CharField('Type name', blank=False, default='', max_length=50, unique=True)
     type_cd = m.CharField('Type code', blank=False, default='', max_length=50, unique=True)
-    icon = m.FileField(upload_to='images/ui')  # Temporarily store files
+    icon = m.FileField(upload_to='images/ui')
+    # icon = m.FileField(upload_to='static/images/ui/')
 
     def __str__(self):
         return self.type_name

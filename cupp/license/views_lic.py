@@ -6,6 +6,7 @@ from .forms import MainTableForm
 from .models import MainTable, DimensionTable
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.views import generic as g
 
 
 def addnew(request):
@@ -85,3 +86,14 @@ def destroy(request, id):
     model = MainTable.objects.get(id=id)
     model.delete()
     return redirect("/register-license")
+
+class LicenseView(g.TemplateView):
+    template_name = 'base.html'
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in the is_event_member variable
+        context['is_event_member'] = self.request.user.groups.filter(name='license').exists()
+        return context
+
