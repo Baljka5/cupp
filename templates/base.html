@@ -85,7 +85,7 @@
                     <img src="/static/images/logo.png" alt="xbook logo">
                 </a>
             {% else %}
-                <a href="{% url 'default_redirect' %}" class="d-inline-block">
+                <a href="{% url 'map' %}" class="d-inline-block">
                     <img src="/static/images/logo.png" alt="xbook logo">
                 </a>
             {% endif %}
@@ -124,7 +124,10 @@
                     </li>
                 {% endif %}
                 {% is_in_store_planner_group as user_in_store_planner_group %}
-                {% if user_in_store_planner_group %}
+                {% is_in_manager_group as user_in_manager_group %}
+                <!-- Assume you have a similar tag for checking manager group or superuser status -->
+
+                {% if user_in_store_planner_group or user_in_manager_group %}
                     <li class="nav-item">
                         <a href="{% url 'map' %}" class="navbar-nav-link">
                             <i class="icon-location4 mr-1"></i>

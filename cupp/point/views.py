@@ -17,6 +17,7 @@ from cupp.store_planning.models import StorePlanning
 
 class FormBase(GroupMixin):
     model = Point
+    st_model = StorePlanning
     template_name = 'point/form.html'
     form_class = PointForm
 
@@ -50,6 +51,8 @@ class Create(FormBase, g.CreateView):
         else:
             context['photo_formset'] = PhotoFormset(self.request.POST, self.request.FILES)
         return context
+
+
 
 
 class Edit(FormBase, StorePlannerMixin, g.UpdateView):
@@ -176,6 +179,8 @@ def custom_login_redirect(request):
     elif request.user.groups.filter(name='license').exists():
         return redirect('/register-license/')
     elif request.user.groups.filter(name='Store planner').exists():
+        return redirect('/map/')
+    elif request.user.groups.filter(name='Manager').exists():
         return redirect('/map/')
     else:
         return redirect('/default-redirect/')

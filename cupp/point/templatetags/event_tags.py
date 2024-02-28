@@ -9,6 +9,11 @@ register = template.Library()
 
 
 @register.simple_tag(takes_context=True)
+def is_in_manager_group(context):
+    request = context['request']
+    return request.user.groups.filter(name='Manager').exists() or request.user.is_superuser
+
+@register.simple_tag(takes_context=True)
 def is_in_event_group(context):
     request = context['request']
     return request.user.groups.filter(name='Event').exists() or request.user.is_superuser
