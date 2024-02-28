@@ -44,6 +44,12 @@ class FormBase(GroupMixin):
 
 
 class Create(FormBase, g.CreateView):
+
+    def get_form_kwargs(self):
+        kwargs = super(Create, self).get_form_kwargs()
+        kwargs['user'] = self.request.user  # Add the user to form kwargs
+        return kwargs
+
     def get_context_data(self, *args, **kwargs):
         context = super(FormBase, self).get_context_data(*args, **kwargs)
         if self.request.method == 'GET':
@@ -53,9 +59,13 @@ class Create(FormBase, g.CreateView):
         return context
 
 
-
-
 class Edit(FormBase, StorePlannerMixin, g.UpdateView):
+
+    def get_form_kwargs(self):
+        kwargs = super(Edit, self).get_form_kwargs()
+        kwargs['user'] = self.request.user  # Add the user to form kwargs
+        return kwargs
+
     def get_context_data(self, *args, **kwargs):
         context = super(Edit, self).get_context_data(*args, **kwargs)
         if self.request.method == 'GET':

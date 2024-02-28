@@ -42,16 +42,14 @@
                                 </div>
                             </div>
                             <div id="id_pp_fields" class="row d-none">
-                                {% if is_in_manager_group %}
-                                    <div class="form-group col-md-6" id="store_fields">
-                                        <label>Store ID:</label>
-                                        {% render_field form.store_id class+="form-control" %}
-                                    </div>
-                                    <div class="form-group col-md-6" id="store_fields">
-                                        <label>Store Name:</label>
-                                        {% render_field form.store_name class+="form-control" %}
-                                    </div>
-                                {% endif %}
+                                <div class="form-group col-md-6 store_fields">
+                                    <label>Store ID:</label>
+                                    {% render_field form.store_id class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-6 store_fields">
+                                    <label>Store Name:</label>
+                                    {% render_field form.store_name class+="form-control" %}
+                                </div>
                                 {#                                <div class="form-group col-md-6">#}
                                 {#                                    <label>City&Province: <span class="text-purple">*</span></label>#}
                                 {#                                    {% render_field form.addr1_prov class+="form-control" %}#}
@@ -389,10 +387,10 @@
             var tp = $('#id_type').val();
             if (tp == 'PP' || tp == 'CU') {
                 $('#id_pp_fields').removeClass('d-none');
-                if (tp == 'CU') {
-                    $('#store_fields').removeClass('d-none');
+                if (tp === 'CU') {
+                    $('.store_fields').removeClass('d-none');
                 } else {
-                    $('#store_fields').addClass('d-none');
+                    $('.store_fields').addClass('d-none');
                 }
             } else {
                 $('#id_pp_fields').addClass('d-none');

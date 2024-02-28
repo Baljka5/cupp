@@ -5,14 +5,23 @@ from cupp.common.fields import ClearableFileInput
 from cupp.store_planning.models import StorePlanning
 
 from .models import Point, PointPhoto
+from cupp.constants import CHOICES_POINT_TYPE
 
 
 class PointForm(f.ModelForm):
     available_date = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
+
     # cont_st_dt = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
     # cont_ed_dt = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
 
     # type = f.ModelChoiceField(queryset=Type.objects.all(), required=True, label='Type', empty_label=None)
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(PointForm, self).__init__(*args, **kwargs)
+
+        if not (user and (user.is_superuser or user.groups.filter(name='Manager').exists())):
+            self.fields['type'].choices = [choice for choice in CHOICES_POINT_TYPE if choice[0] != 'CU']
 
     class Meta:
         model = Point
