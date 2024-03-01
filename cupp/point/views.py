@@ -7,17 +7,17 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
-from .forms import PointForm, PhotoFormset
+from .forms import PointForm, PhotoFormset, StorePlanningForm
 from .models import Point, District, City, Type
 from .mixins import GroupMixin, StorePlannerMixin
 from django.contrib.auth.models import Group, User
 from django import template
-from cupp.store_planning.models import StorePlanning
+# from cupp.store_planning.models import StorePlanning
 
 
 class FormBase(GroupMixin):
     model = Point
-    st_model = StorePlanning
+    # st_model = StorePlanning
     template_name = 'point/form.html'
     form_class = PointForm
 
@@ -54,9 +54,31 @@ class Create(FormBase, g.CreateView):
         context = super(FormBase, self).get_context_data(*args, **kwargs)
         if self.request.method == 'GET':
             context['photo_formset'] = PhotoFormset()
+            context['store_planning_form'] = StorePlanningForm()
         else:
             context['photo_formset'] = PhotoFormset(self.request.POST, self.request.FILES)
+            context['store_planning_form'] = StorePlanningForm(self.request.POST)
         return context
+
+    # def form_valid(self, form):
+    #     response = super(Create, self).form_valid(form)  # This saves the Point instance
+    #     point_instance = form.instance
+    #
+    #     # Now, create or update StorePlanning instance
+    #     store_planning_defaults = {
+    #         'store_name': point_instance.store_name,
+    #         'lat': point_instance.lat,
+    #         'lon': point_instance.lon,
+    #         # Add all fields you want to copy
+    #     }
+    #     StorePlanning.objects.update_or_create(
+    #         store_id=point_instance.store_id,
+    #         defaults=store_planning_defaults
+    #     )
+    #
+    #     return response
+
+
 
 
 class Edit(FormBase, StorePlannerMixin, g.UpdateView):
@@ -70,8 +92,10 @@ class Edit(FormBase, StorePlannerMixin, g.UpdateView):
         context = super(Edit, self).get_context_data(*args, **kwargs)
         if self.request.method == 'GET':
             context['photo_formset'] = PhotoFormset(instance=self.object)
+            context['store_planning_form'] = StorePlanningForm(instance=self.object.storeplanning)
         else:
             context['photo_formset'] = PhotoFormset(self.request.POST, files=self.request.FILES, instance=self.object)
+            context['store_planning_form'] = StorePlanningForm(self.request.POST, instance=self.object.storeplanning)
 
         return context
 

@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 
 
 class StoreConsultant(m.Model):
-    store_id = m.CharField('Store id', blank=True, null=True, max_length=10)
+    store_id = m.IntegerField('Store ID', blank=True, null=True, default=0)
     team_mgr = m.CharField('Team manager name', blank=True, null=True, max_length=50)
     sc_name = m.CharField('Store consultant name', blank=True, null=True, max_length=50)
     tt_type = m.CharField('Working timetable', blank=True, null=True, max_length=50)

@@ -26,6 +26,7 @@ from cupp.point import views as point_views
 from cupp.point.views import get_districts, custom_login_redirect
 from cupp.license import views_lic as license_views
 from cupp.event import views_event as event_views
+from cupp.store_consultant import views as sc_views
 
 # from cupp.ajax_table_list import ajax_table_list
 
@@ -42,6 +43,8 @@ urlpatterns = [
     path('groups/', point_views.display_groups, name='display-groups'),
     path('', point_views.index, name='event_index'),
     # path('register-license/', license_views.MainTableCreateView, name='register_license'),
+
+    path('sc-index/', sc_views.scIndex, name='sc-index'),
 
     path('log-index/', event_views.index, name='event_index'),
     path('log-create', event_views.event_addnew, name='event-create'),

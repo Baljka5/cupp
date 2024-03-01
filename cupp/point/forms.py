@@ -2,9 +2,9 @@ from django import forms as f
 from django.conf import settings
 
 from cupp.common.fields import ClearableFileInput
-from cupp.store_planning.models import StorePlanning
+# from cupp.store_planning.models import StorePlanning
 
-from .models import Point, PointPhoto
+from .models import Point, PointPhoto, StorePlanning
 from cupp.constants import CHOICES_POINT_TYPE
 
 
@@ -13,6 +13,7 @@ class PointForm(f.ModelForm):
 
     # cont_st_dt = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
     # cont_ed_dt = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
+    # address_det = f.CharField(max_length=500)
 
     # type = f.ModelChoiceField(queryset=Type.objects.all(), required=True, label='Type', empty_label=None)
 
@@ -38,21 +39,22 @@ class PointForm(f.ModelForm):
             'isr_file': ClearableFileInput(),
             'pl_file': ClearableFileInput(),
         }
-        st_model = StorePlanning
-        st_fields = ('addr1_prov', 'addr2_dist', 'address_det', 'sp_name', 'near_gs_cvs', 'near_school', 'park_slot',
-                     'floor', 'cont_st_dt', 'cont_ed_dt', 'zip_code', 'rent_tp', 'rent_near', 'adv', 'disadv',
-                     'propose',
-                     )
+        # st_model = StorePlanning
+        # st_fields = ('addr1_prov', 'addr2_dist', 'address_det', 'sp_name', 'near_gs_cvs', 'near_school', 'park_slot',
+        #              'floor', 'cont_st_dt', 'cont_ed_dt', 'zip_code', 'rent_tp', 'rent_near', 'adv', 'disadv',
+        #              'propose',
+        #              )
 
 
 PhotoFormset = f.inlineformset_factory(Point, PointPhoto, fields=['photo'], extra=6)
 
-# class StorePlanningForm(f.ModelForm):
-#     cont_st_dt = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
-#     cont_ed_dt = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
-#
-#     class Meta:
-#         model = StorePlanning
-#         fields = ('addr1_prov', 'addr2_dist', 'address_det', 'sp_name', 'near_gs_cvs', 'near_school', 'park_slot',
-#                   'floor', 'cont_st_dt', 'cont_ed_dt', 'zip_code', 'rent_tp', 'rent_near', 'adv', 'disadv', 'propose',
-#                   )
+
+class StorePlanningForm(f.ModelForm):
+    cont_st_dt = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
+    cont_ed_dt = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
+
+    class Meta:
+        model = StorePlanning
+        fields = ('addr1_prov', 'addr2_dist', 'address_det', 'sp_name', 'near_gs_cvs', 'near_school', 'park_slot',
+                  'floor', 'cont_st_dt', 'cont_ed_dt', 'zip_code', 'rent_tp', 'rent_near', 'adv', 'disadv', 'propose',
+                  )
