@@ -142,7 +142,7 @@ function initMap() {
 
   var mapOptions = {
     center: {lat: 47.9156, lng: 106.9130},
-    scrollwheel: false,
+    scrollwheel: true,
     zoom: 13,
     mapTypeControl: true,
     fullscreenControl: false,

@@ -35,7 +35,6 @@ urlpatterns = [
     path('ajax/get_districts/', get_districts, name='ajax_get_districts'),
     path('', auth_views.LoginView.as_view(redirect_authenticated_user=True), name='login'),
 
-
     # path('ajax/table-data/', ajax_table_list.get_table_data, name='ajax_table_data'),
 
     path('custom-login-redirect/', custom_login_redirect, name='custom_login_redirect'),
@@ -45,6 +44,7 @@ urlpatterns = [
     # path('register-license/', license_views.MainTableCreateView, name='register_license'),
 
     path('sc-index/', sc_views.scIndex, name='sc-index'),
+    path('update_consultant_area/', sc_views.update_consultant_area, name='update_consultant_area'),
 
     path('log-index/', event_views.index, name='event_index'),
     path('log-create', event_views.event_addnew, name='event-create'),
