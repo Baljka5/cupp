@@ -12,6 +12,8 @@ from .models import Point, District, City, Type
 from .mixins import GroupMixin, StorePlannerMixin
 from django.contrib.auth.models import Group, User
 from django import template
+
+
 # from cupp.store_planning.models import StorePlanning
 
 
@@ -79,8 +81,6 @@ class Create(FormBase, g.CreateView):
     #     return response
 
 
-
-
 class Edit(FormBase, StorePlannerMixin, g.UpdateView):
 
     def get_form_kwargs(self):
@@ -92,10 +92,10 @@ class Edit(FormBase, StorePlannerMixin, g.UpdateView):
         context = super(Edit, self).get_context_data(*args, **kwargs)
         if self.request.method == 'GET':
             context['photo_formset'] = PhotoFormset(instance=self.object)
-            context['store_planning_form'] = StorePlanningForm(instance=self.object.storeplanning)
+            context['store_planning_form'] = StorePlanningForm(instance=self.object)
         else:
             context['photo_formset'] = PhotoFormset(self.request.POST, files=self.request.FILES, instance=self.object)
-            context['store_planning_form'] = StorePlanningForm(self.request.POST, instance=self.object.storeplanning)
+            context['store_planning_form'] = StorePlanningForm(self.request.POST, instance=self.object)
 
         return context
 
