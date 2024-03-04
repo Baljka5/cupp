@@ -21,14 +21,17 @@
                     </div>
                 {% endfor %}
             </div>
-            <div class="not-allocated" ondrop="drop(event)" ondragover="allowDrop(event)">
-                {% for consultant in consultants %}
-                    <!-- Make sc elements draggable -->
-                    <div class="sc" id="sc{{ consultant.id }}" draggable="true" ondragstart="drag(event)"
-                         data-consultant-id="{{ consultant.id }}">
-                        {{ consultant.sc_name }}
-                    </div>
-                {% endfor %}
+            <div class="not-allocated-body"  ondrop="drop(event)" ondragover="allowDrop(event)"
+                     data-area-id="not-allocated">
+                <div class="not-allocated">
+                    {% for consultant in consultants %}
+                        <!-- Make sc elements draggable -->
+                        <div class="sc" id="sc{{ consultant.id }}" draggable="true" ondragstart="drag(event)"
+                             data-consultant-id="{{ consultant.id }}">
+                            {{ consultant.sc_name }}
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
             <div class="save-close-container">
                 <button id="saveCloseBtn">SAVE & CLOSE</button>
@@ -78,6 +81,12 @@
 
         }
 
+        .not-allocated-body {
+            background-color: #D1D0CF;
+            padding: 10px;
+            margin: 5px;
+        }
+
         .not-allocated {
             display: flex;
             justify-content: center;
@@ -112,34 +121,52 @@
         function drop(event) {
             event.preventDefault();
             var data = event.dataTransfer.getData("text");
-            var consultantId = document.getElementById(data).getAttribute('data-consultant-id');
-            var targetAreaId = event.target.getAttribute('data-area-id');
-            event.target.appendChild(document.getElementById(data)); // Append the consultant to the new team
+            var consultantElement = document.getElementById(data);
+            var consultantId = consultantElement.getAttribute('data-consultant-id');
+            var target = event.target;
 
-            // Now you can make an AJAX call to update the backend
+            // Determine whether the drop target is a team body or the not-allocated section
+            var targetIsTeamBody = target.classList.contains('team-body');
+            var targetIsNotAllocated = target.classList.contains('not-allocated') || target.id === 'not-allocated';
+            var targetAreaId = target.getAttribute('data-area-id') || (targetIsNotAllocated ? 'not-allocated' : null);
+
+            // Append the consultant to the new team or back to not-allocated
+            if (targetIsTeamBody || targetIsNotAllocated) {
+                target.appendChild(consultantElement);
+            } else {
+                // If the drop target is not a team body or not-allocated, find the closest matching parent
+                var closestTarget = target.closest('.team-body, .not-allocated');
+                if (closestTarget) {
+                    closestTarget.appendChild(consultantElement);
+                    targetAreaId = closestTarget.getAttribute('data-area-id') || 'not-allocated';
+                }
+            }
+
+            // Make an AJAX call to update the backend
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/your-update-url/', true);
+            xhr.open('POST', '/update-consultant-area/', true);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-            xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken')); // Add the CSRF token
+            xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken')); // Assuming you have a function to get cookies
             xhr.send('consultantId=' + consultantId + '&targetAreaId=' + targetAreaId);
 
-            // You may want to update your page based on the server's response
             xhr.onload = function () {
-                if (xhr.status == 200) {
-                    // Handle successful response
+                if (xhr.status === 200) {
+                    console.log('Consultant updated successfully');
+                    // Additional success logic here
                 } else {
-                    // Handle error response
+                    console.error('Error updating consultant');
+                    // Additional error handling here
                 }
             };
         }
 
-        // Function to get the value of a cookie by name
+        // Function to get the value of a cookie by name for CSRF token
         function getCookie(name) {
             var cookieValue = null;
             if (document.cookie && document.cookie !== '') {
                 var cookies = document.cookie.split(';');
                 for (var i = 0; i < cookies.length; i++) {
-                    var cookie = jQuery.trim(cookies[i]);
+                    var cookie = cookies[i].trim();
                     if (cookie.substring(0, name.length + 1) === (name + '=')) {
                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                         break;

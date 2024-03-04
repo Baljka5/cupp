@@ -1,20 +1,30 @@
 from django.http import JsonResponse
 from django.shortcuts import render
 from cupp.store_consultant.models import Area, Consultants
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_protect
 
 
-@csrf_exempt
+@csrf_protect
+@require_POST
 def update_consultant_area(request):
-    if request.method == 'POST':
-        consultant_id = request.POST.get('consultantId')
-        target_area_id = request.POST.get('targetAreaId')
-        # Update the consultant's area here
-        # ...
+    consultant_id = request.POST.get('consultantId')
+    target_area_id = request.POST.get('targetAreaId')
 
-        return JsonResponse({'success': 'Consultant updated successfully.'})
-    else:
-        return JsonResponse({'error': 'Invalid request'}, status=400)
+    try:
+        consultant = Consultants.objects.get(id=consultant_id)
+
+        if target_area_id == 'not-allocated':
+            # Assuming that a null foreign key on consultant represents not-allocated
+            consultant.area = None
+        else:
+            # Assuming that the area_id is a ForeignKey in Consultants model
+            consultant.area = Area.objects.get(id=target_area_id)
+
+        consultant.save()
+        return JsonResponse({'status': 'success'})
+    except (Consultants.DoesNotExist, Area.DoesNotExist) as e:
+        return JsonResponse({'status': 'failed', 'message': str(e)}, status=400)
 
 
 def scIndex(request):
