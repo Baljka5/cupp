@@ -71,7 +71,7 @@ class Point(m.Model):
     created_by = m.ForeignKey(User, verbose_name='Creadted by', related_name='points', on_delete=m.PROTECT)
 
     # type = m.CharField('Type', max_length=10, choices=get_type_choices())
-    store_id = m.IntegerField('Store ID', blank=True, null=True, default=0)
+    store_id = m.CharField('Store ID', blank=True, null=True, max_length=5)
     store_name = m.CharField('Store name', blank=True, null=True, max_length=500)
     type = m.CharField('Type', max_length=10, choices=CHOICES_POINT_TYPE)
     lat = m.CharField('Latitude', max_length=50, default='47.9116')
