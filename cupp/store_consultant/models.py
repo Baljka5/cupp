@@ -6,7 +6,8 @@ from django.contrib.auth.models import User
 
 
 class StoreConsultant(m.Model):
-    store_id = m.IntegerField('Store ID', blank=True, null=True, default=0)
+    store_id = m.CharField('Store ID', blank=True, null=True, max_length=5)
+    store_name = m.CharField('Store Name', blank=True, null=True, max_length=50)
     team_mgr = m.CharField('Team manager name', blank=True, null=True, max_length=50)
     sc_name = m.CharField('Store consultant name', blank=True, null=True, max_length=50)
     tt_type = m.CharField('Working timetable', blank=True, null=True, max_length=50)
@@ -27,6 +28,10 @@ class StoreConsultant(m.Model):
     close_date = m.DateField('Closing date', blank=True, null=True)
     close_reason = m.TextField('Reason for closing store', blank=True, null=True)
     near_store = m.IntegerField('Number of the store within 500 meters', blank=True, null=True, default=0)
+    near_gs = m.CharField('GS detail status', blank=True, null=True, max_length=100)
+    sm_name = m.CharField('Store manager name', blank=True, null=True, max_length=50)
+    sm_phone = m.IntegerField('Store manager phone', blank=True, null=True)
+    prc_grade = m.BooleanField('Pricing policy', blank=True, null=True)
     created_date = m.DateTimeField('Created date', auto_now_add=True)
     modified_date = m.DateTimeField('Modified date', auto_now=True)
     created_by = m.ForeignKey(User, verbose_name='Created by', related_name='store_consultant_created',
@@ -45,3 +50,74 @@ class StoreConsultant(m.Model):
     class Meta:
         db_table = 'store_consultant'
         verbose_name = 'Store Consultant'
+
+
+class Area(m.Model):
+    team_no = m.CharField('Area No', max_length=10, blank=True, null=True)
+    team_man_name = m.CharField('Area manager name', max_length=50, blank=True, null=True)
+    team_man_surname = m.CharField('Area manager surname', max_length=50, blank=True, null=True)
+    team_man_email = m.EmailField('Area manager email address', blank=True, null=True)
+    team_man_phone = m.IntegerField('Area manager phone number', blank=True, null=True, default=0)
+    team_man_sex = m.BooleanField('Area manager gender', blank=True, null=True)
+    team_man_birthdt = m.DateField('Area manager birthday', blank=True, null=True)
+    team_man_rel_status = m.BooleanField('Area manager marital status', blank=True, null=True)
+    team_man_child = m.IntegerField('Area manager number of children', blank=True, null=True, default=0)
+    team_man_Addr1 = m.CharField('Living city', blank=True, null=True, max_length=50)
+    team_man_Addr2 = m.CharField('Living district', blank=True, null=True, max_length=50)
+    team_man_Addr3 = m.CharField('Living khoroo', blank=True, null=True, max_length=50)
+    team_man_Addr4 = m.CharField('Address detail', blank=True, null=True, max_length=50)
+    created_date = m.DateTimeField('Created date', auto_now_add=True)
+    created_by = m.ForeignKey(User, verbose_name='Created by', related_name='area_manager_created', on_delete=m.PROTECT,
+                              null=True)
+    modified_date = m.DateTimeField('Modified date', auto_now=True)
+    modified_by = m.ForeignKey(User, verbose_name='Modified by', related_name='area_manager_modified',
+                               on_delete=m.PROTECT,
+                               null=True)
+
+    def __str__(self):
+        return self.team_man_name
+
+    def save(self, *args, **kwargs):
+        if not self.pk and not self.created_by:
+            self.created_by = self.modified_by
+        super(Area, self).save(*args, **kwargs)
+
+    class Meta:
+        db_table = 'area_manager'
+        verbose_name = 'Area Manger'
+
+
+class Consultants(m.Model):
+    sc_name = m.CharField('Store name of consultants', max_length=50, blank=True, null=True)
+    sc_surname = m.CharField('Surname of store consultants',max_length=50, blank=True, null=True)
+    sc_email = m.EmailField('Email address of store consultants', blank=True, null=True)
+    sc_phone = m.IntegerField('Phone number of store consultants', blank=True, null=True)
+    sc_sex = m.BooleanField('Gender of store consultant', blank=True, null=True)
+    sc_birthdt = m.DateField('Birth date of store consultant', blank=True, null=True)
+    sc_rel_status = m.BooleanField('Relation status of store consultant', blank=True, null=True)
+    sc_child = m.IntegerField('Child number of store consultant', blank=True, null=True)
+    sc_Addr1 = m.CharField('Living city', blank=True, null=True, max_length=50)
+    sc_Addr2 = m.CharField('Living district', blank=True, null=True, max_length=50)
+    sc_Addr3 = m.CharField('Living khoroo', blank=True, null=True, max_length=50)
+    sc_Addr4 = m.CharField('Detail address', blank=True, null=True, max_length=50)
+    created_date = m.DateTimeField('Created date', auto_now_add=True)
+    created_by = m.ForeignKey(User, verbose_name='Created by', related_name='sc_created', on_delete=m.PROTECT,
+                              null=True)
+    modified_date = m.DateTimeField('Modified date', auto_now=True)
+    modified_by = m.ForeignKey(User, verbose_name='Modified by', related_name='sc_modified',
+                               on_delete=m.PROTECT,
+                               null=True)
+
+    def __str__(self):
+        return self.sc_name
+
+    def save(self, *args, **kwargs):
+        if not self.pk and not self.created_by:
+            self.created_by = self.modified_by
+        super(Consultants, self).save(*args, **kwargs)
+
+    class Meta:
+        db_table = 'consultants'
+        verbose_name = 'Consultant'
+
+

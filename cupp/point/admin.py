@@ -7,6 +7,7 @@ from django import forms
 from .models import Point, City, District, Type
 from cupp.license.models import DimensionTable, DimensionTableLicenseProvider, MainTable
 from cupp.event.models import ActionOwner, ActionCategory, StoreDailyLog
+from cupp.store_consultant.models import Area, Consultants
 
 admin.site.register(Point)
 admin.site.unregister(User)
@@ -18,7 +19,8 @@ admin.site.register(ActionOwner)
 admin.site.register(ActionCategory)
 admin.site.register(StoreDailyLog)
 admin.site.register(DimensionTableLicenseProvider)
-
+admin.site.register(Consultants)
+admin.site.register(Area)
 
 
 @admin.register(User)

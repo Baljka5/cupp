@@ -8,8 +8,76 @@
 
 {% block content %}
     <div class="content">
-        <div class="row">
+        <div class="teams-container">
+            <div class="team-row">
+                {% for area in areas %}
+                    <div class="team">
+                        <div class="team-header">{{ area.team_no }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="team">
+                <div class="not-allocated">
+                    {% for consultant in consultants %}
+                        <div class="sc" id="sc{{ consultant.id }}">{{ consultant.sc_name }}</div>
+                    {% endfor %}
 
+                </div>
+            </div>
+            <div class="save-close-container">
+                <button id="saveCloseBtn">SAVE & CLOSE</button>
+            </div>
         </div>
     </div>
+    <style>
+        .teams-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .team-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .team {
+            background-color: #D1D0CF;
+            padding: 10px;
+            margin: 5px;
+        }
+
+        .team-header {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .sc {
+            background-color: #ffcc99;
+            padding: 5px;
+            margin: 5px 5px;
+            text-align: center;
+        }
+
+        .not-allocated {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .save-close-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        #saveCloseBtn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+    </style>
+
 {% endblock %}

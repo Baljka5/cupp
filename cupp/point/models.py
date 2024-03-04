@@ -180,7 +180,7 @@ class PointPhoto(m.Model):
 
 class StorePlanning(m.Model):
     five_digit_validator = RegexValidator(r'^\d{5}$', 'Store number must be a 5-digit number')
-    store_id = m.IntegerField('Store ID', blank=True, null=True, default=0)
+    store_id = m.CharField('Store ID', blank=True, null=True, max_length=5)
     store_name = m.CharField('Store name', blank=True, null=True, max_length=500)
     lat = m.CharField('Latitude', max_length=50, default='47.9116')
     lon = m.CharField('Longitude', max_length=50, default='106.9057')
@@ -232,9 +232,7 @@ class StorePlanning(m.Model):
     modified_by = m.ForeignKey(User, verbose_name='Modified by', related_name='store_planning_modified',
                                on_delete=m.PROTECT, null=True)
 
-# class TeamManager(m.Model):
-
-
+    # class TeamManager(m.Model):
 
     def __str__(self):
         return self.store_id

@@ -6,7 +6,8 @@ from django.contrib.auth.models import User
 
 
 class StoreTrainer(m.Model):
-    store_id = m.IntegerField('Store ID', blank=True, null=True, default=0)
+    store_id = m.CharField('Store ID', blank=True, null=True, max_length=5)
+    store_name = m.CharField('Store name', blank=True, null=True, max_length=500)
     size = m.FloatField('Area size', blank=True, null=True, default=0)
     sitting_size = m.FloatField('Sitting area size', blank=True, null=True, default=0)
     war_size = m.FloatField('Warehouse size', blank=True, null=True, default=0)
