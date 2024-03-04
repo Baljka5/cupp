@@ -105,12 +105,6 @@
         {% if user.is_authenticated %}
 
             <ul class="navbar-nav ml-md-auto">
-                <li class="nav-item">
-                    <a href="{% url 'sc-index' %}" class="navbar-nav-link">
-                        <i class="icon-store mr-1"></i>
-                        <span>Store Consultant</span>
-                    </a>
-                </li>
                 {% is_in_event_group as user_in_event_group %}
                 {% if user_in_event_group %}
                     <li>
@@ -152,6 +146,12 @@
                         <a href="/admin/" class="navbar-nav-link">
                             <i class="icon-cog mr-1"></i>
                             <span>Settings</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'sc-index' %}" class="navbar-nav-link">
+                            <i class="icon-store mr-1"></i>
+                            <span>Store Consultant</span>
                         </a>
                     </li>
                 {% endif %}
