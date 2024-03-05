@@ -9,13 +9,15 @@
     <div class="content">
         <form method="post" autocomplete="off" enctype="multipart/form-data" id="type_form">
             {% csrf_token %}
-            {% render_field form.lat type="hidden" class+="form-control" %}
-            {% render_field form.lon type="hidden" class+="form-control" %}
+            {% render_field form.lat class+="form-control" %}
+            {% render_field form.lon class+="form-control" %}
 
             <div class="row">
                 <div class="col-md-5">
+
                     <div id="mapContainer" class="border-1 border-purple-300" data-lat="{{ object.lat }}"
-                         data-lng="{{ object.lon }}"></div>
+                         data-lng="{{ object.lon }}"><input id="pac-input" class="controls" type="text"
+                                                            placeholder="Search Box"></div>
                 </div>
                 <div class="col-md-7">
                     <div class="card shadow-none border-0 m-0">
@@ -277,6 +279,38 @@
     <style>
         .textarea-fullwidth {
             width: 100%;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .controls {
+            margin-top: 10px;
+            border: 1px solid transparent;
+            border-radius: 2px 0 0 2px;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            height: 32px;
+            outline: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        #pac-input {
+            background-color: #fff;
+            font-family: Roboto;
+            font-size: 15px;
+            font-weight: 300;
+            margin-left: 12px;
+            padding: 0 11px 0 13px;
+            text-overflow: ellipsis;
+            width: 400px;
+        }
+
+        #pac-input:focus {
+            border-color: #4d90fe;
         }
     </style>
     <script>

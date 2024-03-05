@@ -32,6 +32,7 @@ class StoreConsultant(m.Model):
     sm_name = m.CharField('Store manager name', blank=True, null=True, max_length=50)
     sm_phone = m.IntegerField('Store manager phone', blank=True, null=True)
     prc_grade = m.BooleanField('Pricing policy', blank=True, null=True)
+    tv_screen = m.IntegerField('Tv screen', blank=True, null=True, default=0)
     created_date = m.DateTimeField('Created date', auto_now_add=True)
     modified_date = m.DateTimeField('Modified date', auto_now=True)
     created_by = m.ForeignKey(User, verbose_name='Created by', related_name='store_consultant_created',
@@ -89,7 +90,7 @@ class Area(m.Model):
 
 class Consultants(m.Model):
     sc_name = m.CharField('Store name of consultants', max_length=50, blank=True, null=True)
-    sc_surname = m.CharField('Surname of store consultants',max_length=50, blank=True, null=True)
+    sc_surname = m.CharField('Surname of store consultants', max_length=50, blank=True, null=True)
     sc_email = m.EmailField('Email address of store consultants', blank=True, null=True)
     sc_phone = m.IntegerField('Phone number of store consultants', blank=True, null=True)
     sc_sex = m.BooleanField('Gender of store consultant', blank=True, null=True)
@@ -119,5 +120,3 @@ class Consultants(m.Model):
     class Meta:
         db_table = 'consultants'
         verbose_name = 'Consultant'
-
-

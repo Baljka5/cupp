@@ -3,7 +3,6 @@
 {% load widget_tweaks %}
 
 {% block header %}
-    <!-- You can add specific header content here if needed, such as a page title -->
 {% endblock %}
 
 {% block content %}
@@ -13,19 +12,16 @@
                 {% for area in areas %}
                     <div class="team">
                         <div class="team-header">{{ area.team_no }}</div>
-                        <!-- Make team-body a drop zone -->
                         <div class="team-body" ondrop="drop(event)" ondragover="allowDrop(event)"
                              data-area-id="{{ area.id }}">
-                            <!-- Your code for displaying team consultants goes here -->
                         </div>
                     </div>
                 {% endfor %}
             </div>
-            <div class="not-allocated-body"  ondrop="drop(event)" ondragover="allowDrop(event)"
-                     data-area-id="not-allocated">
+            <div class="not-allocated-body" ondrop="drop(event)" ondragover="allowDrop(event)"
+                 data-area-id="not-allocated">
                 <div class="not-allocated">
                     {% for consultant in consultants %}
-                        <!-- Make sc elements draggable -->
                         <div class="sc" id="sc{{ consultant.id }}" draggable="true" ondragstart="drag(event)"
                              data-consultant-id="{{ consultant.id }}">
                             {{ consultant.sc_name }}
@@ -111,11 +107,11 @@
 
     <script>
         function allowDrop(event) {
-            event.preventDefault(); // Necessary to allow dropping
+            event.preventDefault();
         }
 
         function drag(event) {
-            event.dataTransfer.setData("text", event.target.id); // Set the id of the drag source
+            event.dataTransfer.setData("text", event.target.id);
         }
 
         function drop(event) {
@@ -125,16 +121,13 @@
             var consultantId = consultantElement.getAttribute('data-consultant-id');
             var target = event.target;
 
-            // Determine whether the drop target is a team body or the not-allocated section
             var targetIsTeamBody = target.classList.contains('team-body');
             var targetIsNotAllocated = target.classList.contains('not-allocated') || target.id === 'not-allocated';
             var targetAreaId = target.getAttribute('data-area-id') || (targetIsNotAllocated ? 'not-allocated' : null);
 
-            // Append the consultant to the new team or back to not-allocated
             if (targetIsTeamBody || targetIsNotAllocated) {
                 target.appendChild(consultantElement);
             } else {
-                // If the drop target is not a team body or not-allocated, find the closest matching parent
                 var closestTarget = target.closest('.team-body, .not-allocated');
                 if (closestTarget) {
                     closestTarget.appendChild(consultantElement);
@@ -142,25 +135,21 @@
                 }
             }
 
-            // Make an AJAX call to update the backend
             var xhr = new XMLHttpRequest();
             xhr.open('POST', '/update-consultant-area/', true);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-            xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken')); // Assuming you have a function to get cookies
+            xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
             xhr.send('consultantId=' + consultantId + '&targetAreaId=' + targetAreaId);
 
             xhr.onload = function () {
                 if (xhr.status === 200) {
                     console.log('Consultant updated successfully');
-                    // Additional success logic here
                 } else {
                     console.error('Error updating consultant');
-                    // Additional error handling here
                 }
             };
         }
 
-        // Function to get the value of a cookie by name for CSRF token
         function getCookie(name) {
             var cookieValue = null;
             if (document.cookie && document.cookie !== '') {

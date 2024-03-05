@@ -40,6 +40,12 @@ class StoreTrainer(m.Model):
     dogbuggi_cooker = m.IntegerField('Tteok-bokki machine number', blank=True, null=True, default=0)
     hot_water_disp = m.IntegerField('Water boiler number', blank=True, null=True, default=0)
     tv_screen = m.IntegerField('TV number', blank=True, null=True, default=0)
+    pos_qty = m.IntegerField('POS', blank=True, null=True, default=0)
+    cam_int = m.IntegerField('Camera', blank=True, null=True, default=0)
+    cam_ext = m.IntegerField('External camera', blank=True, default=0)
+    monitor_eq = m.CharField('Recording device information', blank=True, null=True, max_length=100)
+    hard_disk_size_tb = m.IntegerField('Hard disk size', blank=True, null=True, default=0)
+    video_storage_day = m.IntegerField('Days to keep records', blank=True, null=True, default=0)
     created_date = m.DateTimeField('Created date', auto_now_add=True)
     modified_date = m.DateTimeField('Modified date', auto_now=True)
     created_by = m.ForeignKey(User, verbose_name='Created by', related_name='store_trainer_created',
@@ -58,4 +64,3 @@ class StoreTrainer(m.Model):
     class Meta:
         db_table = 'store_trainer'
         verbose_name = 'Store Trainer'
-
