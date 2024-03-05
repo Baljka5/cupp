@@ -121,6 +121,7 @@ class AjaxList(LoginRequiredMixin, g.ListView):
 
     def get_queryset(self):
         types = self.request.GET.getlist('type')
+        user = self.request.user
         grades = self.request.GET.getlist('grade')
         availables = self.request.GET.getlist('availability')
         size = self.request.GET.get('size')
@@ -168,14 +169,26 @@ class AjaxList(LoginRequiredMixin, g.ListView):
         if created_by:
             kwargs['created_by__id'] = created_by
 
-        if types:
-            qs = Point.objects.filter(Q(**kwargs) | Q(type__in=types))
-        else:
-            qs = Point.objects.filter(**kwargs)
+        if user.is_superuser:
+            return Point.objects.all()
 
-        user = self.request.user
-        if user.groups.filter(name='Store planner').exists():
-            qs = qs.filter(Q(created_by=user, type='PP') | Q(type__in=types))
+        qs = Point.objects.none()
+        if user.groups.filter(name='Store planner').exists() or user.is_superuser:
+            pp_qs = Point.objects.filter(created_by=user, type='PP')
+            qs = qs.union(pp_qs)
+
+            # For other types, if selected, include them in the queryset but exclude PP type points created by other users.
+        if types:
+            non_pp_qs = Point.objects.filter(type__in=types).exclude(type='PP')
+            qs = qs.union(non_pp_qs)
+        # if types:
+        #     qs = Point.objects.filter(Q(**kwargs) | Q(type__in=types))
+        # else:
+        #     qs = Point.objects.filter(**kwargs)
+        #
+        # user = self.request.user
+        # if user.groups.filter(name='Store planner').exists():
+        #     qs = qs.filter(Q(created_by=user, type='PP') | Q(type__in=types))
 
         return qs
 
