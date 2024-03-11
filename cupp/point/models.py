@@ -111,6 +111,11 @@ class Point(m.Model):
                                on_delete=m.PROTECT, null=True)
 
     def save(self, *args, **kwargs):
+
+        if not self.pk and not self.created_by:
+            self.created_by = self.modified_by
+        # super(Point, self).save(*args, **kwargs)
+
         super().save(*args, **kwargs)  # Call the "real" save() method.
 
         # Create or update the StorePlanning instance
@@ -141,6 +146,7 @@ class Point(m.Model):
             'radius': self.radius,
             'turnover_rent_percent': self.turnover_rent_percent,
             'address': self.address,
+            'created_by': self.created_by,
             # 'cluster': self.cluster,  # Uncomment and modify if cluster exists in Point and needs to be copied
         }
 

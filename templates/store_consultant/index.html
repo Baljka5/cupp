@@ -7,6 +7,26 @@
 
 {% block content %}
     <div class="content">
+        <div class="dropdown-section">
+            <div class="dropdown-container">
+                <label for="year-select">YEAR</label>
+                <select id="year-select" name="year">
+                    <option value="2023">2023</option>
+                    <option value="2024">2024</option>
+                    <!-- Additional years as needed -->
+                </select>
+            </div>
+            <div class="dropdown-container">
+                <label for="month-select">MONTH</label>
+                <select id="month-select" name="month">
+                    <option value="jan">JAN</option>
+                    <option value="feb">FEB</option>
+                    <option value="mar">MAR</option>
+                    <!-- Additional months as needed -->
+                </select>
+            </div>
+        </div>
+
         <div class="teams-container">
             <div class="team-row">
                 {% for area in areas %}
@@ -101,6 +121,36 @@
             color: white;
             border: none;
             cursor: pointer;
+        }
+
+        .dropdown-section {
+            display: flex;
+            justify-content: start;
+            margin-bottom: 20px; /* Adjust as needed */
+        }
+
+        .dropdown-container {
+            margin-right: 20px; /* Adjust space between dropdowns as needed */
+        }
+
+        .dropdown-container select {
+            display: block;
+            width: 100%; /* Adjust width as needed */
+            padding: 5px;
+            margin-top: 5px; /* Adjust as needed */
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f8f8f8;
+        }
+
+        .dropdown-container label {
+            display: block;
+            text-align: center;
+            background-color: #666; /* Adjust color as needed */
+            color: white;
+            padding: 5px;
+            border-radius: 4px;
+            margin-bottom: 5px;
         }
 
     </style>

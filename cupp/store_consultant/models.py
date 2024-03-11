@@ -76,7 +76,7 @@ class Area(m.Model):
                                null=True)
 
     def __str__(self):
-        return self.team_man_name
+        return '%s - %s' % (self.team_no, self.team_man_name)
 
     def save(self, *args, **kwargs):
         if not self.pk and not self.created_by:
@@ -116,6 +116,34 @@ class Consultants(m.Model):
         if not self.pk and not self.created_by:
             self.created_by = self.modified_by
         super(Consultants, self).save(*args, **kwargs)
+
+    class Meta:
+        db_table = 'consultants'
+        verbose_name = 'Consultant'
+
+
+class Allocation(m.Model):
+    year = m.CharField('Year', max_length=4, blank=True, null=True)
+    month = m.CharField('Month', max_length=12, blank=True, null=True)
+    team_no = m.CharField('Team No', max_length=10, blank=True, null=True)
+    store_cons = m.CharField('Store Consultant', max_length=50, blank=True, null=True)
+    storeID = m.CharField('Store ID', max_length=5, blank=True, null=True)
+    store_name = m.CharField('Store Name', max_length=50, blank=True, null=True)
+    created_date = m.DateTimeField('Created date', auto_now_add=True)
+    created_by = m.ForeignKey(User, verbose_name='Created by', related_name='allocation_created', on_delete=m.PROTECT,
+                              null=True)
+    modified_date = m.DateTimeField('Modified date', auto_now=True)
+    modified_by = m.ForeignKey(User, verbose_name='Modified by', related_name='allocation_modified',
+                               on_delete=m.PROTECT,
+                               null=True)
+
+    def __str__(self):
+        return self.team_no
+
+    def save(self, *args, **kwargs):
+        if not self.pk and not self.created_by:
+            self.created_by = self.modified_by
+        super(Allocation, self).save(*args, **kwargs)
 
     class Meta:
         db_table = 'consultants'

@@ -9,6 +9,8 @@
     <div class="content">
         <div class="row">
             <div class="col-md-5">
+                {% render_field form.lat class+="form-control" %}
+                {% render_field form.lon class+="form-control" %}
                 <div id="mapContainer" class="border-1 border-purple-300" data-lat="{{ object.lat }}"
                      data-lng="{{ object.lon }}"></div>
             </div>
