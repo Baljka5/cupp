@@ -151,8 +151,10 @@ class Point(m.Model):
         }
 
         StorePlanning.objects.update_or_create(store_id=self.store_id, defaults=defaults)
-        StoreTrainer.objects.update_or_create(store_id=self.store_id)
-        StoreConsultant.objects.update_or_create(store_id=self.store_id)
+        StoreTrainer.objects.update_or_create(store_id=self.store_id, store_name=self.store_name,
+                                              created_by=self.created_by)
+        StoreConsultant.objects.update_or_create(store_id=self.store_id, store_name=self.store_name,
+                                                 created_by=self.created_by)
 
     # def st_save(self, *args, **kwargs):
     #     super().save(*args, **kwargs)  # Call the "real" save() method.
