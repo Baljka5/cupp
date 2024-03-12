@@ -88,8 +88,14 @@
         </div>
     {% endif %}
     <div align="right" class="mb-1 font-size-sm">
-        <a href="{% url 'point_detail' object.id %}" class="text-purple" target="_blank">
+        <a href="{% url 'point_detail' object.id %}" class="text-purple">
             <i class="fa fa-pencil"></i> Дэлгэрэнгүй
         </a>
     </div>
+
+    {#    <div align="right" class="mb-1 font-size-sm">#}
+    {#        <a href="{% url 'point_detail' object.id %}" class="text-purple" target="_blank">#}
+    {#            <i class="fa fa-pencil"></i> Дэлгэрэнгүй#}
+    {#        </a>#}
+    {#    </div>#}
 </div>
