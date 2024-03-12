@@ -11,23 +11,23 @@
             <div id="id_type_filter" class="bg-white p-2 shadow-sm font-size-sm d-none d-sm-block">
                 <a href="#" id="id_select_all">Select All</a> / <a href="#" id="id_unselect_all">Unselect All</a>
                 <hr class="mb-2 mt-2">
-{#                {% for type in types %}#}
-{#                    <label class="d-block">#}
-{#                        <input type="checkbox" value="{{ type.type_cd }}" id="id_{{ type.type_cd }}" name="type"#}
-{#                               class="mr-1 type-checkbox"#}
-{#                               checked>#}
-{#                        {{ type.type_name }}#}
-{#                    </label>#}
-{#                {% endfor %}#}
+                {#                {% for type in types %}#}
+                {#                    <label class="d-block">#}
+                {#                        <input type="checkbox" value="{{ type.type_cd }}" id="id_{{ type.type_cd }}" name="type"#}
+                {#                               class="mr-1 type-checkbox"#}
+                {#                               checked>#}
+                {#                        {{ type.type_name }}#}
+                {#                    </label>#}
+                {#                {% endfor %}#}
                 {% for k,v in types %}
-{#                    {% if k != 'PP' %}#}
-                        <label class="d-block">
-                            <input type="checkbox" value="{{ k }}" id="id_{{ k }}" name="type"
-                                   class="mr-1 type-checkbox"
-                                   checked>
-                            {{ v }}
-                        </label>
-{#                    {% endif %}#}
+                    {#                    {% if k != 'PP' %}#}
+                    <label class="d-block">
+                        <input type="checkbox" value="{{ k }}" id="id_{{ k }}" name="type"
+                               class="mr-1 type-checkbox"
+                               checked>
+                        {{ v }}
+                    </label>
+                    {#                    {% endif %}#}
                 {% endfor %}
 
                 <hr class="mb-2 mt-2">
@@ -80,26 +80,37 @@
                 </select>
             </div>
 
+
             <div id="third_filter" class="bg-white p-2 shadow-sm font-size-sm d-none d-md-block">
-                <label class="d-block">
-                    <input type="text" id="id_filter_size" name="size"
-                           class="form-control ion-height-helper map-digit-filter" data-fouc>
-                    <div class="mt-1">Size</div>
+                <label>
+                    Latitude:
                 </label>
-                <hr class="mb-1 mt-2">
-                <label class="d-block">
-                    <input type="text" id="id_filter_base_rent_rate" name="base_rent_rate"
-                           class="form-control ion-height-helper map-digit-filter"
-                           data-fouc>
-                    <div class="mt-1">Base rent rate</div>
+                <input type="text" id="search_latitude" name="latitude" class="form-control form-control-sm">
+
+                <label class="mt-2">
+                    Longitude:
                 </label>
-                <hr class="mb-1 mt-2">
-                <label class="d-block">
-                    <input type="text" id="id_filter_max_rent_rate" name="max_rent_rate"
-                           class="form-control ion-height-helper map-digit-filter"
-                           data-fouc>
-                    <div class="mt-1">Maximum rent rate</div>
-                </label>
+                <input type="text" id="search_longitude" name="longitude" class="form-control form-control-sm">
+
+                {#                <label class="d-block">#}
+                {#                    <input type="text" id="id_filter_size" name="size"#}
+                {#                           class="form-control ion-height-helper map-digit-filter" data-fouc>#}
+                {#                    <div class="mt-1">Size</div>#}
+                {#                </label>#}
+                {#                <hr class="mb-1 mt-2">#}
+                {#                <label class="d-block">#}
+                {#                    <input type="text" id="id_filter_base_rent_rate" name="base_rent_rate"#}
+                {#                           class="form-control ion-height-helper map-digit-filter"#}
+                {#                           data-fouc>#}
+                {#                    <div class="mt-1">Base rent rate</div>#}
+                {#                </label>#}
+                {#                <hr class="mb-1 mt-2">#}
+                {#                <label class="d-block">#}
+                {#                    <input type="text" id="id_filter_max_rent_rate" name="max_rent_rate"#}
+                {#                           class="form-control ion-height-helper map-digit-filter"#}
+                {#                           data-fouc>#}
+                {#                    <div class="mt-1">Maximum rent rate</div>#}
+                {#                </label>#}
             </div>
         </form>
 
@@ -115,6 +126,7 @@
                 </ul>
             {% endfor %}
         </div>
+
     </div>
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBls3a4Jl1HY60FhdpaSPxBrVBg2D4EYAY&callback=initMap"
@@ -186,6 +198,43 @@
                     maploadList(map, true);
                 },
             });
+        });
+
+        function searchByLatLon() {
+            var lat = parseFloat($('#search_latitude').val());
+            var lon = parseFloat($('#search_longitude').val());
+
+            if (!isNaN(lat) && !isNaN(lon)) {
+                var latLng = new google.maps.LatLng(lat, lon);
+                map.setCenter(latLng);
+                map.setZoom(15); // Adjust zoom level as needed
+
+                // Optional: Place a temporary marker at the searched location
+                var searchMarker = new google.maps.Marker({
+                    position: latLng,
+                    map: map,
+                    title: "Search Result"
+                });
+
+                // Optionally, clear the marker after some time or based on some user action
+                setTimeout(function () {
+                    searchMarker.setMap(null);
+                }, 3000); // Clears marker after 3 seconds
+            } else {
+                alert("Please enter valid latitude and longitude values.");
+            }
+        }
+
+        $('#search_latitude, #search_longitude').on('keypress', function (e) {
+            if (e.which == 13) { // Enter key is pressed
+                searchByLatLon();
+                return false; // Prevent form submission
+            }
+        });
+
+        // If you have a search button:
+        $('#your_search_button_id').click(function () {
+            searchByLatLon();
         });
     </script>
 {% endblock %}
