@@ -83,14 +83,10 @@
 
             <div id="third_filter" class="bg-white p-2 shadow-sm font-size-sm d-none d-md-block">
                 <label>
-                    Latitude:
+                    Lat/Lon:
                 </label>
-                <input type="text" id="search_latitude" name="latitude" class="form-control form-control-sm">
-
-                <label class="mt-2">
-                    Longitude:
-                </label>
-                <input type="text" id="search_longitude" name="longitude" class="form-control form-control-sm">
+                <input type="text" id="search_latlon" name="latlon" placeholder="47.915711 106.891544"
+                       class="form-control form-control-sm">
 
                 {#                <label class="d-block">#}
                 {#                    <input type="text" id="id_filter_size" name="size"#}
@@ -200,41 +196,47 @@
             });
         });
 
-        function searchByLatLon() {
-            var lat = parseFloat($('#search_latitude').val());
-            var lon = parseFloat($('#search_longitude').val());
+        function searchByLatLonCombined() {
+            var input = $('#search_latlon').val().trim();
+            var parts = input.split(/\s+/); // Split by whitespace
+            if (parts.length === 2) {
+                var lat = parseFloat(parts[0]);
+                var lon = parseFloat(parts[1]);
 
-            if (!isNaN(lat) && !isNaN(lon)) {
-                var latLng = new google.maps.LatLng(lat, lon);
-                map.setCenter(latLng);
-                map.setZoom(15); // Adjust zoom level as needed
+                if (!isNaN(lat) && !isNaN(lon)) {
+                    var latLng = new google.maps.LatLng(lat, lon);
+                    map.setCenter(latLng);
+                    map.setZoom(15); // Adjust zoom level as needed
 
-                // Optional: Place a temporary marker at the searched location
-                var searchMarker = new google.maps.Marker({
-                    position: latLng,
-                    map: map,
-                    title: "Search Result"
-                });
+                    // Optional: Place a temporary marker at the searched location
+                    var searchMarker = new google.maps.Marker({
+                        position: latLng,
+                        map: map,
+                        title: "Search Result"
+                    });
 
-                // Optionally, clear the marker after some time or based on some user action
-                setTimeout(function () {
-                    searchMarker.setMap(null);
-                }, 3000); // Clears marker after 3 seconds
+                    // Optionally, clear the marker after some time or based on some user action
+                    setTimeout(function () {
+                        searchMarker.setMap(null);
+                    }, 3000); // Clears marker after 3 seconds
+                } else {
+                    alert("Please enter valid latitude and longitude values.");
+                }
             } else {
-                alert("Please enter valid latitude and longitude values.");
+                alert("Please enter the coordinates in the format: 'latitude longitude'.");
             }
         }
 
-        $('#search_latitude, #search_longitude').on('keypress', function (e) {
+        $('#search_latlon').on('keypress', function (e) {
             if (e.which == 13) { // Enter key is pressed
-                searchByLatLon();
+                searchByLatLonCombined();
                 return false; // Prevent form submission
             }
         });
 
         // If you have a search button:
         $('#your_search_button_id').click(function () {
-            searchByLatLon();
+            searchByLatLonCombined();
         });
     </script>
 {% endblock %}
