@@ -45,6 +45,8 @@ urlpatterns = [
 
     path('sc-index/', sc_views.scIndex, name='sc-index'),
     path('update_consultant_area/', sc_views.update_consultant_area, name='update_consultant_area'),
+    path('save-allocations/', sc_views.save_allocations, name='save_allocations'),
+    path('get-allocations/', sc_views.get_allocations, name='get_allocations'),
 
     path('log-index/', event_views.index, name='event_index'),
     path('log-create', event_views.event_addnew, name='event-create'),

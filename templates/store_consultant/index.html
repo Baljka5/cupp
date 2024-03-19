@@ -32,14 +32,21 @@
                 {% for area in areas %}
                     <div class="team">
                         <div class="team-header">{{ area.team_no }}</div>
-                        <div class="team-body" ondrop="drop(event)" ondragover="allowDrop(event)"
+                        <div class="team-body" id="area-{{ area.id }}" ondrop="drop(event)"
+                             ondragover="allowDrop(event)"
                              data-area-id="{{ area.id }}">
+
+                            {#                        <div class="team-body" ondrop="drop(event)" ondragover="allowDrop(event)"#}
+                            {#                             data-area-id="{{ area.id }}">#}
                         </div>
                     </div>
                 {% endfor %}
             </div>
-            <div class="not-allocated-body" ondrop="drop(event)" ondragover="allowDrop(event)"
+            {#            <div class="not-allocated-body" ondrop="drop(event)" ondragover="allowDrop(event)"#}
+            {#                 data-area-id="not-allocated">#}
+            <div class="not-allocated-body" id="not-allocated" ondrop="drop(event)" ondragover="allowDrop(event)"
                  data-area-id="not-allocated">
+
                 <div class="not-allocated">
                     {% for consultant in consultants %}
                         <div class="sc" id="sc{{ consultant.id }}" draggable="true" ondragstart="drag(event)"
@@ -50,7 +57,8 @@
                 </div>
             </div>
             <div class="save-close-container">
-                <button id="saveCloseBtn">SAVE & CLOSE</button>
+                {#                <button id="saveCloseBtn">SAVE & CLOSE</button>#}
+                <button id="saveCloseBtn" onclick="saveAllocations()">SAVE & CLOSE</button>
             </div>
         </div>
     </div>
@@ -156,6 +164,41 @@
     </style>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Fetch and render the current allocations after the page has fully loaded
+            fetchAllocationsAndRender();
+        });
+
+        function fetchAllocationsAndRender() {
+            // Fetch the current allocations from the server
+            fetch('/get-allocations/')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Use the fetched data to position consultant elements according to their allocations
+                    data.forEach(allocation => {
+                        // Assuming your consultant elements have IDs formatted as 'sc<consultant_id>'
+                        const consultantElement = document.getElementById(`sc${allocation.consultant__id}`);
+                        // And your area elements can be identified with a data attribute 'data-area-id'
+                        const areaElement = document.querySelector(`[data-area-id="${allocation.area__id}"]`);
+
+                        if (consultantElement && areaElement) {
+                            // Move the consultant element to its allocated area
+                            const targetContainer = areaElement.querySelector('.team-body') || areaElement;
+                            targetContainer.appendChild(consultantElement);
+                        }
+                    });
+                })
+                .catch(error => {
+                    // Handle any errors that occurred during the fetch
+                    console.error('Error fetching allocations:', error);
+                });
+        }
+
         function allowDrop(event) {
             event.preventDefault();
         }
@@ -168,44 +211,72 @@
             event.preventDefault();
             var data = event.dataTransfer.getData("text");
             var consultantElement = document.getElementById(data);
-            var consultantId = consultantElement.getAttribute('data-consultant-id');
             var target = event.target;
 
+            // Ensure we're dropping the consultant into a valid area or back to the not-allocated container
             var targetIsTeamBody = target.classList.contains('team-body');
             var targetIsNotAllocated = target.classList.contains('not-allocated') || target.id === 'not-allocated';
-            var targetAreaId = target.getAttribute('data-area-id') || (targetIsNotAllocated ? 'not-allocated' : null);
 
             if (targetIsTeamBody || targetIsNotAllocated) {
                 target.appendChild(consultantElement);
             } else {
+                // If dropped on a child, find the closest .team-body or .not-allocated container
                 var closestTarget = target.closest('.team-body, .not-allocated');
                 if (closestTarget) {
                     closestTarget.appendChild(consultantElement);
-                    targetAreaId = closestTarget.getAttribute('data-area-id') || 'not-allocated';
                 }
             }
 
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/update-consultant-area/', true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-            xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-            xhr.send('consultantId=' + consultantId + '&targetAreaId=' + targetAreaId);
+            // Call function to save updated allocation to the server here
+            // saveAllocation(consultantId, targetAreaId);
+        }
 
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    console.log('Consultant updated successfully');
-                } else {
-                    console.error('Error updating consultant');
-                }
-            };
+        // Implement the saveAllocation function to send the updated allocation to the server
+        // This function should be implemented based on how your backend expects to receive and process these updates
+        function saveAllocations() {
+            const allocations = []; // Prepare to collect allocations data
+
+            // Example: Loop through all allocated consultants and prepare data for sending
+            document.querySelectorAll('.team-body').forEach(area => {
+                const areaId = area.getAttribute('data-area-id');
+                area.querySelectorAll('.sc').forEach(consultant => {
+                    const consultantId = consultant.getAttribute('data-consultant-id');
+                    allocations.push({consultantId, areaId});
+                });
+            });
+
+            // Send the allocations data to the server using fetch API
+            fetch('/save-allocations/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Include CSRF token as needed, depending on your server-side setup
+                    'X-CSRFToken': getCookie('csrftoken'), // Implement getCSRFToken() to retrieve CSRF token
+                },
+                body: JSON.stringify({allocations})
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Success:', data);
+                    // Handle success - e.g., show a success message
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    // Handle error - e.g., show an error message
+                });
         }
 
         function getCookie(name) {
-            var cookieValue = null;
+            let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
-                var cookies = document.cookie.split(';');
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = cookies[i].trim();
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
                     if (cookie.substring(0, name.length + 1) === (name + '=')) {
                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                         break;
@@ -214,6 +285,8 @@
             }
             return cookieValue;
         }
+
     </script>
+
 
 {% endblock %}

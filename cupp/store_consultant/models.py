@@ -118,11 +118,13 @@ class Consultants(m.Model):
         super(Consultants, self).save(*args, **kwargs)
 
     class Meta:
-        db_table = 'consultants'
+        db_table = 'consultant'
         verbose_name = 'Consultant'
 
 
 class Allocation(m.Model):
+    consultant = m.ForeignKey(Consultants, on_delete=m.CASCADE, null=True, blank=True)
+    area = m.ForeignKey(Area, on_delete=m.SET_NULL, null=True, blank=True)
     year = m.CharField('Year', max_length=4, blank=True, null=True)
     month = m.CharField('Month', max_length=12, blank=True, null=True)
     team_no = m.CharField('Team No', max_length=10, blank=True, null=True)
@@ -146,5 +148,5 @@ class Allocation(m.Model):
         super(Allocation, self).save(*args, **kwargs)
 
     class Meta:
-        db_table = 'consultants'
-        verbose_name = 'Consultant'
+        db_table = 'allocation'
+        verbose_name = 'Allocation'
