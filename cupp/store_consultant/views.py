@@ -3,7 +3,8 @@ import json
 from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import render
-from cupp.store_consultant.models import Area, Consultants, Allocation
+from cupp.store_consultant.models import Area, Consultants, Allocation, StoreConsultant
+from cupp.point.models import Point
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect
 
@@ -11,7 +12,8 @@ from django.views.decorators.csrf import csrf_protect
 def scIndex(request):
     areas = Area.objects.all()
     consultants = Consultants.objects.all()
-    return render(request, 'store_consultant/index.html', {'areas': areas, 'consultants': consultants})
+    store_consultants = StoreConsultant.objects.all()
+    return render(request, 'store_consultant/index.html', {'areas': areas, 'consultants': consultants, 'store_consultants': store_consultants})
 
 
 @csrf_protect

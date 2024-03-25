@@ -11,8 +11,8 @@
             <div class="dropdown-container">
                 <label for="year-select">YEAR</label>
                 <select id="year-select" name="year">
-                    <option value="2023">2023</option>
-                    <option value="2024">2024</option>
+                    <option value="2023">2024</option>
+                    <option value="2024">2025</option>
                     <!-- Additional years as needed -->
                 </select>
             </div>
@@ -31,7 +31,7 @@
             <div class="team-row">
                 {% for area in areas %}
                     <div class="team">
-                        <div class="team-header">{{ area.team_no }}</div>
+                        <div class="team-header">{{ area.team_no }}<span class="sc-count"></span></div>
                         <div class="team-body" id="area-{{ area.id }}" ondrop="drop(event)"
                              ondragover="allowDrop(event)"
                              data-area-id="{{ area.id }}">
@@ -44,6 +44,13 @@
             </div>
             {#            <div class="not-allocated-body" ondrop="drop(event)" ondragover="allowDrop(event)"#}
             {#                 data-area-id="not-allocated">#}
+            <div class="store-allocation-body" id="store-allocation" ondrop="drop(event)" ondragover="allowDrop(event)"
+                 data-area-id="store-allocation">
+                <div class="store-allocation">
+                    <h2>SC Allocation (Not Allocated)</h2>
+                    <!-- SCs will be dynamically added here via drag-and-drop -->
+                </div>
+            </div>
             <div class="not-allocated-body" id="not-allocated" ondrop="drop(event)" ondragover="allowDrop(event)"
                  data-area-id="not-allocated">
 
@@ -56,6 +63,25 @@
                     {% endfor %}
                 </div>
             </div>
+{#            <div class="store-allocation-body" id="store-allocation" ondrop="drop(event)" ondragover="allowDrop(event)"#}
+{#                 data-area-id="store-allocation">#}
+{#                <div class="store-allocation">#}
+{#                    <h2>Store Allocation (Not Allocated)</h2>#}
+{#                    <!-- SCs will be dynamically added here via drag-and-drop -->#}
+{#                </div>#}
+{#            </div>#}
+{#            <div class="not-allocated-body" id="not-allocated" ondrop="drop(event)" ondragover="allowDrop(event)"#}
+{#                 data-area-id="not-allocated">#}
+{##}
+{#                <div class="not-allocated">#}
+{#                    {% for store_consultant in store_consultants %}#}
+{#                        <div class="sc" id="sc{{ store_consultant.id }}" draggable="true" ondragstart="drag(event)"#}
+{#                             data-consultant-id="{{ store_consultant.id }}">#}
+{#                            {{ store_consultant.store_id }}#}
+{#                        </div>#}
+{#                    {% endfor %}#}
+{#                </div>#}
+{#            </div>#}
             <div class="save-close-container">
                 {#                <button id="saveCloseBtn">SAVE & CLOSE</button>#}
                 <button id="saveCloseBtn" onclick="saveAllocations()">SAVE & CLOSE</button>
@@ -81,28 +107,33 @@
             margin-bottom: 20px;
             flex: 1;
             margin-left: 20px;
+            display: flex;
+            flex-direction: column; /* Ensure .team-header can take full width */
         }
 
         .team:first-child {
             margin-left: 0;
         }
 
-        .team-body {
-            background-color: #F4E2D0;
-            padding: 10px;
-            margin: 5px;
-        }
-
         .team-header {
             font-weight: bold;
             margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between; /* Align items on opposite ends */
+            align-items: center; /* Center items vertically */
+            width: 100%; /* Ensure it spans the full width of .team */
+        }
+
+        .team-body {
+            background-color: #F4E2D0;
+            padding: 10px;
+            margin: 5px 0; /* Adjusted for demonstration */
         }
 
         .sc {
             background-color: #ffcc99;
             padding: 5px;
             margin: 5px 5px;
-
         }
 
         .not-allocated-body {
@@ -160,18 +191,16 @@
             border-radius: 4px;
             margin-bottom: 5px;
         }
-
     </style>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Fetch and render the current allocations after the page has fully loaded
-            fetchAllocationsAndRender();
+            // Initially fetch and render allocations, then update SC counts
+            fetchAllocationsAndRender().then(updateScCounts);
         });
 
         function fetchAllocationsAndRender() {
-            // Fetch the current allocations from the server
-            fetch('/get-allocations/')
+            return fetch('/get-allocations/')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -179,22 +208,16 @@
                     return response.json();
                 })
                 .then(data => {
-                    // Use the fetched data to position consultant elements according to their allocations
                     data.forEach(allocation => {
-                        // Assuming your consultant elements have IDs formatted as 'sc<consultant_id>'
                         const consultantElement = document.getElementById(`sc${allocation.consultant__id}`);
-                        // And your area elements can be identified with a data attribute 'data-area-id'
                         const areaElement = document.querySelector(`[data-area-id="${allocation.area__id}"]`);
-
                         if (consultantElement && areaElement) {
-                            // Move the consultant element to its allocated area
                             const targetContainer = areaElement.querySelector('.team-body') || areaElement;
                             targetContainer.appendChild(consultantElement);
                         }
                     });
                 })
                 .catch(error => {
-                    // Handle any errors that occurred during the fetch
                     console.error('Error fetching allocations:', error);
                 });
         }
@@ -209,49 +232,43 @@
 
         function drop(event) {
             event.preventDefault();
-            var data = event.dataTransfer.getData("text");
-            var consultantElement = document.getElementById(data);
-            var target = event.target;
+            const data = event.dataTransfer.getData("text");
+            const consultantElement = document.getElementById(data);
+            let target = event.target;
 
             // Ensure we're dropping the consultant into a valid area or back to the not-allocated container
-            var targetIsTeamBody = target.classList.contains('team-body');
-            var targetIsNotAllocated = target.classList.contains('not-allocated') || target.id === 'not-allocated';
-
-            if (targetIsTeamBody || targetIsNotAllocated) {
-                target.appendChild(consultantElement);
-            } else {
-                // If dropped on a child, find the closest .team-body or .not-allocated container
-                var closestTarget = target.closest('.team-body, .not-allocated');
-                if (closestTarget) {
-                    closestTarget.appendChild(consultantElement);
-                }
+            if (!target.classList.contains('team-body')) {
+                target = target.closest('.team-body, .not-allocated-body');
             }
 
-            // Call function to save updated allocation to the server here
-            // saveAllocation(consultantId, targetAreaId);
+            if (target) {
+                target.appendChild(consultantElement);
+                updateScCounts(); // Update the SC counts after each drop operation
+                saveCurrentStateToLocal(); // Save the current state to local storage
+            }
         }
 
-        // Implement the saveAllocation function to send the updated allocation to the server
-        // This function should be implemented based on how your backend expects to receive and process these updates
-        function saveAllocations() {
-            const allocations = []; // Prepare to collect allocations data
-
-            // Example: Loop through all allocated consultants and prepare data for sending
-            document.querySelectorAll('.team-body').forEach(area => {
-                const areaId = area.getAttribute('data-area-id');
+        function saveCurrentStateToLocal() {
+            const allocations = [];
+            document.querySelectorAll('.team-body, .not-allocated-body').forEach(area => {
+                const areaId = area.getAttribute('data-area-id') || 'not-allocated';
                 area.querySelectorAll('.sc').forEach(consultant => {
-                    const consultantId = consultant.getAttribute('data-consultant-id');
-                    allocations.push({consultantId, areaId});
+                    allocations.push({
+                        consultantId: consultant.getAttribute('data-consultant-id'),
+                        areaId: areaId
+                    });
                 });
             });
+            localStorage.setItem('allocations', JSON.stringify(allocations));
+        }
 
-            // Send the allocations data to the server using fetch API
+        function saveAllocations() {
+            const allocations = JSON.parse(localStorage.getItem('allocations')) || [];
             fetch('/save-allocations/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    // Include CSRF token as needed, depending on your server-side setup
-                    'X-CSRFToken': getCookie('csrftoken'), // Implement getCSRFToken() to retrieve CSRF token
+                    'X-CSRFToken': getCookie('csrftoken'),
                 },
                 body: JSON.stringify({allocations})
             })
@@ -263,12 +280,20 @@
                 })
                 .then(data => {
                     console.log('Success:', data);
-                    // Handle success - e.g., show a success message
+                    alert('Allocations saved successfully!');
+                    localStorage.removeItem('allocations'); // Clear local storage after successful save
                 })
-                .catch((error) => {
+                .catch(error => {
                     console.error('Error:', error);
-                    // Handle error - e.g., show an error message
+                    alert('Failed to save the allocations. Please try again.');
                 });
+        }
+
+        function updateScCounts() {
+            document.querySelectorAll('.team').forEach(team => {
+                const count = team.querySelectorAll('.sc').length;
+                team.querySelector('.sc-count').textContent = ` (${count} SC${count !== 1 ? 's' : ''})`;
+            });
         }
 
         function getCookie(name) {
@@ -285,8 +310,6 @@
             }
             return cookieValue;
         }
-
     </script>
-
 
 {% endblock %}

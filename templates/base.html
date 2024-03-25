@@ -106,6 +106,12 @@
 
             <ul class="navbar-nav ml-md-auto">
                 {% is_in_event_group as user_in_event_group %}
+                <li>
+                    <a href="{% url 'rent_index' %}" class="navbar-nav-link">
+                        <i class="icon-calendar mr-1"></i>
+                        <span>Rent</span>
+                    </a>
+                </li>
                 {% if user_in_event_group %}
                     <li>
                         <a href="{% url 'event_index' %}" class="navbar-nav-link">

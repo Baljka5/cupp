@@ -1,0 +1,219 @@
+{#<link rel="stylesheet" type="text/css"#}
+{#      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"/>#}
+{% extends "base.html" %}
+{% load event_tags %}
+{% load widget_tweaks %}
+
+{% block header %}
+
+{% endblock %}
+{% block content %}
+    <div class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <span><a href="/rent-create" id="btn_save_and_new"
+                         class="btn bg-purple ml-1">Add New Record</a></span>
+                <div class="row">
+                    <div class="col-md-12 d-flex justify-content-end mb-3">
+                        <form method="get" action="." class="form-inline">
+                            <div class="input-group">
+                                <input type="text" name="store_id" value="{{ store_id_query }}"
+                                       placeholder="Store ID..." class="form-control mr-2" style="margin-right: 2px;">
+                                <input type="text" name="str_name" value="{{ str_name_query }}"
+                                       placeholder="Category..." class="form-control mr-2"
+                                       style="margin-right: 2px;">
+                                <button type="submit" class="btn bg-purple ml-1" style="margin-right: 2px;">Filter
+                                </button>
+                                <a href="." class="btn btn-secondary">Clear</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <br>
+
+                <div class="table-responsive">
+                    <table id="bootstrapdatatable" class="table table-striped table-bordered" width="100%">
+                        <thead>
+                        <th><input type="checkbox" id="checkall"/></th>
+                        <th>
+                            <a href="?sort=id{% if request.GET.sort == 'id' and request.GET.order != 'desc' %}&order=desc{% else %}&order=asc{% endif %}{{ '&store_id='|add:store_id_query|add:'&str_name='|add:str_name_query }}">
+                                Дугаар
+                                {% if request.GET.sort == 'id' and request.GET.order != 'desc' %}
+                                    <span>&darr;</span>
+                                    <!-- Indicates current order is ascending, so show descending icon -->
+                                {% else %}
+                                    <span>&uarr;</span> <!-- Default or when desc, show ascending icon -->
+                                {% endif %}
+                            </a>
+                        </th>
+                        <th>Салбарын дугаар</th>
+                        <th>Салбарын нэр</th>
+                        <th>Албан ёсны хаяг</th>
+                        <th>Түрээслүүлэгч 1</th>
+                        <th>Түрээслүүлэгч 2</th>
+                        <th>Холбоо барих утас 1</th>
+                        <th>Холбоо барих утас 2</th>
+                        <th>И-майл хаяг</th>
+                        <th>Талбайн нийт хэмжээ</th>
+                        <th>Гэрээний төрөл</th>
+                        <th>Гэрээний дугаар 1</th>
+                        <th>Гэрээний дугаар 2</th>
+                        <th>Гэрээ эхлэх хугацаа</th>
+                        <th>Дуусах хугацаа</th>
+                        <th>Сунгагдсан хугацаа</th>
+                        <th>Талбай хүлээлцсэн актын өдөр</th>
+                        <th>Түрээсийн төлбөр</th>
+                        <th>Түрээсийн төлбөр 1</th>
+                        <th>Түрээсийн төлбөр 2</th>
+                        <th>Барьцаа төлбөр</th>
+                        <th>СӨХ гэрээний дугаар</th>
+                        <th>Менежемент гэрээний дугаар</th>
+                        <th>Менежментийн төлбөр</th>
+                        <th>Гэрээнд орсон зардал</th>
+                        <th>Бусад орлого болон зардлын гэрээ</th>
+                        <th>Stora box</th>
+                        <th>Stora box түрээсийн төлбөр</th>
+                        <th>ATM</th>
+                        <th>ATM түрээсийн төлбөр</th>
+                        <th>Дамжуулан түрээслэх боломжтой эсэх</th>
+                        <th>1 Дамжуулан түрээсийн гэрээний дугаар</th>
+                        <th>1 Дамжуулан түрээсийн талбай хэмжээ</th>
+                        <th>1 Дамжуулан түрээсийн үнэ</th>
+                        <th>1 Дамжуулан түрээсийн барьцаа төлбөр</th>
+                        <th>2 Дамжуулан түрээсийн гэрээний дугаар</th>
+                        <th>2 Дамжуулан түрээсийн талбай хэмжээ</th>
+                        <th>2 Дамжуулан түрээсийн үнэ</th>
+                        <th>2 Дамжуулан түрээсийн барьцаа төлбөр</th>
+                        <th>Албан бичиг</th>
+                        <th>Өргөдөл</th>
+                        <th>Бусад гэрээ</th>
+                        <th>Франчайз санал болгох заалттай</th>
+                        <th>Дамжуулан түрээсийн заалт</th>
+                        <th>Үл хөдлөх хөрөнгийн зориулалт</th>
+                        <th>Нотариат</th>
+                        <th>ҮХХ-н гэрчилгээтэй эсэх</th>
+                        <th>Гэрээний онцгой нөхцөл</th>
+                        <th>Гэрээний хариуцлагын заалт</th>
+                        <th>Гэрээний холбоос</th>
+
+
+                        <th>Edit</th>
+                        {% if user.is_authenticated %}
+                            {% is_in_event_group as user_in_event_group %}
+                            {% if user.is_superuser %}
+                                <th>Delete</th>
+                            {% elif user_in_event_group %}
+
+                            {% endif %}
+                        {% endif %}
+                        </thead>
+                        <tbody>
+                        {% for model in page_obj %}
+                            <tr>
+                            <td><input type="checkbox" class="checkthis"/></td>
+                            <td>{{ model.id }}</td>
+                            <td>{{ model.store_id }}</td>
+                            <td>{{ model.str_name }}</td>
+                            <td>{{ model.str_address }}</td>
+                            <td>{{ model.lesser1 }}</td>
+                            <td>{{ model.lesser2 }}</td>
+                            <td>{{ model.phone_number1 }}</td>
+                            <td>{{ model.phone_number2 }}</td>
+                            <td>{{ model.email }}</td>
+                            <td>{{ model.area_size }}</td>
+                            <td>{{ model.cont_type }}</td>
+                            <td>{{ model.cntr_num1 }}</td>
+                            <td>{{ model.cntr_num2 }}</td>
+                            <td>{{ model.st_dt }}</td>
+                            <td>{{ model.ed_dt }}</td>
+                            <td>{{ model.ext_ed_dt }}</td>
+                            <td>{{ model.hand_over_dt }}</td>
+                            <td>{{ model.rent_mo_fee }}</td>
+                            <td>{{ model.rent_mo_fee_annex1 }}</td>
+                            <td>{{ model.rent_mo_fee_annex2 }}</td>
+                            <td>{{ model.deposit_amount }}</td>
+                            <td>{{ model.association_no }}</td>
+                            <td>{{ model.association_fee }}</td>
+                            <td>{{ model.manage_cnt_no }}</td>
+                            <td>{{ model.manage_fee }}</td>
+                            <td>{{ model.exp_inc }}</td>
+                            <td>{{ model.orther_cnt }}</td>
+                            <td>{{ model.stora_yn }}</td>
+                            <td>{{ model.stora_fee }}</td>
+                            <td>{{ model.atm_yn }}</td>
+                            <td>{{ model.atm_fee }}</td>
+                            <td>{{ model.sublet_yn }}</td>
+                            <td>{{ model.sublet1_cnt_no }}</td>
+                            <td>{{ model.sublet1_size }}</td>
+                            <td>{{ model.sublet1_rent }}</td>
+                            <td>{{ model.sublet1_deposit }}</td>
+                            <td>{{ model.sublet2_cnt_no }}</td>
+                            <td>{{ model.sublet2_size }}</td>
+                            <td>{{ model.sublet2_rent }}</td>
+                            <td>{{ model.sublet2_deposit }}</td>
+                            <td>{{ model.letter }}</td>
+                            <td>{{ model.notice }}</td>
+                            <td>{{ model.other_cnt }}</td>
+                            <td>{{ model.franchise_yn }}</td>
+                            <td>{{ model.fr_rent_yn }}</td>
+                            <td>{{ model.dedication }}</td>
+                            <td>{{ model.notariat_yn }}</td>
+                            <td>{{ model.real_estate_yn }}</td>
+                            <td>{{ model.special_terms }}</td>
+                            <td>{{ model.cont_resp_term }}</td>
+                            <td>{{ model.cont_link }}</td>
+                            <td><a href="/rent-edit/{{ model.id }}" class="btn btn-primary">Edit</a></td>
+                            {% if user.is_authenticated %}
+                                {% is_in_event_group as user_in_event_group %}
+                                {% if user.is_superuser %}
+                                    <td><a href="{% url 'rent-delete' model.id %}" class="btn btn-danger">Delete</a></td>
+                                {% elif user_in_event_group %}
+
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <br>
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1" aria-label="First">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <li class="page-item active"><a class="btn bg-purple" href="?page={{ num }}">{{ num }}</a></li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+
+    </div>{% endblock %}

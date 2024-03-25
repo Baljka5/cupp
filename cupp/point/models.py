@@ -219,6 +219,7 @@ class StorePlanning(m.Model):
 
     addr1_prov = m.ForeignKey(City, on_delete=m.SET_NULL, null=True, blank=True, verbose_name='City and Aimag')
     addr2_dist = m.ForeignKey(District, on_delete=m.SET_NULL, null=True, blank=True, verbose_name='District and Sum')
+    addr3_khr = m.CharField('Хороо', null=True, blank=True,max_length=50)
     address_det = m.CharField('Address detail', blank=True, default='', max_length=500)
     sp_name = m.CharField('SP name', blank=True, default='', max_length=50)
     near_gs_cvs = m.IntegerField('GS25 number', blank=True, null=True, default=0)
@@ -230,6 +231,7 @@ class StorePlanning(m.Model):
     zip_code = m.CharField('Zip code', blank=True, default='', max_length=100)
     rent_tp = m.BooleanField('Type of rent agreement', blank=True, null=True)
     rent_near = m.CharField('Company name', blank=True, default='', max_length=50)
+    lessee_promise = m.CharField('Амлалт', blank=True, null=True, max_length=50)
     adv = m.CharField('Advantage', blank=True, default='', max_length=100)
     disadv = m.CharField('Disadvantage', blank=True, default='', max_length=100)
     propose = m.TextField('Suggestions for improvement', blank=True, null=True)

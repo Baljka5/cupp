@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'cupp.store_trainer',
     'cupp.store_consultant',
     'cupp.store_planning',
+    'cupp.rent'
 
 ]
 
