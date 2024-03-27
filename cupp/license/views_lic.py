@@ -15,7 +15,8 @@ def addnew(request):
         form = MainTableForm(request.POST)
         if form.is_valid():
             try:
-                # Save the form and redirect to a new URL
+                form.instance.created_by = request.user if not form.instance.pk else form.instance.created_by
+                form.instance.modified_by = request.user
                 form.save()
                 messages.success(request, 'Form submission successful.')
                 return redirect('/register-license')
