@@ -13,7 +13,22 @@ def scIndex(request):
     areas = Area.objects.all()
     consultants = Consultants.objects.all()
     store_consultants = StoreConsultant.objects.all()
-    return render(request, 'store_consultant/index.html', {'areas': areas, 'consultants': consultants, 'store_consultants': store_consultants})
+    return render(request, 'store_consultant/index.html',
+                  {'areas': areas, 'consultants': consultants, 'store_consultants': store_consultants})
+
+
+def get_team_data(request, team_id):
+    try:
+        scs = Consultants.objects.filter(allocation__area_id=team_id)
+        scs_data = list(scs.values('id', 'sc_name'))
+        # If you have store data to include, add it here
+        # stores_data = ...
+        return JsonResponse({
+            'team_scs': scs_data,
+            # 'stores': stores_data,  # Uncomment and complete this line if needed
+        })
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 
 @csrf_protect

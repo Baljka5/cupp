@@ -53,7 +53,7 @@ def rent_addnew(request):
 def index(request):
     # Retrieve filter values from GET request
     store_id_query = request.GET.get('store_id', '')
-    str_name_query = request.GET.get('', '')
+    str_name_query = request.GET.get('str_name', '')
 
     # Build the query based on presence of filter values
     query = Q()

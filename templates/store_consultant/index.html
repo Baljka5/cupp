@@ -30,7 +30,7 @@
         <div class="teams-container">
             <div class="team-row">
                 {% for area in areas %}
-                    <div class="team">
+                    <div class="team" onclick="showTeamDetails('{{ area.id }}', '{{ area.team_no }}')">
                         <div class="team-header">{{ area.team_no }}<span class="sc-count"></span></div>
                         <div class="team-body" id="area-{{ area.id }}" ondrop="drop(event)"
                              ondragover="allowDrop(event)"
@@ -41,6 +41,9 @@
                         </div>
                     </div>
                 {% endfor %}
+            </div>
+            <div class="team-detail-container" id="team-detail-container">
+                <!-- Team Details Will Be Populated Here -->
             </div>
             {#            <div class="not-allocated-body" ondrop="drop(event)" ondragover="allowDrop(event)"#}
             {#                 data-area-id="not-allocated">#}
@@ -63,25 +66,25 @@
                     {% endfor %}
                 </div>
             </div>
-{#            <div class="store-allocation-body" id="store-allocation" ondrop="drop(event)" ondragover="allowDrop(event)"#}
-{#                 data-area-id="store-allocation">#}
-{#                <div class="store-allocation">#}
-{#                    <h2>Store Allocation (Not Allocated)</h2>#}
-{#                    <!-- SCs will be dynamically added here via drag-and-drop -->#}
-{#                </div>#}
-{#            </div>#}
-{#            <div class="not-allocated-body" id="not-allocated" ondrop="drop(event)" ondragover="allowDrop(event)"#}
-{#                 data-area-id="not-allocated">#}
-{##}
-{#                <div class="not-allocated">#}
-{#                    {% for store_consultant in store_consultants %}#}
-{#                        <div class="sc" id="sc{{ store_consultant.id }}" draggable="true" ondragstart="drag(event)"#}
-{#                             data-consultant-id="{{ store_consultant.id }}">#}
-{#                            {{ store_consultant.store_id }}#}
-{#                        </div>#}
-{#                    {% endfor %}#}
-{#                </div>#}
-{#            </div>#}
+            {#            <div class="store-allocation-body" id="store-allocation" ondrop="drop(event)" ondragover="allowDrop(event)"#}
+            {#                 data-area-id="store-allocation">#}
+            {#                <div class="store-allocation">#}
+            {#                    <h2>Store Allocation (Not Allocated)</h2>#}
+            {#                    <!-- SCs will be dynamically added here via drag-and-drop -->#}
+            {#                </div>#}
+            {#            </div>#}
+            {#            <div class="not-allocated-body" id="not-allocated" ondrop="drop(event)" ondragover="allowDrop(event)"#}
+            {#                 data-area-id="not-allocated">#}
+            {##}
+            {#                <div class="not-allocated">#}
+            {#                    {% for store_consultant in store_consultants %}#}
+            {#                        <div class="sc" id="sc{{ store_consultant.id }}" draggable="true" ondragstart="drag(event)"#}
+            {#                             data-consultant-id="{{ store_consultant.id }}">#}
+            {#                            {{ store_consultant.store_id }}#}
+            {#                        </div>#}
+            {#                    {% endfor %}#}
+            {#                </div>#}
+            {#            </div>#}
             <div class="save-close-container">
                 {#                <button id="saveCloseBtn">SAVE & CLOSE</button>#}
                 <button id="saveCloseBtn" onclick="saveAllocations()">SAVE & CLOSE</button>
@@ -191,12 +194,92 @@
             border-radius: 4px;
             margin-bottom: 5px;
         }
+
+        .team-details {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #f4e2d0; /* Match your color scheme */
+        }
+
+        .sc-detail {
+            background-color: #ffcc99;
+            margin: 5px 0;
+            padding: 5px;
+        }
+
+        .stores-detail span {
+            margin-right: 10px;
+            /* Additional styling as needed */
+        }
+
+        .team.highlighted {
+            background-color: #add8e6; /* Light blue, for example */
+            /* Other styles for highlighted team */
+        }
+
+        /* Hidden by default */
+        .team-detail-container {
+            display: none;
+        }
+
+        /* Visible when a team is clicked */
+        .team-detail-container.visible {
+            display: block;
+            /* Other styles to make it visible */
+        }
     </style>
 
     <script>
+        function highlightTeam(teamId) {
+            // Remove existing highlights
+            document.querySelectorAll('.team').forEach(team => {
+                team.classList.remove('highlighted');
+            });
+
+            // Highlight the selected team
+            const selectedTeam = document.getElementById(`team-${teamId}`);
+            selectedTeam.classList.add('highlighted');
+        }
+
+        // Function to show team details and distribution
+        function showTeamDetails(teamId) {
+            const detailContainer = document.getElementById('team-detail-container');
+            detailContainer.innerHTML = ''; // Clear previous details
+            detailContainer.classList.add('visible'); // Make the container visible
+
+            // Fetch the data for the selected team
+            fetch(`/get-team-data/${teamId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    // Your existing logic to create the details view
+
+                    // After fetching and creating elements for team details
+                    highlightTeam(teamId); // Call the function to highlight the team
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        // Event listeners for teams
+        document.querySelectorAll('.team').forEach(team => {
+            team.addEventListener('click', function () {
+                showTeamDetails(this.dataset.teamId);
+            });
+        });
+
         document.addEventListener('DOMContentLoaded', function () {
-            // Initially fetch and render allocations, then update SC counts
-            fetchAllocationsAndRender().then(updateScCounts);
+            const teams = document.querySelectorAll('.team');
+            teams.forEach(team => {
+                team.addEventListener('click', function () {
+                    showTeamDetails(this.dataset.areaId); // this assumes your team divs have data-area-id attributes
+                });
+
+                // Initially fetch and render allocations, then update SC counts
+                fetchAllocationsAndRender().then(updateScCounts);
+            });
         });
 
         function fetchAllocationsAndRender() {

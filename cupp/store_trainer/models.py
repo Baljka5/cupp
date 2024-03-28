@@ -11,7 +11,7 @@ class StoreTrainer(m.Model):
     size = m.FloatField('Area size', blank=True, null=True, default=0)
     sitting_size = m.FloatField('Sitting area size', blank=True, null=True, default=0)
     war_size = m.FloatField('Warehouse size', blank=True, null=True, default=0)
-    toiler_size = m.FloatField('Toilet size', blank=True, null=True, default=0)
+    toilet_size = m.FloatField('Toilet size', blank=True, null=True, default=0)
     resale_size = m.FloatField('Hall size', blank=True, null=True, default=0)
     shelf = m.IntegerField('Shelf number', blank=True, null=True, default=0)
     wall_shelf = m.IntegerField('Wall shelf numver', blank=True, null=True, default=0)
