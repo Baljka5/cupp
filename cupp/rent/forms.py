@@ -4,6 +4,11 @@ from .models import StrRent
 
 
 class StrRentForm(f.ModelForm):
+    st_dt = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
+    ed_dt = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
+    ext_ed_dt = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
+    hand_over_dt = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
+
     class Meta:
         model = StrRent
         fields = ['store_id', 'str_name', 'str_address', 'lesser1', 'lesser2', 'phone_number1', 'phone_number2',
