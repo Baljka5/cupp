@@ -178,11 +178,13 @@
                             <td>{{ model.special_terms }}</td>
                             <td>{{ model.cont_resp_term }}</td>
                             <td>{{ model.cont_link }}</td>
-                            <td><a href="/rent-edit/{{ model.id }}" class="btn btn-primary">Edit</a></td>
                             {% if user.is_authenticated %}
                                 {% is_in_event_group as user_in_event_group %}
                                 {% if user.is_superuser %}
-                                    <td><a href="{% url 'rent-delete' model.id %}" class="btn btn-danger">Delete</a></td>
+                                    <td><a href="/rent-edit/{{ model.id }}" class="btn btn-primary">Edit</a></td>
+
+                                    <td><a href="{% url 'rent-delete' model.id %}" class="btn btn-danger">Delete</a>
+                                    </td>
                                 {% elif user_in_event_group %}
 
                                 {% endif %}

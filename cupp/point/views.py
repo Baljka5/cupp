@@ -229,5 +229,7 @@ def custom_login_redirect(request):
         return redirect('/map/')
     elif request.user.groups.filter(name='Manager').exists():
         return redirect('/map/')
+    elif request.user.groups.filter(name='Rent').exists():
+        return redirect('/rent-index/')
     else:
         return redirect('/default-redirect/')

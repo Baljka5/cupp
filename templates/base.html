@@ -72,6 +72,7 @@
         {% if user.is_authenticated %}
             {% is_in_event_group as user_in_event_group %}
             {% is_in_license_group as user_in_license_group %}
+            {% is_in_rent_group as user_in_rent_group %}
             {% if user.is_superuser %}
                 <a href="{% url 'map' %}" class="d-inline-block">
                     <img src="/static/images/logo.png" alt="xbook logo">
@@ -82,6 +83,10 @@
                 </a>
             {% elif user_in_license_group %}
                 <a href="{% url 'index' %}" class="d-inline-block">
+                    <img src="/static/images/logo.png" alt="xbook logo">
+                </a>
+            {% elif user_in_rent_group %}
+                <a href="{% url 'rent_index' %}" class="d-inline-block">
                     <img src="/static/images/logo.png" alt="xbook logo">
                 </a>
             {% else %}
@@ -105,13 +110,16 @@
         {% if user.is_authenticated %}
 
             <ul class="navbar-nav ml-md-auto">
+                {% is_in_rent_group as user_in_rent_group %}
+                {% if user_in_rent_group %}
+                    <li>
+                        <a href="{% url 'rent_index' %}" class="navbar-nav-link">
+                            <i class="icon-file-check mr-1"></i>
+                            <span>Rent</span>
+                        </a>
+                    </li>
+                {% endif %}
                 {% is_in_event_group as user_in_event_group %}
-                <li>
-                    <a href="{% url 'rent_index' %}" class="navbar-nav-link">
-                        <i class="icon-calendar mr-1"></i>
-                        <span>Rent</span>
-                    </a>
-                </li>
                 {% if user_in_event_group %}
                     <li>
                         <a href="{% url 'event_index' %}" class="navbar-nav-link">

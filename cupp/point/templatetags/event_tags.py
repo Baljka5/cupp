@@ -30,6 +30,11 @@ def is_in_license_group(context):
     request = context['request']
     return request.user.groups.filter(name='license').exists() or request.user.is_superuser
 
+@register.simple_tag(takes_context=True)
+def is_in_rent_group(context):
+    request = context['request']
+    return request.user.groups.filter(name='Rent').exists() or request.user.is_superuser
+
 
 @login_required
 def custom_login_redirect(request):

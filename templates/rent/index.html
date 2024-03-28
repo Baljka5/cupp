@@ -54,11 +54,11 @@
                             <input id="id_store_name" class="form-control" name="store_name" readonly type="text">
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Албан ёсны хаяг: </label>
+                            <label>Албан ёсны хаяг: <span class="text-purple">*</span></label>
                             {% render_field form.str_address class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Түрээслүүлэгч 1: </label>
+                            <label>Түрээслүүлэгч 1: <span class="text-purple">*</span></label>
                             {% render_field form.lesser1 class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
@@ -66,7 +66,7 @@
                             {% render_field form.lesser2 class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Түрээслүүлэгч 3: <span class="text-purple">*</span></label>
+                            <label>Түрээслүүлэгч 3: </label>
                             {% render_field form.lesser3 class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
@@ -74,16 +74,12 @@
                             {% render_field form.phone_number1 class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Холбоо барих утас 2': </label>
+                            <label>Холбоо барих утас 2': <span class="text-purple">*</span></label>
                             {% render_field form.phone_number2 class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
                             <label>Холбоо барих утас 3': </label>
                             {% render_field form.phone_number3 class+="form-control" %}
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label>И-майл хаяг: <span class="text-purple">*</span></label>
-                            {% render_field form.email class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
                             <label>И-майл хаяг: <span class="text-purple">*</span></label>
@@ -102,11 +98,11 @@
                             {% render_field form.cntr_num1 class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Гэрээний дугаар 2: <span class="text-purple">*</span></label>
+                            <label>Гэрээний дугаар 2: </label>
                             {% render_field form.cntr_num2 class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Гэрээний дугаар 3: <span class="text-purple">*</span></label>
+                            <label>Гэрээний дугаар 3: </label>
                             {% render_field form.cntr_num3 class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
@@ -138,7 +134,7 @@
                             {% render_field form.rent_mo_fee_annex2 class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Түрээсийн төлбөр 3: <span class="text-purple">*</span></label>
+                            <label>Түрээсийн төлбөр 3: </label>
                             {% render_field form.rent_mo_fee_annex3 class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
@@ -170,12 +166,12 @@
                             {% render_field form.other_cnt class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Гэрээнд орсон зардал: <span class="text-purple">*</span></label>
-                            {% render_field form.stora_yn class+="form-control" %}
+                            <label>Дамжуулан түрээслэх боломжтой эсэх: <span class="text-purple">*</span></label>
+                            {% render_field form.other_cnt class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
                             <label>Stora box: <span class="text-purple">*</span></label>
-                            {% render_field form.exp_inc class+="form-control" %}
+                            {% render_field form.stora_yn class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
                             <label>Stora box түрээсийн төлбөр: <span class="text-purple">*</span></label>
@@ -188,10 +184,6 @@
                         <div class="form-group col-md-6">
                             <label>ATM түрээсийн төлбөр: <span class="text-purple">*</span></label>
                             {% render_field form.atm_fee class+="form-control" %}
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label>Дамжуулан түрээслэх боломжтой эсэх: <span class="text-purple">*</span></label>
-                            {% render_field form.sublet_yn class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
                             <label>1 Дамжуулан түрээсийн гэрээний дугаар: <span class="text-purple">*</span></label>
@@ -210,48 +202,48 @@
                             {% render_field form.sublet1_deposit class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>2 Дамжуулан түрээсийн гэрээний дугаар: <span class="text-purple">*</span></label>
+                            <label>2 Дамжуулан түрээсийн гэрээний дугаар:</label>
                             {% render_field form.sublet2_cnt_no class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>2 Дамжуулан түрээсийн талбай хэмжээ: <span class="text-purple">*</span></label>
+                            <label>2 Дамжуулан түрээсийн талбай хэмжээ: </label>
                             {% render_field form.sublet2_size class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>2 Дамжуулан түрээсийн үнэ: <span class="text-purple">*</span></label>
+                            <label>2 Дамжуулан түрээсийн үнэ: </label>
                             {% render_field form.sublet2_rent class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>2 Дамжуулан түрээсийн барьцаа төлбөр: <span class="text-purple">*</span></label>
+                            <label>2 Дамжуулан түрээсийн барьцаа төлбөр: </label>
                             {% render_field form.sublet2_deposit class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>3 Дамжуулан түрээсийн гэрээний дугаар: <span class="text-purple">*</span></label>
+                            <label>3 Дамжуулан түрээсийн гэрээний дугаар: </label>
                             {% render_field form.sublet3_cnt_no class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>3 Дамжуулан түрээсийн талбай хэмжээ: <span class="text-purple">*</span></label>
+                            <label>3 Дамжуулан түрээсийн талбай хэмжээ: </label>
                             {% render_field form.sublet3_size class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>3 Дамжуулан түрээсийн үнэ: <span class="text-purple">*</span></label>
+                            <label>3 Дамжуулан түрээсийн үнэ: </label>
                             {% render_field form.sublet3_rent class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>3 Дамжуулан түрээсийн барьцаа төлбөр: <span class="text-purple">*</span></label>
+                            <label>3 Дамжуулан түрээсийн барьцаа төлбөр: </label>
                             {% render_field form.sublet3_deposit class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Албан бичиг: <span class="text-purple">*</span></label>
+                            <label>Албан бичиг: </label>
                             {% render_field form.letter class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Өргөдөл: <span class="text-purple">*</span></label>
+                            <label>Өргөдөл: </label>
                             {% render_field form.notice class+="form-control" %}
                         </div>
 
                         <div class="form-group col-md-6">
-                            <label>Бусад гэрээ: <span class="text-purple">*</span></label>
+                            <label>Бусад гэрээ: </label>
                             {% render_field form.other_cont class+="form-control" %}
                         </div>
 
@@ -277,7 +269,7 @@
                             {% render_field form.real_estate_yn class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Гэрээний онцгой нөхцөл: <span class="text-purple">*</span></label>
+                            <label>Гэрээний онцгой нөхцөл: </label>
                             {% render_field form.special_terms class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
