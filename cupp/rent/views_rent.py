@@ -15,6 +15,17 @@ def rent_addnew(request):
     if request.method == "POST":
         form = StrRentForm(request.POST)
         if form.is_valid():
+            store_id = request.POST.get('store_id')
+            if store_id:
+                try:
+                    store_trainer_instance = StoreTrainer.objects.get(pk=store_id)
+                    form.instance.store_id = store_trainer_instance
+                except StoreTrainer.DoesNotExist:
+                    messages.error(request, "Store ID is invalid.")
+                    return render(request, 'rent/index.html', {'form': form, 'store_id_to_name': store_id_to_name})
+            else:
+                messages.error(request, "Store ID is missing.")
+                return render(request, 'rent/index.html', {'form': form, 'store_id_to_name': store_id_to_name})
             try:
                 form.instance.created_by = request.user if not form.instance.pk else form.instance.created_by
                 form.instance.modified_by = request.user

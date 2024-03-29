@@ -51,7 +51,7 @@
 
                         <div class="form-group col-md-6">
                             <label>Дэлгүүрийн нэр: <span class="text-purple">*</span></label>
-                            <input id="id_store_name" class="form-control" name="store_name" readonly type="text">
+                            <input id="id_store_name" class="form-control" name="str_name" readonly type="text">
                         </div>
                         <div class="form-group col-md-6">
                             <label>Албан ёсны хаяг: <span class="text-purple">*</span></label>
@@ -107,19 +107,19 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label>Гэрээ эхлэх хугацаа: <span class="text-purple">*</span></label>
-                            {% render_field form.st_dt class+="form-control" %}
+                            {% render_field form.st_dt class+="form-control dateinput" %}
                         </div>
                         <div class="form-group col-md-6">
                             <label>Дуусах хугацаа: <span class="text-purple">*</span></label>
-                            {% render_field form.ed_dt class+="form-control" %}
+                            {% render_field form.ed_dt class+="form-control dateinput" %}
                         </div>
                         <div class="form-group col-md-6">
                             <label>Сунгагдсан хугацаа: <span class="text-purple">*</span></label>
-                            {% render_field form.ext_ed_dt class+="form-control" %}
+                            {% render_field form.ext_ed_dt class+="form-control dateinput" %}
                         </div>
                         <div class="form-group col-md-6">
                             <label>Талбай хүлээлцсэн актын өдөр: <span class="text-purple">*</span></label>
-                            {% render_field form.hand_over_dt class+="form-control" %}
+                            {% render_field form.hand_over_dt class+="form-control dateinput" %}
                         </div>
                         <div class="form-group col-md-6">
                             <label>Түрээсийн төлбөр: <span class="text-purple">*</span></label>
@@ -324,15 +324,24 @@
 
                 });
 
-
-                $('#id_st_dt, #id_ed_dt').daterangepicker({
+                $('.dateinput').daterangepicker({
                     singleDatePicker: true,
                     applyClass: 'bg-purple btn-sm',
                     cancelClass: 'btn-light btn-sm',
                     locale: {
-                        format: 'YYYY/MM/DD'
+                        format: 'YYYY-MM-DD' // Make sure this matches your DATE_INPUT_FORMATS in Django settings
                     }
                 });
+
+
+                {#$('#id_st_dt').daterangepicker({#}
+                {#    singleDatePicker: true,#}
+                {#    applyClass: 'bg-purple btn-sm',#}
+                {#    cancelClass: 'btn-light btn-sm',#}
+                {#    locale: {#}
+                {#        format: 'YYYY/MM/DD'#}
+                {#    }});#}
+
                 $('#id_store_id').select2({
                     ajax: {
                         url: '/path/to/api/store-id-search/',

@@ -19,7 +19,7 @@ class StrRent(models.Model):
     area_size = models.IntegerField('Талбайн нийт хэмжээ м.кв', null=True)
     cont_type = models.BooleanField('Гэрээний төрөл', null=True)
     cntr_num1 = models.CharField('Гэрээний дугаар 1', null=True, max_length=30)
-    cntr_num2 = models.CharField('Гэрээний дугаар 2', null=True, max_length=30)
+    cntr_num2 = models.CharField('Гэрээний дугаар 2', blank=True, null=True, max_length=30)
     cntr_num3 = models.CharField('Гэрээний дугаар 3', blank=True, null=True, max_length=30)
     st_dt = models.DateField('Гэрээ эхлэх хугацаа', null=True)
     ed_dt = models.DateField('Дуусах хугацаа ', null=True)
