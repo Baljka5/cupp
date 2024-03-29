@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
 
@@ -9,6 +10,7 @@ from django.contrib import messages
 from cupp.point.models import Point
 
 
+@login_required
 def event_addnew(request):
     if request.method == "POST":
         form = StoreDailyLogForm(request.POST)
