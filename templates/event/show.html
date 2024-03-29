@@ -67,33 +67,35 @@
                         <tbody>
                         {% for model in page_obj %}
                             <tr>
-                            <td><input type="checkbox" class="checkthis"/></td>
-                            <td>{{ model.id }}</td>
-                            <td>{{ model.date }}</td>
-                            <td>{{ model.store_no }}</td>
-                            <td>{{ model.store_name }}</td>
-                            <td>{{ model.activ_desc }}</td>
-                            <td>{{ model.activ_cat }}</td>
-                            <td>
-                                {% if model.consequences is True %}
-                                    Сайн
-                                {% elif model.consequences is False %}
-                                    Муу
-                                {% else %}
-                                    None
-                                {% endif %}
-                            </td>
-                            <td>{{ model.resp_action }}</td>
-                            <td>{{ model.action_owner }}</td>
-                            <td><a href="/log-edit/{{ model.id }}" class="btn btn-primary">Edit</a></td>
-                            {% if user.is_authenticated %}
-                                {% is_in_event_group as user_in_event_group %}
-                                {% if user.is_superuser %}
-                                    <td><a href="{% url 'log-delete' model.id %}" class="btn btn-danger">Delete</a></td>
-                                {% elif user_in_event_group %}
+                                <td><input type="checkbox" class="checkthis"/></td>
+                                <td>{{ model.id }}</td>
+                                <td>{{ model.date }}</td>
+                                <td>{{ model.store_no }}</td>
+                                <td>{{ model.store_name }}</td>
+                                <td>{{ model.activ_desc }}</td>
+                                <td>{{ model.activ_cat }}</td>
+                                <td>
+                                    {% if model.consequences is True %}
+                                        Сайн
+                                    {% elif model.consequences is False %}
+                                        Муу
+                                    {% else %}
+                                        None
+                                    {% endif %}
+                                </td>
+                                <td>{{ model.resp_action }}</td>
+                                <td>{{ model.action_owner }}</td>
+                                <td><a href="/log-edit/{{ model.id }}" class="btn btn-primary">Edit</a></td>
+                                {% if user.is_authenticated %}
+                                    {% is_in_event_group as user_in_event_group %}
+                                    {% if user.is_superuser %}
+                                        <td><a href="{% url 'log-delete' model.id %}" class="btn btn-danger">Delete</a>
+                                        </td>
+                                    {% elif user_in_event_group %}
 
+                                    {% endif %}
                                 {% endif %}
-                            {% endif %}
+                            </tr>
                         {% endfor %}
                         </tbody>
                     </table>
