@@ -1,6 +1,9 @@
 from django import forms as f
 from django.conf import settings
 from .models import StrRent
+from cupp.constants import CONTRACT_TYPE_CHOICES
+
+
 
 
 class StrRentForm(f.ModelForm):
@@ -8,6 +11,7 @@ class StrRentForm(f.ModelForm):
     ed_dt = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
     ext_ed_dt = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
     hand_over_dt = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
+    cont_type = f.ChoiceField(choices=CONTRACT_TYPE_CHOICES, label='Contract Type')
 
     class Meta:
         model = StrRent

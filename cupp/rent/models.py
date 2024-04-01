@@ -1,5 +1,6 @@
 from django.db import models
 from cupp.store_trainer.models import StoreTrainer
+from cupp.constants import CONTRACT_TYPE_CHOICES
 
 
 # Create your models here.
@@ -17,7 +18,7 @@ class StrRent(models.Model):
     phone_number3 = models.IntegerField('Холбоо барих утас 3', blank=True, null=True, default=0)
     email = models.EmailField('И-майл хаяг', null=True)
     area_size = models.IntegerField('Талбайн нийт хэмжээ м.кв', null=True)
-    cont_type = models.BooleanField('Гэрээний төрөл', null=True)
+    cont_type = models.CharField('Contract Type', max_length=10, choices=CONTRACT_TYPE_CHOICES, null=True, blank=True)
     cntr_num1 = models.CharField('Гэрээний дугаар 1', null=True, max_length=30)
     cntr_num2 = models.CharField('Гэрээний дугаар 2', blank=True, null=True, max_length=30)
     cntr_num3 = models.CharField('Гэрээний дугаар 3', blank=True, null=True, max_length=30)

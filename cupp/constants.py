@@ -34,3 +34,9 @@ CHOICES_POINT_GRADE = (
     ('B', 'B'),
     ('C', 'C'),
 )
+
+CONTRACT_TYPE_CHOICES = (
+    ('basic', 'Үндсэн'),
+    ('renewal', 'Сунгалт'),
+    ('additional', 'Нэмэлт'),
+)
