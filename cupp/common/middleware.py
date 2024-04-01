@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from django.contrib.sessions.models import Session
 
 
@@ -32,4 +34,28 @@ class OneSessionPerUserMiddleware:
         # the view is called.
         # For this tutorial, we're not adding any code so we just return the response
 
+        return response
+
+
+class AutoLogout:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if not request.user.is_authenticated:
+            # If the user is not authenticated, no need to check for inactivity.
+            return self.get_response(request)
+
+        # Check if 'last_touch' is in the session.
+        if 'last_touch' in request.session:
+            last_touch = datetime.strptime(request.session['last_touch'], '%Y-%m-%d %H:%M:%S')
+            if datetime.now() - last_touch > timedelta(minutes=5):
+                # If it's been more than 5 minutes, delete the current session.
+                Session.objects.get(session_key=request.session.session_key).delete()
+                request.session.flush()  # Delete current session cookie.
+        else:
+            # Otherwise, set 'last_touch' to the current time.
+            request.session['last_touch'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+        response = self.get_response(request)
         return response
