@@ -62,7 +62,7 @@
                             {% render_field form.lesser1 class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Түрээслүүлэгч 2: <span class="text-purple">*</span></label>
+                            <label>Түрээслүүлэгч 2: </label>
                             {% render_field form.lesser2 class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
@@ -74,11 +74,11 @@
                             {% render_field form.phone_number1 class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Холбоо барих утас 2': <span class="text-purple">*</span></label>
+                            <label>Холбоо барих утас 2: </label>
                             {% render_field form.phone_number2 class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Холбоо барих утас 3': </label>
+                            <label>Холбоо барих утас 3: </label>
                             {% render_field form.phone_number3 class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
@@ -107,30 +107,30 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label>Гэрээ эхлэх хугацаа: <span class="text-purple">*</span></label>
-                            {% render_field form.st_dt class+="form-control dateinput" %}
+                            {% render_field form.st_dt class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
                             <label>Дуусах хугацаа: <span class="text-purple">*</span></label>
-                            {% render_field form.ed_dt class+="form-control dateinput" %}
+                            {% render_field form.ed_dt class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Сунгагдсан хугацаа: <span class="text-purple">*</span></label>
-                            {% render_field form.ext_ed_dt class+="form-control dateinput" %}
+                            <label>Сунгагдсан хугацаа: </label>
+                            {% render_field form.ext_ed_dt class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
                             <label>Талбай хүлээлцсэн актын өдөр: <span class="text-purple">*</span></label>
-                            {% render_field form.hand_over_dt class+="form-control dateinput" %}
+                            {% render_field form.hand_over_dt class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
                             <label>Түрээсийн төлбөр: <span class="text-purple">*</span></label>
                             {% render_field form.rent_mo_fee class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Түрээсийн төлбөр 1: <span class="text-purple">*</span></label>
+                            <label>Түрээсийн төлбөр 1: </label>
                             {% render_field form.rent_mo_fee_annex1 class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Түрээсийн төлбөр 2: <span class="text-purple">*</span></label>
+                            <label>Түрээсийн төлбөр 2: </label>
                             {% render_field form.rent_mo_fee_annex2 class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
@@ -162,7 +162,7 @@
                             {% render_field form.exp_inc class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Бусад орлого болон зардлын гэрээ: <span class="text-purple">*</span></label>
+                            <label>Бусад орлого болон зардлын гэрээ: </label>
                             {% render_field form.other_cnt class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
@@ -186,19 +186,19 @@
                             {% render_field form.atm_fee class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>1 Дамжуулан түрээсийн гэрээний дугаар: <span class="text-purple">*</span></label>
+                            <label>1 Дамжуулан түрээсийн гэрээний дугаар: </label>
                             {% render_field form.sublet1_cnt_no class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>1 Дамжуулан түрээсийн талбай хэмжээ: <span class="text-purple">*</span></label>
+                            <label>1 Дамжуулан түрээсийн талбай хэмжээ: </label>
                             {% render_field form.sublet1_size class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>1 Дамжуулан түрээсийн үнэ: <span class="text-purple">*</span></label>
+                            <label>1 Дамжуулан түрээсийн үнэ: </label>
                             {% render_field form.sublet1_rent class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
-                            <label>1 Дамжуулан түрээсийн барьцаа төлбөр: <span class="text-purple">*</span></label>
+                            <label>1 Дамжуулан түрээсийн барьцаа төлбөр: </label>
                             {% render_field form.sublet1_deposit class+="form-control" %}
                         </div>
                         <div class="form-group col-md-6">
@@ -306,10 +306,11 @@
                 </div>
             </div>
         </form>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet"/>
-
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.js"></script>
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.css"/>
         <script>
             $(document).ready(function () {
                 $('#id_store_id').select2({
@@ -324,23 +325,6 @@
 
                 });
 
-                $('.dateinput').daterangepicker({
-                    singleDatePicker: true,
-                    applyClass: 'bg-purple btn-sm',
-                    cancelClass: 'btn-light btn-sm',
-                    locale: {
-                        format: 'YYYY-MM-DD' // Make sure this matches your DATE_INPUT_FORMATS in Django settings
-                    }
-                });
-
-
-                {#$('#id_st_dt').daterangepicker({#}
-                {#    singleDatePicker: true,#}
-                {#    applyClass: 'bg-purple btn-sm',#}
-                {#    cancelClass: 'btn-light btn-sm',#}
-                {#    locale: {#}
-                {#        format: 'YYYY/MM/DD'#}
-                {#    }});#}
 
                 $('#id_store_id').select2({
                     ajax: {
@@ -365,6 +349,14 @@
                         },
                         cache: true
                     },
+                });
+                $('#id_st_dt, #id_ed_dt, #id_ext_ed_dt, #id_hand_over_dt').daterangepicker({
+                    singleDatePicker: true,
+                    applyClass: 'bg-purple btn-sm',
+                    cancelClass: 'btn-light btn-sm',
+                    locale: {
+                        format: 'YYYY/MM/DD'
+                    }
                 });
 
                 {#$('#id_alc_opentime, #id_alc_closetime').timepicker({#}
