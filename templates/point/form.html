@@ -9,13 +9,13 @@
     <div class="content">
         <form method="post" autocomplete="off" enctype="multipart/form-data" id="type_form">
             {% csrf_token %}
-            {% render_field form.lat class+="form-control" %}
-            {% render_field form.lon class+="form-control" %}
-{#            <div class="form-group">#}
-{#                <label>Lat/Lon:</label>#}
-{#                <input type="text" id="search_lat_lon" placeholder="47.915711, 106.891544" class="form-control">#}
-{#                <button id="search_lat_lon_btn" class="btn btn-primary">Search</button>#}
-{#            </div>#}
+            {% render_field form.lat type="hidden" class+="form-control" %}
+            {% render_field form.lon type="hidden" class+="form-control" %}
+            {#            <div class="form-group">#}
+            {#                <label>Lat/Lon:</label>#}
+            {#                <input type="text" id="search_lat_lon" placeholder="47.915711, 106.891544" class="form-control">#}
+            {#                <button id="search_lat_lon_btn" class="btn btn-primary">Search</button>#}
+            {#            </div>#}
 
             <div class="row">
                 <div class="col-md-5">
@@ -154,61 +154,79 @@
                                     <label>Radius by meter /limit 1km/:</label>
                                     {% render_field form.radius class+="form-control" %}
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label>Дэлгэрэнгүй хаяг:</label>
-                                    {% render_field store_planning_form.address_det class+="form-control" %}
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label>Хариуцсан SP:</label>
-                                    {% render_field store_planning_form.sp_name class+="form-control" %}
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label>300 метр дотор GS25-н тоо:</label>
-                                    {% render_field store_planning_form.near_gs_cvs class+="form-control" %}
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label>300 метр дотор сургуулийн тоо:</label>
-                                    {% render_field store_planning_form.near_gs_cvs class+="form-control" %}
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label>Зогсоолын тоо:</label>
-                                    {% render_field store_planning_form.park_slot class+="form-control" %}
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label>Давхарын тоо:</label>
-                                    {% render_field store_planning_form.park_slot class+="form-control" %}
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label>Түрээсийн гэрээ эхлэх хугацаа:</label>
-                                    {% render_field store_planning_form.cont_st_dt class+="form-control" %}
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label>Түрээсийн гэрээ дуусах хугацаа:</label>
-                                    {% render_field store_planning_form.cont_ed_dt class+="form-control" %}
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label>Zip code:</label>
-                                    {% render_field store_planning_form.zip_code class+="form-control" %}
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label>Түрээсийн гэрээний төрөл:</label>
-                                    {% render_field store_planning_form.rent_tp class+="form-control" %}
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label>Дамжуулж буй компани:</label>
-                                    {% render_field store_planning_form.rent_near class+="form-control" %}
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label>Байршлын давуу тал:</label>
-                                    {% render_field store_planning_form.adv class+="form-control" %}
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label>Байршлын сул тал:</label>
-                                    {% render_field store_planning_form.disadv class+="form-control" %}
-                                </div>
-                                <div class="form-group textarea-fullwidth">
-                                    <label>Байршлыг сайжруулах санал:</label>
-                                    {% render_field store_planning_form.propose class+="form-control" %}
+
+                                <h3>Detail</h3>
+
+                                <div id="id_details_fields" class="row">
+
+                                    <div class="form-group col-md-6">
+                                        <label>Дэлгэрэнгүй хаяг:</label>
+                                        {% render_field store_planning_form.address_det class+="form-control" %}
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Хороо:</label>
+                                        {% render_field store_planning_form.addr3_khr class+="form-control" %}
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Хариуцсан SP:</label>
+                                        {% render_field store_planning_form.sp_name class+="form-control" %}
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>300 метр дотор GS25-н тоо:</label>
+                                        {% render_field store_planning_form.near_gs_cvs class+="form-control" %}
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>300 метр дотор сургуулийн тоо:</label>
+                                        {% render_field store_planning_form.near_gs_cvs class+="form-control" %}
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Ойролцоо 300 метерт хэчнээн сургууль:</label>
+                                        {% render_field store_planning_form.near_school class+="form-control" %}
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Зогсоолын тоо:</label>
+                                        {% render_field store_planning_form.park_slot class+="form-control" %}
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Давхарын тоо:</label>
+                                        {% render_field store_planning_form.floor class+="form-control" %}
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Түрээсийн гэрээ эхлэх хугацаа:</label>
+                                        {% render_field store_planning_form.cont_st_dt class+="form-control" %}
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Түрээсийн гэрээ дуусах хугацаа:</label>
+                                        {% render_field store_planning_form.cont_ed_dt class+="form-control" %}
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Zip code:</label>
+                                        {% render_field store_planning_form.zip_code class+="form-control" %}
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Түрээсийн гэрээний төрөл:</label>
+                                        {% render_field store_planning_form.rent_tp class+="form-control" %}
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Дамжуулж буй компани:</label>
+                                        {% render_field store_planning_form.rent_near class+="form-control" %}
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Амлалт:</label>
+                                        {% render_field store_planning_form.lessee_promise class+="form-control" %}
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Байршлын давуу тал:</label>
+                                        {% render_field store_planning_form.adv class+="form-control" %}
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Байршлын сул тал:</label>
+                                        {% render_field store_planning_form.disadv class+="form-control" %}
+                                    </div>
+                                    <div class="form-group textarea-fullwidth col-md-12">
+                                        <label>Байршлыг сайжруулах санал:</label>
+                                        {% render_field store_planning_form.propose class+="form-control" %}
+                                    </div>
                                 </div>
                             </div>
 
@@ -279,44 +297,6 @@
             </div>
         </form>
     </div>
-
-    <style>
-        .textarea-fullwidth {
-            width: 100%;
-        }
-
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-
-        .controls {
-            margin-top: 10px;
-            border: 1px solid transparent;
-            border-radius: 2px 0 0 2px;
-            box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            height: 32px;
-            outline: none;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-        }
-
-        #pac-input {
-            background-color: #fff;
-            font-family: Roboto;
-            font-size: 15px;
-            font-weight: 300;
-            margin-left: 12px;
-            padding: 0 11px 0 13px;
-            text-overflow: ellipsis;
-            width: 400px;
-        }
-
-        #pac-input:focus {
-            border-color: #4d90fe;
-        }
-    </style>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var cityField = document.querySelector('#id_addr1_prov');
@@ -430,14 +410,14 @@
         function renderPPFileds() {
             var tp = $('#id_type').val();
             if (tp == 'PP' || tp == 'CU') {
-                $('#id_pp_fields').removeClass('d-none');
+                $('#id_pp_fields, #id_details_fields').removeClass('d-none');
                 if (tp === 'CU') {
                     $('.store_fields').removeClass('d-none');
                 } else {
                     $('.store_fields').addClass('d-none');
                 }
             } else {
-                $('#id_pp_fields').addClass('d-none');
+                $('#id_pp_fields, #id_details_fields').addClass('d-none');
                 $('#store_fields').addClass('d-none');
             }
         }

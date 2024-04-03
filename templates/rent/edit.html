@@ -1,10 +1,399 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% load widget_tweaks %}
 
-</body>
-</html>
+{% block header %}
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <form method="POST" class="post-form" action="{% url 'rent-update' model.id %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="row">
+                <div class="col-12">
+                    <h3>Update Details</h3>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label>Дугаар: </label>
+                        <input type="text" class="form-control" name="id" id="id_id" readonly
+                               value="{{ model.id }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Store ID: <span class="text-purple">*</span></label>
+                        <select id="id_store_id" class="form-control" name="store_id">
+                            {% for store_id, store_name in store_id_to_name.items %}
+                                <option value="{{ store_id }}"
+                                        {% if model.store_id.store_id == store_id %}selected{% endif %}>
+                                    {{ store_id }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+
+                    <div class="form-group col-md-6">
+                        <label>Дэлгүүрийн нэр: <span class="text-purple">*</span></label>
+                        <input id="id_store_name" value="{{ model.str_name }}" class="form-control" name="str_name"
+                               readonly type="text">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Албан ёсны хаяг: </label>
+                        <input type="text" class="form-control" name="str_address" id="id_str_address"
+                               value="{{ model.str_address }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Түрээслүүлэгч 1: </label>
+                        <input type="text" class="form-control" name="lesser1" id="id_lesser1"
+                               value="{{ model.lesser1 }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Түрээслүүлэгч 2: </label>
+                        <input type="text" class="form-control" name="lesser2" id="id_lesser2"
+                               value="{{ model.lesser2 }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Түрээслүүлэгч 3: </label>
+                        <input type="text" class="form-control" name="lesser3" id="id_lesser3"
+                               value="{{ model.lesser3 }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Холбоо барих утас 1: </label>
+                        <input type="text" class="form-control" name="phone_number1" id="id_phone_number1"
+                               value="{{ model.phone_number1 }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Холбоо барих утас 2: </label>
+                        <input type="text" class="form-control" name="phone_number2" id="id_phone_number2"
+                               value="{{ model.phone_number2 }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Холбоо барих утас 3: </label>
+                        <input type="text" class="form-control" name="phone_number3" id="id_phone_number3"
+                               value="{{ model.phone_number3 }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>И-майл хаяг: </label>
+                        <input type="text" class="form-control" name="email" id="email"
+                               value="{{ model.email }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Талбайн нийт хэмжээ м.кв: </label>
+                        <input type="text" class="form-control" name="area_size" id="id_area_size"
+                               value="{{ model.area_size }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Contract Type: </label>
+                        <input type="text" class="form-control" name="cont_type" id="id_cont_type"
+                               value="{{ model.cont_type }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Гэрээний дугаар 1: </label>
+                        <input type="text" class="form-control" name="cntr_num1" id="id_cntr_num1"
+                               value="{{ model.cntr_num1 }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Гэрээний дугаар 2: </label>
+                        <input type="text" class="form-control" name="cntr_num2" id="id_cntr_num2"
+                               value="{{ model.cntr_num2 }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Гэрээний дугаар 3: </label>
+                        <input type="text" class="form-control" name="cntr_num3" id="id_cntr_num3"
+                               value="{{ model.cntr_num3 }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Гэрээ эхлэх хугацаа: </label>
+                        <input type="date" class="form-control" name="st_dt" id="id_st_dt"
+                               value="{{ model.st_dt }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Дуусах хугацаа: </label>
+                        <input type="date" class="form-control" name="ed_dt" id="id_ed_dt"
+                               value="{{ model.ed_dt }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Сунгагдсан хугацаа: </label>
+                        <input type="date" class="form-control" name="ext_ed_dt" id="id_ext_ed_dt"
+                               value="{{ model.ext_ed_dt }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Талбай хүлээлцсэн актын өдөр: </label>
+                        <input type="text" class="form-control" name="hand_over_dt" id="id_hand_over_dt"
+                               value="{{ model.hand_over_dt }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Түрээсийн төлбөр: </label>
+                        <input type="text" class="form-control" name="rent_mo_fee" id="id_rent_mo_fee"
+                               value="{{ model.rent_mo_fee }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Түрээсийн төлбөр 1: </label>
+                        <input type="text" class="form-control" name="rent_mo_fee_annex1" id="id_rent_mo_fee_annex1"
+                               value="{{ model.rent_mo_fee_annex1 }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Түрээсийн төлбөр 2: </label>
+                        <input type="text" class="form-control" name="rent_mo_fee_annex2" id="id_rent_mo_fee_annex2"
+                               value="{{ model.rent_mo_fee_annex2 }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Түрээсийн төлбөр 3: </label>
+                        <input type="text" class="form-control" name="rent_mo_fee_annex3" id="id_rent_mo_fee_annex3"
+                               value="{{ model.rent_mo_fee_annex3 }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Барьцаа төлбөр: </label>
+                        <input type="text" class="form-control" name="deposit_amount" id="id_deposit_amount"
+                               value="{{ model.deposit_amount }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>СӨХ гэрээний дугаар: </label>
+                        <input type="text" class="form-control" name="association_no" id="id_association_no"
+                               value="{{ model.association_no }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>СӨХ-ийн төлбөр: </label>
+                        <input type="text" class="form-control" name="association_fee" id="id_association_fee"
+                               value="{{ model.association_fee }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Менежемент гэрээний дугаар: </label>
+                        <input type="text" class="form-control" name="manage_cnt_no" id="id_manage_cnt_no"
+                               value="{{ model.manage_cnt_no }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Менежментийн төлбөр: </label>
+                        <input type="text" class="form-control" name="manage_fee" id="id_manage_fee"
+                               value="{{ model.manage_fee }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Гэрээнд орсон зардал: </label>
+                        <input type="text" class="form-control" name="exp_inc" id="id_exp_inc"
+                               value="{{ model.exp_inc }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Бусад орлого болон зардлын гэрээ: </label>
+                        <input type="text" class="form-control" name="other_cnt" id="id_other_cnt"
+                               value="{{ model.other_cnt }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Stora box: </label>
+                        <input type="text" class="form-control" name="stora_yn" id="id_stora_yn"
+                               value="{{ model.stora_yn }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Stora box түрээсийн төлбөр: </label>
+                        <input type="text" class="form-control" name="stora_fee" id="id_stora_fee"
+                               value="{{ model.stora_fee }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>ATM: </label>
+                        <input type="text" class="form-control" name="atm_yn" id="id_atm_yn"
+                               value="{{ model.atm_yn }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>ATM түрээсийн төлбөр: </label>
+                        <input type="text" class="form-control" name="atm_fee" id="id_atm_fee"
+                               value="{{ model.atm_fee }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Дамжуулан түрээслэх боломжтой эсэх: </label>
+                        <input type="text" class="form-control" name="sublet_yn" id="id_sublet_yn"
+                               value="{{ model.sublet_yn }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>1 Дамжуулан түрээсийн гэрээний дугаар: </label>
+                        <input type="text" class="form-control" name="sublet1_cnt_no" id="id_sublet1_cnt_no"
+                               value="{{ model.sublet1_cnt_no }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>1 Дамжуулан түрээсийн талбай хэмжээ: </label>
+                        <input type="text" class="form-control" name="sublet1_size" id="id_sublet1_size"
+                               value="{{ model.sublet1_size }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>1 Дамжуулан түрээсийн үнэ: </label>
+                        <input type="text" class="form-control" name="sublet1_rent" id="id_sublet1_rent"
+                               value="{{ model.sublet1_rent }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>1 Дамжуулан түрээсийн барьцаа төлбөр: </label>
+                        <input type="text" class="form-control" name="sublet1_deposit" id="id_sublet1_deposit"
+                               value="{{ model.sublet1_deposit }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>2 Дамжуулан түрээсийн гэрээний дугаар: </label>
+                        <input type="text" class="form-control" name="sublet2_cnt_no" id="id_sublet2_cnt_no"
+                               value="{{ model.sublet2_cnt_no }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>2 Дамжуулан түрээсийн талбай хэмжээ: </label>
+                        <input type="text" class="form-control" name="sublet2_size" id="id_sublet2_size"
+                               value="{{ model.sublet2_size }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>2 Дамжуулан түрээсийн үнэ: </label>
+                        <input type="text" class="form-control" name="sublet2_rent" id="id_sublet2_rent"
+                               value="{{ model.sublet2_rent }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>2 Дамжуулан түрээсийн барьцаа төлбөр: </label>
+                        <input type="text" class="form-control" name="sublet2_deposit" id="id_sublet2_deposit"
+                               value="{{ model.sublet2_deposit }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>3 Дамжуулан түрээсийн гэрээний дугаар: </label>
+                        <input type="text" class="form-control" name="sublet3_cnt_no" id="id_sublet3_cnt_no"
+                               value="{{ model.sublet3_cnt_no }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>3 Дамжуулан түрээсийн талбай хэмжээ: </label>
+                        <input type="text" class="form-control" name="sublet3_size" id="id_sublet3_size"
+                               value="{{ model.sublet3_size }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>3 Дамжуулан түрээсийн үнэ: </label>
+                        <input type="text" class="form-control" name="sublet3_rent" id="id_sublet3_rent"
+                               value="{{ model.sublet3_rent }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>2 Дамжуулан түрээсийн барьцаа төлбөр: </label>
+                        <input type="text" class="form-control" name="sublet3_deposit" id="id_sublet3_deposit"
+                               value="{{ model.sublet3_deposit }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Албан бичиг: </label>
+                        <input type="text" class="form-control" name="letter" id="id_letter"
+                               value="{{ model.letter }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Өргөдөл: </label>
+                        <input type="text" class="form-control" name="notice" id="id_notice"
+                               value="{{ model.notice }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Бусад гэрээ: </label>
+                        <input type="text" class="form-control" name="other_cont" id="id_other_cont"
+                               value="{{ model.other_cont }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Франчайз санал болгох заалттай: </label>
+                        <input type="text" class="form-control" name="franchise_yn" id="id_franchise_yn"
+                               value="{{ model.franchise_yn }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Дамжуулан түрээсийн заалт: </label>
+                        <input type="text" class="form-control" name="fr_rent_yn" id="id_fr_rent_yn"
+                               value="{{ model.fr_rent_yn }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Үл хөдлөх хөрөнгийн зориулалт: </label>
+                        <input type="text" class="form-control" name="dedication" id="id_dedication"
+                               value="{{ model.dedication }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Нотариат: </label>
+                        <input type="text" class="form-control" name="notariat_yn" id="id_notariat_yn"
+                               value="{{ model.notariat_yn }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>ҮХХ-н гэрчилгээтэй эсэх: </label>
+                        <input type="text" class="form-control" name="real_estate_yn" id="id_real_estate_yn"
+                               value="{{ model.real_estate_yn }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Гэрээний онцгой нөхцөл: </label>
+                        <input type="text" class="form-control" name="special_terms" id="id_special_terms"
+                               value="{{ model.special_terms }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Гэрээний хариуцлагын заалт: </label>
+                        <input type="text" class="form-control" name="cont_resp_term" id="id_cont_resp_term"
+                               value="{{ model.cont_resp_term }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Гэрээний холбоос: </label>
+                        <input type="text" class="form-control" name="cont_link" id="id_cont_link"
+                               value="{{ model.cont_link }}"/>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <a href="{% url 'index' %}" class="btn btn-link text-purple-300">
+                        Cancel
+                    </a>
+                </div>
+                <div class="form-group col-md-6">
+                    <button type="submit" class="btn btn-success btn-lg">Update</button>
+                </div>
+
+            </div>
+        </form>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.js"></script>
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.css"/>
+        <script>
+            $(document).ready(function () {
+                $('#id_store_id').select2({
+                    width: '100%',
+                    placeholder: "Select a Store ID",
+                });
+
+                $('#id_store_id').change(function () {
+                    var selectedName = $(this).find('option:selected').data('name');
+                    $('#id_store_name').val(selectedName);
+                    $('#id_store_name').prop('readonly', true);
+
+                });
+
+
+                {#$('#id_store_id').select2({#}
+                {#    ajax: {#}
+                {#        url: '/api/store-id-search/',#}
+                {#        dataType: 'json',#}
+                {#        delay: 250,#}
+                {#        data: function (params) {#}
+                {#            return {#}
+                {#                q: params.term, // search term#}
+                {#                page: params.page#}
+                {#            };#}
+                {#        },#}
+                {#        processResults: function (data, params) {#}
+                {#            // parse the results into the format expected by Select2#}
+                {#            params.page = params.page || 1;#}
+                {#            return {#}
+                {#                results: data.items,#}
+                {#                pagination: {#}
+                {#                    more: (params.page * 30) < data.total_count#}
+                {#                }#}
+                {#            };#}
+                {#        },#}
+                {#        cache: true#}
+                {#    },});#}
+                $('#id_st_dt, #id_ed_dt, #id_ext_ed_dt, #id_hand_over_dt').daterangepicker({
+                    singleDatePicker: true,
+                    applyClass: 'bg-purple btn-sm',
+                    cancelClass: 'btn-light btn-sm',
+                    locale: {
+                        format: 'YYYY/MM/DD'
+                    }
+                });
+
+                {#$('#id_alc_opentime, #id_alc_closetime').timepicker({#}
+                {#    timeFormat: 'H:i',#}
+                {#    interval: 30,#}
+                {#    scrollDefault: 'now',#}
+                {#    dynamic: false,#}
+                {#    dropdown: true,#}
+                {#    scrollbar: true,#}
+                {#    change: function (time) {#}
+                {#        var element = $(this), text;#}
+                {#        var timepicker = element.timepicker();#}
+                {#        text = timepicker.format(time);#}
+                {#        element.siblings('.helper-text').text(text);#}
+                {#    }});#}
+            });
+        </script>
+    </div>{% endblock content %}

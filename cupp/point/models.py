@@ -187,6 +187,7 @@ class PointPhoto(m.Model):
 
 
 class StorePlanning(m.Model):
+    point = m.ForeignKey(Point, on_delete=m.CASCADE, related_name='store_plannings', null=True, blank=True)
     five_digit_validator = RegexValidator(r'^\d{5}$', 'Store number must be a 5-digit number')
     store_id = m.CharField('Store ID', blank=True, null=True, max_length=5)
     store_name = m.CharField('Store name', blank=True, null=True, max_length=500)

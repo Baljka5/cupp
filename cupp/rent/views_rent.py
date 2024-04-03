@@ -1,5 +1,6 @@
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.http import JsonResponse
 
 from .forms import StrRentForm
 from django.views import generic as g
@@ -68,14 +69,19 @@ def index(request):
 
     # Build the query based on presence of filter values
     query = Q()
-    if store_id_query:
-        query &= Q(store_id__icontains=store_id_query)
+    if store_id_query.isdigit():  # Assuming store_id_query should be an ID (integer)
+        # We perform an exact match if store_id_query is a digit
+        query &= Q(store_id=store_id_query)
+    elif store_id_query:
+        # If store_id_query is not a digit, replace this with the appropriate string field
+        # For example, if StoreTrainer has a 'name' field you'd like to filter by:
+        query &= Q(store_id__name__icontains=store_id_query)
+
     if str_name_query:
-        query &= Q(id__str_name__icontains=str_name_query)
+        query &= Q(str_name__icontains=str_name_query)
 
     models = StrRent.objects.filter(query).distinct().order_by('id')
-
-    paginator = Paginator(models, 10)
+    paginator = Paginator(models, 10)  # Show 10 rents per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -93,7 +99,10 @@ def index(request):
 
 def edit(request, id):
     model = StrRent.objects.get(id=id)
-    return render(request, 'rent/edit.html', {'model': model})
+    store_id_to_name = {rent.store_id: rent.store_name for rent in StoreTrainer.objects.all()}
+    return render(request, 'rent/edit.html', {
+        'model': model,
+        'store_id_to_name': store_id_to_name})
 
 
 def update(request, id):
@@ -110,6 +119,18 @@ def destroy(request, id):
     model = StrRent.objects.get(id=id)
     model.delete()
     return redirect("/rent-index")
+
+
+def store_id_search(request):
+    # Your logic to search for store ID based on query
+    search_query = request.GET.get('q', '')
+    if search_query:
+        stores = StoreTrainer.objects.filter(name__icontains=search_query)
+    else:
+        stores = StoreTrainer.objects.none()
+
+    store_list = [{'id': store.pk, 'text': store.name} for store in stores]
+    return JsonResponse({'items': store_list})
 
 
 class RentView(g.TemplateView):

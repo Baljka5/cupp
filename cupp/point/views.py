@@ -8,7 +8,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
 from .forms import PointForm, PhotoFormset, StorePlanningForm
-from .models import Point, District, City, Type
+from .models import Point, District, City, Type, StorePlanning
 from .mixins import GroupMixin, StorePlannerMixin
 from django.contrib.auth.models import Group, User
 from django import template
@@ -112,7 +112,9 @@ class AjaxInfo(GroupMixin, StorePlannerMixin, g.DetailView):
 
 class Detail(LoginRequiredMixin, g.DetailView):
     model = Point
+
     template_name = 'point/detail.html'
+
 
 
 class AjaxList(LoginRequiredMixin, g.ListView):

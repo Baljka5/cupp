@@ -326,30 +326,29 @@
                 });
 
 
-                $('#id_store_id').select2({
-                    ajax: {
-                        url: '/path/to/api/store-id-search/',
-                        dataType: 'json',
-                        delay: 250,
-                        data: function (params) {
-                            return {
-                                q: params.term, // search term
-                                page: params.page
-                            };
-                        },
-                        processResults: function (data, params) {
-                            // parse the results into the format expected by Select2
-                            params.page = params.page || 1;
-                            return {
-                                results: data.items,
-                                pagination: {
-                                    more: (params.page * 30) < data.total_count
-                                }
-                            };
-                        },
-                        cache: true
-                    },
-                });
+                {#$('#id_store_id').select2({#}
+                {#    ajax: {#}
+                {#        url: '/api/store-id-search/',#}
+                {#        dataType: 'json',#}
+                {#        delay: 250,#}
+                {#        data: function (params) {#}
+                {#            return {#}
+                {#                q: params.term, // search term#}
+                {#                page: params.page#}
+                {#            };#}
+                {#        },#}
+                {#        processResults: function (data, params) {#}
+                {#            // parse the results into the format expected by Select2#}
+                {#            params.page = params.page || 1;#}
+                {#            return {#}
+                {#                results: data.items,#}
+                {#                pagination: {#}
+                {#                    more: (params.page * 30) < data.total_count#}
+                {#                }#}
+                {#            };#}
+                {#        },#}
+                {#        cache: true#}
+                {#    },});#}
                 $('#id_st_dt, #id_ed_dt, #id_ext_ed_dt, #id_hand_over_dt').daterangepicker({
                     singleDatePicker: true,
                     applyClass: 'bg-purple btn-sm',

@@ -59,8 +59,9 @@ urlpatterns = [
     path('rent-index/', rent_views.index, name='rent_index'),
     path('rent-create', rent_views.rent_addnew, name='rent-create'),
     path('rent-edit/<int:id>', rent_views.edit, name='rent-edit'),
-    path('rent-update/<int:id>', rent_views.update, name='rent_update'),
+    path('rent-update/<int:id>', rent_views.update, name='rent-update'),
     path('rent-delete/<int:id>', rent_views.destroy, name='rent-delete'),
+    path('api/store-id-search/', rent_views.store_id_search, name='store_id_search'),
 
     path('register-license/', license_views.index, name='index'),
     path('addnew', license_views.addnew, name='addnew'),

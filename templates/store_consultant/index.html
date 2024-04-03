@@ -42,7 +42,7 @@
                     </div>
                 {% endfor %}
             </div>
-            <div class="team-detail-container" id="team-detail-container">
+            <div class="team-details" id="team-details">
                 <!-- Team Details Will Be Populated Here -->
             </div>
             {#            <div class="not-allocated-body" ondrop="drop(event)" ondragover="allowDrop(event)"#}
@@ -66,6 +66,26 @@
                     {% endfor %}
                 </div>
             </div>
+            <div class="store-allocation-body" id="store-allocation" ondrop="drop(event)" ondragover="allowDrop(event)"
+                 data-area-id="store-allocation">
+                <div class="store-allocation">
+                    <h2>Store Allocation (Not Allocated)</h2>
+                    <!-- SCs will be dynamically added here via drag-and-drop -->
+                </div>
+            </div>
+            <div class="not-allocated-body" id="not-allocated" ondrop="drop(event)" ondragover="allowDrop(event)"
+                 data-area-id="not-allocated">
+
+                <div class="not-allocated">
+                    {% for store_consultant in store_consultants %}
+                        <div class="sc" id="sc{{ store_consultant.id }}" draggable="true" ondragstart="drag(event)"
+                             data-consultant-id="{{ store_consultant.id }}">
+                            {{ store_consultant.store_id }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
             {#            <div class="store-allocation-body" id="store-allocation" ondrop="drop(event)" ondragover="allowDrop(event)"#}
             {#                 data-area-id="store-allocation">#}
             {#                <div class="store-allocation">#}
@@ -215,19 +235,28 @@
         }
 
         .team.highlighted {
-            background-color: #add8e6; /* Light blue, for example */
-            /* Other styles for highlighted team */
+            background-color: #add8e6; /* Highlight color */
         }
 
-        /* Hidden by default */
-        .team-detail-container {
-            display: none;
+        .team-details {
+            display: none; /* Hidden by default */
         }
 
-        /* Visible when a team is clicked */
-        .team-detail-container.visible {
-            display: block;
-            /* Other styles to make it visible */
+        .team-details.visible {
+            display: flex; /* Or 'block', depending on your layout */
+            flex-direction: column;
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #f4e2d0; /* Background color for the details section */
+        }
+
+        /* Additional styles for .sc-detail and .stores-detail */
+        .sc-detail {
+            /* Styles for consultant details */
+        }
+
+        .stores-detail {
+            /* Styles for store allocation details */
         }
     </style>
 
@@ -244,24 +273,55 @@
         }
 
         // Function to show team details and distribution
-        function showTeamDetails(teamId) {
-            const detailContainer = document.getElementById('team-detail-container');
-            detailContainer.innerHTML = ''; // Clear previous details
-            detailContainer.classList.add('visible'); // Make the container visible
+        function showTeamDetails(teamId, teamNo) {
+            // First, clear any previous highlights and team details
+            document.querySelectorAll('.team').forEach(team => {
+                team.classList.remove('highlighted');
+                team.style.order = '0'; // Reset order
+            });
+            document.querySelectorAll('.team-details').forEach(detail => {
+                detail.remove(); // Remove any existing details sections
+            });
 
             // Fetch the data for the selected team
             fetch(`/get-team-data/${teamId}/`)
                 .then(response => response.json())
                 .then(data => {
-                    // Your existing logic to create the details view
+                    // Highlight the selected team
+                    const selectedTeamDiv = document.getElementById(`area-${teamId}`);
+                    selectedTeamDiv.classList.add('highlighted');
+                    selectedTeamDiv.style.order = '-1'; // Bring to front
 
-                    // After fetching and creating elements for team details
-                    highlightTeam(teamId); // Call the function to highlight the team
+                    // Create a new div element for team details
+                    const teamDetailsDiv = document.createElement('div');
+                    teamDetailsDiv.className = 'team-details visible';
+                    selectedTeamDiv.appendChild(teamDetailsDiv);
+
+                    // Add consultants to the team-details
+                    data.team_scs.forEach(sc => {
+                        const scDetailDiv = document.createElement('div');
+                        scDetailDiv.className = 'sc-detail';
+                        scDetailDiv.textContent = sc.sc_name; // Use your actual properties
+                        teamDetailsDiv.appendChild(scDetailDiv);
+                    });
+
+                    // Add store allocation details, create and append elements as needed
+                    // This assumes you have a 'stores' key in your response
+                    const storesDetailDiv = document.createElement('div');
+                    storesDetailDiv.className = 'stores-detail';
+                    data.stores.forEach(store => {
+                        const storeSpan = document.createElement('span');
+                        storeSpan.textContent = store.store_name; // Use your actual properties
+                        storesDetailDiv.appendChild(storeSpan);
+                    });
+                    teamDetailsDiv.appendChild(storesDetailDiv);
+
+                    // If you have other information to display, append it to `teamDetailsDiv`
+                    // ...
                 })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+                .catch(error => console.error('Error:', error));
         }
+
 
         // Event listeners for teams
         document.querySelectorAll('.team').forEach(team => {

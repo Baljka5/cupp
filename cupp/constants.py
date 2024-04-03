@@ -6,7 +6,6 @@ MSG_ERROR = 'Системд алдаа гарлаа!'
 MSG_ACCESS_DENIED = 'Хандах эрхгүй байна.'
 MSG_UNSUCCESSFUL = 'Амжилтгүй боллоо, түр хүлээгээд дахин оролдоно уу.'
 
-
 CHOICES_POINT_TYPE = (
     ('PP', 'Potential Point'),
     ('CU', 'CU Store'),

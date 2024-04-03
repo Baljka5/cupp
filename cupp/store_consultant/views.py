@@ -18,17 +18,11 @@ def scIndex(request):
 
 
 def get_team_data(request, team_id):
-    try:
-        scs = Consultants.objects.filter(allocation__area_id=team_id)
-        scs_data = list(scs.values('id', 'sc_name'))
-        # If you have store data to include, add it here
-        # stores_data = ...
-        return JsonResponse({
-            'team_scs': scs_data,
-            # 'stores': stores_data,  # Uncomment and complete this line if needed
-        })
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
+    # Assuming `team_id` is passed correctly and you have a model `Consultants` with a related field `allocation`
+    scs = Consultants.objects.filter(allocation__area_id=team_id).values('id', 'sc_name')
+    team_scs = list(scs)
+    # Assuming you need to pass store allocations or other details, add them here
+    return JsonResponse({'team_scs': team_scs})
 
 
 @csrf_protect
