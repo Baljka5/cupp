@@ -4,6 +4,10 @@
 {% block header %}
 {% endblock %}
 {% block content %}
+    <div style="padding-top:10px; text-align: center; color: grey">
+        Session 10 минут болоод хаагдаж байгаа тул та өгөгдсөн тус хугацаанд амжиж хадгална уу!
+    </div>
+
 
     <div class="content">
         <form method="post" autocomplete="off" enctype="multipart/form-data" id="type_form" class="post-form"
@@ -11,8 +15,9 @@
             {% csrf_token %}
 
             <div class="row">
-
                 <div class="container">
+
+
                     <div class="col-12">
                         <h3>Enter Details</h3>
                     </div>
@@ -306,8 +311,8 @@
                 </div>
             </div>
         </form>
-{#        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>#}
-{#        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>#}
+        {#        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>#}
+        {#        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>#}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.js"></script>
         <link rel="stylesheet"
               href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.css"/>
