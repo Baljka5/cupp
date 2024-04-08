@@ -49,9 +49,9 @@ def update_consultant_area(request):
 
 @require_POST
 def save_allocations(request):
-    print(request.body)
     try:
         data = json.loads(request.body)
+        print(data)
         allocations = data.get('allocations', [])
 
         with transaction.atomic():

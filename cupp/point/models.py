@@ -1,8 +1,10 @@
 import os
 import uuid
+from sqlite3 import IntegrityError
 
+from django.core.exceptions import MultipleObjectsReturned
 from django.core.validators import RegexValidator
-from django.db import models as m
+from django.db import models as m, transaction
 from django.contrib.auth.models import User
 from django.conf import settings
 from uuid import uuid4
@@ -115,11 +117,11 @@ class Point(m.Model):
         if not self.pk and not self.created_by:
             self.created_by = self.modified_by
         # super(Point, self).save(*args, **kwargs)
-
+        creating = self._state.adding
         super().save(*args, **kwargs)  # Call the "real" save() method.
 
         # Create or update the StorePlanning instance
-        defaults = {
+        store_related_defaults = {
             'store_name': self.store_name,
             'store_id': self.store_id,
             'lat': self.lat,
@@ -149,28 +151,35 @@ class Point(m.Model):
             'created_by': self.created_by,
             # 'cluster': self.cluster,  # Uncomment and modify if cluster exists in Point and needs to be copied
         }
+        if creating or not creating:
+            try:
+                with transaction.atomic():
+                    # Update or create StorePlanning instance
+                    StorePlanning.objects.update_or_create(
+                        store_id=self.store_id,
+                        defaults=store_related_defaults
+                    )
 
-        StorePlanning.objects.update_or_create(store_id=self.store_id, defaults=defaults)
-        StoreTrainer.objects.update_or_create(store_id=self.store_id, store_name=self.store_name,
-                                              created_by=self.created_by)
-        StoreConsultant.objects.update_or_create(store_id=self.store_id, store_name=self.store_name,
-                                                 created_by=self.created_by)
+                    # Update or create StoreTrainer instance
+                    StoreTrainer.objects.update_or_create(
+                        store_id=self.store_id,
+                        defaults={'store_name': self.store_name, 'created_by': self.created_by}
+                    )
 
-    # def st_save(self, *args, **kwargs):
-    #     super().save(*args, **kwargs)  # Call the "real" save() method.
-    #
-    #     defaults = {
-    #     }
-    #
-    #     StoreTrainer.objects.update_or_create(store_id=self.store_id, defaults=defaults)
+                    # Update or create StoreConsultant instance
+                    StoreConsultant.objects.update_or_create(
+                        store_id=self.store_id,
+                        defaults={'store_name': self.store_name, 'created_by': self.created_by}
+                    )
+            except MultipleObjectsReturned:
+                # Handle the case where multiple objects were returned when only one was expected.
+                pass
+            except IntegrityError:
+                # Handle database integrity errors, such as violations of unique constraints.
+                pass
 
     def __str__(self):
         return '%s - %s' % (self.get_type_display(), self.address)
-
-    def md_save(self, *args, **kwargs):
-        if not self.pk and not self.created_by:
-            self.created_by = self.modified_by
-        super(Point, self).save(*args, **kwargs)
 
     class Meta:
         db_table = 'cupp_point'
@@ -189,7 +198,7 @@ class PointPhoto(m.Model):
 class StorePlanning(m.Model):
     point = m.ForeignKey(Point, on_delete=m.CASCADE, related_name='store_plannings', null=True, blank=True)
     five_digit_validator = RegexValidator(r'^\d{5}$', 'Store number must be a 5-digit number')
-    store_id = m.CharField('Store ID', blank=True, null=True, max_length=5)
+    store_id = m.CharField('Store ID', max_length=5, unique=True, blank=True, null=True)
     store_name = m.CharField('Store name', blank=True, null=True, max_length=500)
     lat = m.CharField('Latitude', max_length=50, default='47.9116')
     lon = m.CharField('Longitude', max_length=50, default='106.9057')
@@ -220,7 +229,7 @@ class StorePlanning(m.Model):
 
     addr1_prov = m.ForeignKey(City, on_delete=m.SET_NULL, null=True, blank=True, verbose_name='City and Aimag')
     addr2_dist = m.ForeignKey(District, on_delete=m.SET_NULL, null=True, blank=True, verbose_name='District and Sum')
-    addr3_khr = m.CharField('Хороо', null=True, blank=True,max_length=50)
+    addr3_khr = m.CharField('Хороо', null=True, blank=True, max_length=50)
     address_det = m.CharField('Address detail', blank=True, default='', max_length=500)
     sp_name = m.CharField('SP name', blank=True, default='', max_length=50)
     near_gs_cvs = m.IntegerField('GS25 number', blank=True, null=True, default=0)

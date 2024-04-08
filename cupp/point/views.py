@@ -45,7 +45,7 @@ class FormBase(GroupMixin):
         return self.render_to_response(context)
 
 
-class Create(FormBase, g.CreateView):
+class Create(LoginRequiredMixin, FormBase, g.CreateView):
 
     def get_form_kwargs(self):
         kwargs = super(Create, self).get_form_kwargs()
@@ -53,7 +53,7 @@ class Create(FormBase, g.CreateView):
         return kwargs
 
     def get_context_data(self, *args, **kwargs):
-        context = super(FormBase, self).get_context_data(*args, **kwargs)
+        context = super(Create, self).get_context_data(*args, **kwargs)
         if self.request.method == 'GET':
             context['photo_formset'] = PhotoFormset()
             context['store_planning_form'] = StorePlanningForm()
@@ -62,6 +62,30 @@ class Create(FormBase, g.CreateView):
             context['store_planning_form'] = StorePlanningForm(self.request.POST)
         return context
 
+    def form_valid(self, form):
+        context = self.get_context_data()
+        photo_formset = context['photo_formset']
+        store_planning_form = context['store_planning_form']
+
+        if photo_formset.is_valid() and store_planning_form.is_valid():
+            # This saves the Point instance
+            form.instance.created_by = self.request.user
+            self.object = form.save()
+
+            # Now, save the StorePlanning instance
+            store_planning = store_planning_form.save(commit=False)
+            store_planning.point = self.object  # Link the StorePlanning instance to the Point instance
+            store_planning.save()
+
+            # Save the photos
+            photo_formset.instance = self.object
+            photo_formset.save()
+
+            return redirect(self.get_success_url())
+
+        # If forms are not valid, return to the form with errors
+        return self.render_to_response(
+            self.get_context_data(form=form, photo_formset=photo_formset, store_planning_form=store_planning_form))
     # def form_valid(self, form):
     #     response = super(Create, self).form_valid(form)  # This saves the Point instance
     #     point_instance = form.instance
@@ -114,7 +138,6 @@ class Detail(LoginRequiredMixin, g.DetailView):
     model = Point
 
     template_name = 'point/detail.html'
-
 
 
 class AjaxList(LoginRequiredMixin, g.ListView):
