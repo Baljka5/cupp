@@ -198,6 +198,11 @@ class AjaxList(LoginRequiredMixin, g.ListView):
             return Point.objects.all()
 
         qs = Point.objects.none()
+
+        if user.groups.filter(name='Manager').exists() or user.is_superuser:
+            pp_qs = Point.objects.filter(type='PP')  # Get all PP types for Managers and superusers
+            qs = qs.union(pp_qs)
+
         if user.groups.filter(name='Store planner').exists() or user.is_superuser:
             pp_qs = Point.objects.filter(created_by=user, type='PP')
             qs = qs.union(pp_qs)
