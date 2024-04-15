@@ -139,16 +139,15 @@
         }
 
 
-        .team::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 5px;
-            right: 5px;
-            height: 10px;
-            background: linear-gradient(to top, rgba(255, 255, 255, 0.4), transparent); /* Creates the reflection gradient */
-            z-index: -1;
-        }
+        {#.team::after {#}
+        {#    content: '';#}
+        {#    position: absolute;#}
+        {#    bottom: -10px;#}
+        {#    left: 5px;#}
+        {#    right: 5px;#}
+        {#    height: 10px;#}
+        {#    background: linear-gradient(to top, rgba(252, 2, 2, 0.4), transparent); /* Creates the reflection gradient */#}
+        {#    z-index: -1;}#}
 
         .team-header {
             background-color: #666; /* The color of the team header */
@@ -254,6 +253,7 @@
         .sc-detail, .stores-detail {
             /* Your existing or additional styles here */
         }
+
     </style>
 
 
@@ -271,20 +271,30 @@
 
         // Function to show team details and distribution
         function showTeamDetails(teamId, teamNo) {
-            // Existing functionality to clear highlights and show details...
-
             // Locate the parent `.team` container of the clicked `.team-header`
             const selectedTeam = document.getElementById(`area-${teamId}`).parentNode;
 
-            // Highlight the selected team
-            document.querySelectorAll('.team').forEach(team => {
-                team.classList.remove('highlighted');
-                team.style.marginTop = ''; // Reset any previous adjustments
-            });
-            selectedTeam.classList.add('highlighted');
-            selectedTeam.style.marginTop = '-10px'; // Move the selected team up by 10px
+            // Check if the team is currently expanded
+            const isExpanded = selectedTeam.classList.contains('expanded');
 
-            // Continue with fetching team data and other existing logic...
+            // First, reset any expanded team back to normal
+            document.querySelectorAll('.team.expanded').forEach(team => {
+                if (team !== selectedTeam) { // Avoid collapsing the current team if it's being expanded
+                    team.classList.remove('expanded');
+                    team.removeAttribute('style'); // Remove inline styles
+                }
+            });
+
+            if (isExpanded) {
+                // If the team is already expanded, revert it back to normal
+                selectedTeam.classList.remove('expanded');
+                selectedTeam.removeAttribute('style');
+            } else {
+                // Expand the selected team
+                selectedTeam.classList.add('expanded');
+                selectedTeam.style.marginTop = '-10px'; // Example style, replace with your full-screen styles
+                // Add any other styles you need to expand the team
+            }
         }
 
 
