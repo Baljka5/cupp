@@ -6,6 +6,7 @@ from .models import MainTable
 class MainTableForm(f.ModelForm):
     st_dt = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
     ed_dt = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
+
     # alc_opentime = f.TimeField(input_formats=settings.TIME_INPUT_FORMATS)
     # alc_closetime = f.TimeField(input_formats=settings.TIME_INPUT_FORMATS)
 

@@ -28,6 +28,7 @@ from cupp.license import views_lic as license_views
 from cupp.event import views_event as event_views
 from cupp.rent import views_rent as rent_views
 from cupp.store_consultant import views as sc_views
+from cupp.store_trainer import views as st_views
 
 # from cupp.ajax_table_list import ajax_table_list
 
@@ -62,6 +63,12 @@ urlpatterns = [
     path('rent-update/<int:id>', rent_views.update, name='rent-update'),
     path('rent-delete/<int:id>', rent_views.destroy, name='rent-delete'),
     path('api/store-id-search/', rent_views.store_id_search, name='store_id_search'),
+
+    path('st-index/', st_views.index, name='st-index'),
+    # path('st-create', st_views.st_addnew, name='st-create'),
+    path('st-edit/<int:id>', st_views.edit, name='st-edit'),
+    path('st-update/<int:id>', st_views.update, name='st-update'),
+    # path('st-delete/<int:id>', st_views.destroy, name='st-delete'),
 
     path('register-license/', license_views.index, name='index'),
     path('addnew', license_views.addnew, name='addnew'),

@@ -69,12 +69,16 @@
                 <div class="form-group col-md-6 liquor-time">
                     <label>Архи зарж эхлэх цаг: </label>
                     <input type="time" id="id_alc_opentime" name="alc_opentime" class="form-control"
-                           value="{{ model.alc_opentime }}">
+                           value="{{ model.alc_opentime|time:'H:i' }}">
+{#                    <input type="time" id="id_alc_opentime" name="alc_opentime" class="form-control"#}
+{#                           value="{{ model.alc_opentime }}">#}
                 </div>
                 <div class="form-group col-md-6 liquor-time">
                     <label>Архи зарж дуусах цаг:</label>
                     <input type="time" id="id_alc_closetime" name="alc_closetime" class="form-control"
-                           value="{{ model.alc_closetime }}">
+                           value="{{ model.alc_closetime|time:'H:i' }}">
+                    {#                    <input type="time" id="id_alc_closetime" name="alc_closetime" class="form-control"#}
+                    {#                           value="{{ model.alc_closetime }}">#}
                 </div>
                 <div class="form-group col-md-6 camera-count">
                     <label>Камерын тоо:</label>

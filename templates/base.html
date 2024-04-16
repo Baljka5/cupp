@@ -73,6 +73,7 @@
             {% is_in_event_group as user_in_event_group %}
             {% is_in_license_group as user_in_license_group %}
             {% is_in_rent_group as user_in_rent_group %}
+            {% is_in_store_trainer_group as user_in_store_trainer_group %}
             {% if user.is_superuser %}
                 <a href="{% url 'map' %}" class="d-inline-block">
                     <img src="/static/images/logo.png" alt="xbook logo">
@@ -87,6 +88,10 @@
                 </a>
             {% elif user_in_rent_group %}
                 <a href="{% url 'rent_index' %}" class="d-inline-block">
+                    <img src="/static/images/logo.png" alt="xbook logo">
+                </a>
+            {% elif user_in_store_trainer_group %}
+                <a href="{% url 'st-index' %}" class="d-inline-block">
                     <img src="/static/images/logo.png" alt="xbook logo">
                 </a>
             {% else %}
@@ -110,6 +115,15 @@
         {% if user.is_authenticated %}
 
             <ul class="navbar-nav ml-md-auto">
+                {% is_in_store_trainer_group as user_in_store_trainer_group %}
+                {% if user_in_store_trainer_group %}
+                    <li>
+                        <a href="{% url 'st-index' %}" class="navbar-nav-link">
+                            <i class="icon-store2 mr-1"></i>
+                            <span>Store Trainer</span>
+                        </a>
+                    </li>
+                {% endif %}
                 {% is_in_rent_group as user_in_rent_group %}
                 {% if user_in_rent_group %}
                     <li>

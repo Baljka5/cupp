@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block header %}
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <form method="POST" class="post-form" action="{% url 'st-update' model.id %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="row">
+                <div class="col-12">
+                    <h3>Update Details</h3>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label>Дугаар: </label>
+                        <input type="text" class="form-control" name="id" id="id_id" readonly
+                               value="{{ model.id }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Дэлгүүрийн дугаар: </label>
+                        <input type="text" class="form-control" name="store_id" id="id_store_id" readonly
+                               value="{{ model.store_id }}"/>
+                    </div>
+
+
+                    <div class="form-group col-md-6">
+                        <label>Дэлгүүрийн нэр: </label>
+                        <input type="text" class="form-control" name="store_name" id="id_store_name" readonly
+                               value="{{ model.store_name }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Талбайн хэмжээ/m2/: </label>
+                        <input type="text" class="form-control" name="size" id="id_size"
+                               value="{{ model.size }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Сууж үйлчлүүлэх хэсэг: </label>
+                        <input type="text" class="form-control" name="sitting_size" id="id_sitting_size"
+                               value="{{ model.sitting_size }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Агуулахын хэсэг: </label>
+                        <input type="text" class="form-control" name="war_size" id="id_war_size"
+                               value="{{ model.war_size }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>00 хэсэг: </label>
+                        <input type="text" class="form-control" name="toilet_size" id="id_toilet_size"
+                               value="{{ model.toilet_size }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Заалны цэвэр хэмжээ: </label>
+                        <input type="text" class="form-control" name="resale_size" id="id_resale_size"
+                               value="{{ model.resale_size }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Лангууны тоо: </label>
+                        <input type="text" class="form-control" name="shelf" id="id_shelf"
+                               value="{{ model.shelf }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Ханын лангууны тоо: </label>
+                        <input type="text" class="form-control" name="wall_shelf" id="id_wall_shelf"
+                               value="{{ model.wall_shelf }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Кассын тавиур /урт, богино/: </label>
+                        <input type="text" class="form-control" name="cash_shelf" id="cash_shelf"
+                               value="{{ model.cash_shelf }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Хариуцсан ST: </label>
+                        <input type="text" class="form-control" name="st_name" id="id_st_name" readonly
+                               value="{{ model.st_name }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Сандалны тоо: </label>
+                        <input type="text" class="form-control" name="chair_size" id="id_chair_size"
+                               value="{{ model.chair_size }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Ширээний тоо: </label>
+                        <input type="text" class="form-control" name="desk_size" id="id_desk_size"
+                               value="{{ model.desk_size }}"/>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label>Төлөвлөлт гаргасан огноо: </label>
+                        <input type="date" class="form-control" name="planned_date" id="id_planned_date"
+                               value="{{ model.planned_date|date:"Y-m-d" }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Өрөлт орсон огноо: </label>
+                        <input type="date" class="form-control" name="displayed_date" id="id_displayed_date"
+                               value="{{ model.displayed_date|date:"Y-m-d" }}"/>
+                    </div>
+                    {#                    <div class="form-group col-md-6">#}
+                    {#                        <label>Өрөлт орсон огноо: </label>#}
+                    {#                        <input type="date" class="form-control" name="displayed_date" id="id_displayed_date"#}
+                    {#                               value="{{ model.displayed_date }}"/>#}
+                    {#                    </div>#}
+                    <div class="form-group col-md-6">
+                        <label>Дэлгүүр нээгдсэн огноо: </label>
+                        <input type="date" class="form-control" name="open_date" id="id_open_date"
+                               value="{{ model.open_date|date:"Y-m-d" }}"/>
+                    </div>
+                    <div class="form-group col-md-6 liquor-time">
+                        <label>Дэлгүүр нээгдсэн цаг: </label>
+                        <input type="time" id="id_alc_opentime" name="open_time" class="form-control"
+                               value="{{ model.open_time|time:'H:i' }}">
+                    </div>
+                    {#                    <div class="form-group col-md-6">#}
+                    {#                        <label>Дэлгүүр нээгдсэн цаг: </label>#}
+                    {#                        <input type="time" class="form-control" name="open_time" id="id_open_time"#}
+                    {#                               value="{{ model.open_time }}"/>#}
+                    {#                    </div>#}
+                    <div class="form-group col-md-6">
+                        <label>Гэрэлт самбарны тоо: </label>
+                        <input type="text" class="form-control" name="light_box" id="id_light_box"
+                               value="{{ model.light_box }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Sandwich Grill тоо: </label>
+                        <input type="text" class="form-control" name="sand_grill" id="id_sand_grill"
+                               value="{{ model.sand_grill }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Slushie машин тоо: </label>
+                        <input type="text" class="form-control" name="slushie_mach" id="id_slushie_mach"
+                               value="{{ model.slushie_mach }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Зайрмагны машин тоо: </label>
+                        <input type="text" class="form-control" name="icecream_mach" id="id_icecream_mach"
+                               value="{{ model.icecream_mach }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Ундааны машин: </label>
+                        <input type="text" class="form-control" name="mcs_mach" id="id_mcs_mach"
+                               value="{{ model.mcs_mach }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Зөв аарцны 5 цорготой тоо: </label>
+                        <input type="text" class="form-control" name="disp_5_mach" id="id_disp_5_mach"
+                               value="{{ model.disp_5_mach }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Цайны машин 3 цорготой тоо: </label>
+                        <input type="text" class="form-control" name="disp_3_mach" id="id_disp_3_mach"
+                               value="{{ model.disp_3_mach }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Хэвтээ хөлдөөгчны тоо: </label>
+                        <input type="text" class="form-control" name="horizontal_freeze" id="id_horizontal_freeze"
+                               value="{{ model.horizontal_freeze }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Кофены машины тоо: </label>
+                        <input type="text" class="form-control" name="coffee_mach_button" id="id_coffee_mach_button"
+                               value="{{ model.coffee_mach_button }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Кофены машин - Led screen тоо: </label>
+                        <input type="text" class="form-control" name="manage_cnt_no" id="id_manage_cnt_no"
+                               value="{{ model.coffee_mach_led }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Жигнүүр - мантуун буузны тоо: </label>
+                        <input type="text" class="form-control" name="manage_fee" id="id_manage_fee"
+                               value="{{ model.steamer }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Кофены халуун баригч тоо: </label>
+                        <input type="text" class="form-control" name="exp_inc" id="id_exp_inc"
+                               value="{{ model.can_warmer }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Хоолны халуун баригч тоо: </label>
+                        <input type="text" class="form-control" name="other_cnt" id="id_other_cnt"
+                               value="{{ model.food_warmer }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>ISF Босоо хөлдөөгч тоо: </label>
+                        <input type="text" class="form-control" name="stora_yn" id="id_stora_yn"
+                               value="{{ model.vertical_freezer }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Tteok-bokki машин тоо: </label>
+                        <input type="text" class="form-control" name="stora_fee" id="id_stora_fee"
+                               value="{{ model.dogbuggi_cooker }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Ус буцалгагч тоо: </label>
+                        <input type="text" class="form-control" name="atm_yn" id="id_atm_yn"
+                               value="{{ model.hot_water_disp }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>ТВ-ны дэлгэцийн тоо: </label>
+                        <input type="text" class="form-control" name="atm_fee" id="id_atm_fee"
+                               value="{{ model.tv_screen }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>ПОС-н төхөөрөмж: </label>
+                        <input type="text" class="form-control" name="sublet_yn" id="id_sublet_yn"
+                               value="{{ model.pos_qty }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Дотор камерын тоо: </label>
+                        <input type="text" class="form-control" name="sublet1_cnt_no" id="id_sublet1_cnt_no"
+                               value="{{ model.cam_int }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Гадна камерын тоо: </label>
+                        <input type="text" class="form-control" name="sublet1_size" id="id_sublet1_size"
+                               value="{{ model.cam_ext }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Бичигч төхөөрөмжийн мэдээлэл: </label>
+                        <input type="text" class="form-control" name="sublet1_rent" id="id_sublet1_rent"
+                               value="{{ model.monitor_eq }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Хард диск: </label>
+                        <input type="text" class="form-control" name="sublet1_deposit" id="id_sublet1_deposit"
+                               value="{{ model.hard_disk_size_tb }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Бичлэг хадгалах хоног: </label>
+                        <input type="text" class="form-control" name="sublet2_cnt_no" id="id_sublet2_cnt_no"
+                               value="{{ model.video_storage_day }}"/>
+                    </div>
+
+                </div>
+
+                <div class="form-group col-md-6">
+                    <a href="{% url 'st-index' %}" class="btn btn-link text-purple-300">
+                        Cancel
+                    </a>
+                </div>
+                <div class="form-group col-md-6">
+                    <button type="submit" class="btn btn-success btn-lg">Update</button>
+                </div>
+
+            </div>
+        </form>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.js"></script>
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.css"/>
+    </div>{% endblock content %}

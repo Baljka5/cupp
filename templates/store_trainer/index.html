@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block header %}
+{% endblock %}
+{% block content %}
+    <div class="content">
+        <form method="post" autocomplete="off" enctype="multipart/form-data" id="type_form" class="post-form"
+              action="/addnew">
+            {% csrf_token %}
+
+            <div class="row">
+
+                <div class="container">
+                    <div class="col-12">
+
+                        <h3>Enter Details</h3>
+                        {% if messages %}
+                            <div class="container mt-3">
+                                {% for message in messages %}
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        {{ message }}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label>Store code: <span class="text-purple">*</span></label>
+                        {% render_field form.store_id class+="form-control" %}
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label>Лицензийн төрөл: <span class="text-purple">*</span></label>
+                        <select id="id_lic_id" class="form-control" name="lic_id">
+                            <!-- Placeholder option -->
+                            <option value="" disabled selected>------</option>
+                            {% for lic_id, lic_id_nm in lic_id_to_name.items %}
+                                <option value="{{ lic_id }}" data-name="{{ lic_id_nm }}">{{ lic_id }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    {#                    <div class="form-group col-md-6">#}
+                    {#                        <label>Лицензийн төрөл: <span class="text-purple">*</span></label>#}
+                    {#                        <select id="id_lic_id" class="form-control" name="lic_id">#}
+                    {#                            {% for lic_id, lic_id_nm in lic_id_to_name.items %}#}
+                    {#                                <option value="{{ lic_id }}" data-name="{{ lic_id_nm }}">{{ lic_id }}</option>#}
+                    {#                            {% endfor %}#}
+                    {#                        </select>#}
+                    {#                    </div>#}
+
+                    <div class="form-group col-md-6">
+                        <label>Лицензийн төрлийн нэр: <span class="text-purple">*</span></label>
+                        <input id="id_lic_id_nm" class="form-control" name="lic_id_nm" readonly type="text">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Лицензтэй эсэх: <span class="text-purple">*</span></label>
+                        {% render_field form.lic_yn class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Лиценз авсан огноо: <span class="text-purple">*</span></label>
+                        {% render_field form.st_dt class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Лиценз дуусах огноо: <span class="text-purple">*</span></label>
+                        {% render_field form.ed_dt class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Лиценз авсан ажилтан: <span class="text-purple">*</span></label>
+                        {% render_field form.lic_owner class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6 liquor-time" style="display: none;">
+                        <label>Архи зарж эхлэх цаг: <span class="text-purple">*</span></label>
+                        <input type="time" id="id_alc_opentime" name="alc_opentime" class="form-control"
+                               value="{{ form.alc_opentime.value|default_if_none:"" }}">
+                    </div>
+                    <div class="form-group col-md-6 liquor-time" style="display: none;">
+                        <label>Архи зарж дуусах цаг: <span class="text-purple">*</span></label>
+                        <input type="time" id="id_alc_closetime" name="alc_closetime" class="form-control"
+                               value="{{ form.alc_closetime.value|default_if_none:"" }}">
+                    </div>
+                    <div class="form-group col-md-6 camera-count" style="display: none;">
+                        <label>Камерын тоо: <span class="text-purple">*</span></label>
+                        <input type="number" id="id_camera_cnt" name="camera_cnt" class="form-control"
+                               value="{{ form.camera_cnt.value|default_if_none:"" }}">
+                    </div>
+                    <div class="form-group col-md-6 field-size" style="display: none;">
+                        <label>Талбайн хэмжээ: <span class="text-purple">*</span></label>
+                        <input type="number" id="id_lic_sqrm" name="lic_sqrm" class="form-control"
+                               value="{{ form.lic_sqrm.value|default_if_none:"" }}">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Лиценз олгосон газрын нэр ID: </label>
+                        {% render_field form.lic_prov_ID class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Лиценз олгосон газар: </label>
+                        {% render_field form.lic_prov_name class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Лицензийн код: </label>
+                        {% render_field form.lic_no class+="form-control" %}
+                    </div>
+
+
+                    <div class="mb-3">
+                        <a href="{% url 'index' %}" class="btn btn-link text-purple-300">
+                            Cancel
+                        </a>
+                        {% if not object %}
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        </form>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.js"></script>
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.css"/>
+        <script>
+            $(document).ready(function () {
+                // Function to show or hide fields
+                function toggleLiquorTimeFields() {
+                    var licType = $('#id_lic_id').val();
+                    // Check if the selected license type is '02'
+                    if (licType === '02') {
+                        // Show the fields
+                        $('.liquor-time').show();
+                        $('#id_alc_opentime, #id_alc_closetime').prop('required', true);
+                    } else {
+                        // Hide the fields and clear any selected values if not type '02'
+                        $('.liquor-time').hide();
+                        $('#id_alc_opentime, #id_alc_closetime').prop('required', false).val('');
+                    }
+                    if (licType === '07') {
+                        $('.camera-count').show();
+                        $('#id_camera_cnt').prop('required', true);
+                    } else {
+                        $('.camera-count').hide();
+                        $('#id_camera_cnt').prop('required', false).val('');// Clear value if not type '07'
+                    }
+                    if (licType === '03') {
+                        $('.field-size').show();
+                        $('#id_lic_sqrm').prop('required', true);
+                    } else {
+                        $('.field-size').hide();
+                        $('#id_lic_sqrm').prop('required', false).val('');// Clear value if not type '07'
+                    }
+                }
+
+                // Initial check in case of form re-render with selected value
+                toggleLiquorTimeFields();
+
+                // Change event for license type dropdown
+                $('#id_lic_id').change(function () {
+                    var selectedName = $(this).find('option:selected').data('name');
+                    $('#id_lic_id_nm').val(selectedName);
+                    $('#id_lic_id_nm').prop('readonly', true);
+
+                    // Call the toggle function upon changing the license type
+                    toggleLiquorTimeFields();
+                });
+
+                $('#id_st_dt, #id_ed_dt').daterangepicker({
+                    singleDatePicker: true,
+                    applyClass: 'bg-purple btn-sm',
+                    cancelClass: 'btn-light btn-sm',
+                    locale: {
+                        format: 'YYYY/MM/DD'
+                    }
+                });
+
+                {#$('#id_alc_opentime, #id_alc_closetime').timepicker({#}
+                {#    timeFormat: 'H:i',#}
+                {#    interval: 30,#}
+                {#    scrollDefault: 'now',#}
+                {#    dynamic: false,#}
+                {#    dropdown: true,#}
+                {#    scrollbar: true,#}
+                {#    change: function (time) {#}
+                {#        var element = $(this), text;#}
+                {#        var timepicker = element.timepicker();#}
+                {#        text = timepicker.format(time);#}
+                {#        element.siblings('.helper-text').text(text);#}
+                {#    }});#}
+            });
+        </script>
+
+    </div>{% endblock %}

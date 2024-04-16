@@ -31,21 +31,28 @@
             <div class="team-row">
                 {% for area in areas %}
                     <div class="team">
-                        <div class="team-header"
-                             onclick="showTeamDetails('{{ area.id }}', '{{ area.team_no }}')">{{ area.team_no }}<span
-                                class="sc-count"></span></div>
-                        <div class="team-body" id="area-{{ area.id }}" ondrop="drop(event)"
-                             ondragover="allowDrop(event)"
-                             data-area-id="{{ area.id }}">
+                        <div class="team-header-container">
+                            <div class="team-header"
+                                 onclick="showTeamDetails('{{ area.id }}', '{{ area.team_no }}')">{{ area.team_no }}<span
+                                    class="sc-count"></span></div>
+                        </div>
+                        <div class="team-body-container">
+                            <div class="team-body" id="area-{{ area.id }}" ondrop="drop(event)"
+                                 ondragover="allowDrop(event)"
+                                 data-area-id="{{ area.id }}">
 
-                            {#                        <div class="team-body" ondrop="drop(event)" ondragover="allowDrop(event)"#}
-                            {#                             data-area-id="{{ area.id }}">#}
+                                {#                        <div class="team-body" ondrop="drop(event)" ondragover="allowDrop(event)"#}
+                                {#                             data-area-id="{{ area.id }}">#}
+                            </div>
                         </div>
                     </div>
                 {% endfor %}
             </div>
-            <div class="team-details" id="team-details">
-                <!-- Team Details Will Be Populated Here -->
+            <div id="popup" class="popup" style="display:none;">
+                <div class="popup-content">
+                    <span class="close-btn" onclick="closePopup()">&times;</span>
+                    <p id="popup-text">Team Details Go Here</p>
+                </div>
             </div>
             {#            <div class="not-allocated-body" ondrop="drop(event)" ondragover="allowDrop(event)"#}
             {#                 data-area-id="not-allocated">#}
@@ -114,6 +121,45 @@
         </div>
     </div>
     <style>
+        .popup {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2;
+            cursor: pointer;
+        }
+
+        .popup-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            width: 300px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .close-btn {
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: red;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
         .teams-container {
             display: flex;
             flex-direction: column;
@@ -128,7 +174,7 @@
 
         .team {
             transition: margin-top 0.3s ease;
-            background-color: #D1D0CF;
+            background-color: #813f00;
             padding: 10px;
             margin: 10px; /* This will ensure space around each team container */
             flex: 1;
@@ -136,6 +182,24 @@
             display: flex;
             flex-direction: column; /* Ensure .team-header can take full width */
             box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.1); /* Adds a shadow effect for depth */
+        }
+
+        .team-header-container {
+            width: 100%;
+            background-color: #666; /* The color of the team header */
+            color: white;
+            margin-bottom: 10px; /* Color of the text in the team header */
+        }
+
+        .team-body-container {
+            background-color: #F4E2D0;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box; /* Ensures padding does not affect overall width */
+        }
+
+        .team-header, .team-body {
+            width: 100%;
         }
 
 
@@ -161,7 +225,7 @@
 
 
         .team-body {
-            background-color: #F4E2D0;
+            background-color: #ff8000;
             padding: 10px;
             margin-top: 10px; /* Add space to the top of team body */
         }
@@ -271,32 +335,24 @@
 
         // Function to show team details and distribution
         function showTeamDetails(teamId, teamNo) {
-            // Locate the parent `.team` container of the clicked `.team-header`
-            const selectedTeam = document.getElementById(`area-${teamId}`).parentNode;
-
-            // Check if the team is currently expanded
-            const isExpanded = selectedTeam.classList.contains('expanded');
-
-            // First, reset any expanded team back to normal
-            document.querySelectorAll('.team.expanded').forEach(team => {
-                if (team !== selectedTeam) { // Avoid collapsing the current team if it's being expanded
-                    team.classList.remove('expanded');
-                    team.removeAttribute('style'); // Remove inline styles
-                }
-            });
-
-            if (isExpanded) {
-                // If the team is already expanded, revert it back to normal
-                selectedTeam.classList.remove('expanded');
-                selectedTeam.removeAttribute('style');
-            } else {
-                // Expand the selected team
-                selectedTeam.classList.add('expanded');
-                selectedTeam.style.marginTop = '-10px'; // Example style, replace with your full-screen styles
-                // Add any other styles you need to expand the team
-            }
+            const popup = document.getElementById('popup');
+            const popupText = document.getElementById('popup-text');
+            // Set the team number and any other dynamic content you need
+            popupText.innerHTML = `Details for Team ${teamNo}`;
+            popup.style.display = 'block';
         }
 
+        function closePopup() {
+            const popup = document.getElementById('popup');
+            popup.style.display = 'none';
+        }
+
+        window.onclick = function (event) {
+            const popup = document.getElementById('popup');
+            if (event.target == popup) {
+                popup.style.display = 'none';
+            }
+        }
 
         // Event listeners for teams
         document.querySelectorAll('.team').forEach(team => {

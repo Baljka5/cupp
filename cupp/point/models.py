@@ -37,7 +37,7 @@ class City(m.Model):
 
 
 class District(m.Model):
-    district_name = m.CharField('District and sum name', blank=False, default='', max_length=50, unique=True)
+    district_name = m.CharField('District and sum name', blank=False, default='', max_length=50)
     city = m.ForeignKey(City, on_delete=m.CASCADE, related_name='districts')
 
     def __str__(self):
