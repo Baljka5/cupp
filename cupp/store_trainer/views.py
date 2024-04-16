@@ -49,12 +49,13 @@ def index(request):
     if lic_id_nm_query:
         query &= Q(lic_id__lic_id_nm__icontains=lic_id_nm_query)
 
+    models = StoreTrainer.objects.all()
     if not request.user.is_superuser:
         if request.user.is_authenticated:
             user_first_name = request.user.first_name
-            query &= Q(st_name__iexact=user_first_name)
+            models = models.filter(st_name__icontains=user_first_name)
 
-    models = StoreTrainer.objects.filter(query).distinct().order_by('id')
+    models = models.filter(query).distinct().order_by('id')
 
     paginator = Paginator(models, 10)
     page_number = request.GET.get('page')
