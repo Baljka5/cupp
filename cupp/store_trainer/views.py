@@ -73,6 +73,11 @@ def edit(request, id):
     return render(request, 'store_trainer/edit.html', {'model': model})
 
 
+def st_view(request, id):
+    model = StoreTrainer.objects.get(id=id)
+    return render(request, 'store_trainer/index.html', {'model': model})
+
+
 def update(request, id):
     model = StoreTrainer.objects.get(id=id)
     form = StoreTrainerForm(request.POST, instance=model)

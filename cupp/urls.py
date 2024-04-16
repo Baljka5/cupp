@@ -65,7 +65,7 @@ urlpatterns = [
     path('api/store-id-search/', rent_views.store_id_search, name='store_id_search'),
 
     path('st-index/', st_views.index, name='st-index'),
-    # path('st-create', st_views.st_addnew, name='st-create'),
+    path('st-view/<int:id>', st_views.st_view, name='st-view'),
     path('st-edit/<int:id>', st_views.edit, name='st-edit'),
     path('st-update/<int:id>', st_views.update, name='st-update'),
     # path('st-delete/<int:id>', st_views.destroy, name='st-delete'),
