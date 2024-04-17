@@ -72,7 +72,7 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label>Хариуцсан ST: </label>
-                        <input type="text" class="form-control" name="st_name" id="id_st_name" readonly
+                        <input type="text" class="form-control" name="st_name" id="id_st_name"
                                value="{{ model.st_name }}"/>
                     </div>
                     <div class="form-group col-md-6">
@@ -163,84 +163,86 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label>Кофены машин - Led screen тоо: </label>
-                        <input type="text" class="form-control" name="manage_cnt_no" id="id_manage_cnt_no"
+                        <input type="text" class="form-control" name="coffee_mach_led" id="id_coffee_mach_led"
                                value="{{ model.coffee_mach_led }}"/>
                     </div>
                     <div class="form-group col-md-6">
                         <label>Жигнүүр - мантуун буузны тоо: </label>
-                        <input type="text" class="form-control" name="manage_fee" id="id_manage_fee"
+                        <input type="text" class="form-control" name="steamer" id="id_steamer"
                                value="{{ model.steamer }}"/>
                     </div>
                     <div class="form-group col-md-6">
                         <label>Кофены халуун баригч тоо: </label>
-                        <input type="text" class="form-control" name="exp_inc" id="id_exp_inc"
+                        <input type="text" class="form-control" name="can_warmer" id="id_can_warmer"
                                value="{{ model.can_warmer }}"/>
                     </div>
                     <div class="form-group col-md-6">
                         <label>Хоолны халуун баригч тоо: </label>
-                        <input type="text" class="form-control" name="other_cnt" id="id_other_cnt"
+                        <input type="text" class="form-control" name="food_warmer" id="id_food_warmer"
                                value="{{ model.food_warmer }}"/>
                     </div>
                     <div class="form-group col-md-6">
                         <label>ISF Босоо хөлдөөгч тоо: </label>
-                        <input type="text" class="form-control" name="stora_yn" id="id_stora_yn"
+                        <input type="text" class="form-control" name="vertical_freezer" id="id_vertical_freezer"
                                value="{{ model.vertical_freezer }}"/>
                     </div>
                     <div class="form-group col-md-6">
                         <label>Tteok-bokki машин тоо: </label>
-                        <input type="text" class="form-control" name="stora_fee" id="id_stora_fee"
+                        <input type="text" class="form-control" name="dogbuggi_cooker" id="id_dogbuggi_cooker"
                                value="{{ model.dogbuggi_cooker }}"/>
                     </div>
                     <div class="form-group col-md-6">
                         <label>Ус буцалгагч тоо: </label>
-                        <input type="text" class="form-control" name="atm_yn" id="id_atm_yn"
+                        <input type="text" class="form-control" name="hot_water_disp" id="id_hot_water_disp"
                                value="{{ model.hot_water_disp }}"/>
                     </div>
                     <div class="form-group col-md-6">
                         <label>ТВ-ны дэлгэцийн тоо: </label>
-                        <input type="text" class="form-control" name="atm_fee" id="id_atm_fee"
+                        <input type="text" class="form-control" name="tv_screen" id="id_tv_screen"
                                value="{{ model.tv_screen }}"/>
                     </div>
                     <div class="form-group col-md-6">
                         <label>ПОС-н төхөөрөмж: </label>
-                        <input type="text" class="form-control" name="sublet_yn" id="id_sublet_yn"
+                        <input type="text" class="form-control" name="pos_qty" id="id_pos_qty"
                                value="{{ model.pos_qty }}"/>
                     </div>
                     <div class="form-group col-md-6">
                         <label>Дотор камерын тоо: </label>
-                        <input type="text" class="form-control" name="sublet1_cnt_no" id="id_sublet1_cnt_no"
+                        <input type="text" class="form-control" name="cam_int" id="id_cam_int"
                                value="{{ model.cam_int }}"/>
                     </div>
                     <div class="form-group col-md-6">
                         <label>Гадна камерын тоо: </label>
-                        <input type="text" class="form-control" name="sublet1_size" id="id_sublet1_size"
+                        <input type="text" class="form-control" name="cam_ext" id="id_cam_ext"
                                value="{{ model.cam_ext }}"/>
                     </div>
                     <div class="form-group col-md-6">
                         <label>Бичигч төхөөрөмжийн мэдээлэл: </label>
-                        <input type="text" class="form-control" name="sublet1_rent" id="id_sublet1_rent"
+                        <input type="text" class="form-control" name="monitor_eq" id="id_monitor_eq"
                                value="{{ model.monitor_eq }}"/>
                     </div>
                     <div class="form-group col-md-6">
                         <label>Хард диск: </label>
-                        <input type="text" class="form-control" name="sublet1_deposit" id="id_sublet1_deposit"
+                        <input type="text" class="form-control" name="hard_disk_size_tb" id="id_hard_disk_size_tb"
                                value="{{ model.hard_disk_size_tb }}"/>
                     </div>
                     <div class="form-group col-md-6">
                         <label>Бичлэг хадгалах хоног: </label>
-                        <input type="text" class="form-control" name="sublet2_cnt_no" id="id_sublet2_cnt_no"
+                        <input type="text" class="form-control" name="video_storage_day" id="id_video_storage_day"
                                value="{{ model.video_storage_day }}"/>
                     </div>
 
                 </div>
 
-                <div class="form-group col-md-6">
-                    <a href="{% url 'st-index' %}" class="btn btn-link text-purple-300">
-                        Cancel
-                    </a>
-                </div>
-                <div class="form-group col-md-6">
-                    <button type="submit" class="btn btn-success btn-lg">Update</button>
+                <div class="card-footer bg-transparent border-top-0 pt-0">
+                    <div align="right">
+                        <a href="{% url 'st-index' %}" class="btn btn-link text-purple-300">
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn bg-purple ml-1">
+                            Edit
+                        </button>
+                    </div>
                 </div>
 
             </div>

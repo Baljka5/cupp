@@ -14,8 +14,8 @@
                     <strong>БҮГ</strong>-н дэлгүүрийн сургагч
                     <strong>
                         {% if user.is_authenticated %}
-                            {% if user.is_superuser %}
-                                {{ user.username }}
+                            {% if user.is_superuser or user.username == "Urtnasan" %}
+                                {{ user.username }} <!-- This will display the username if it's "Urtnasan" -->
                             {% else %}
                                 {% is_in_store_trainer_group as user_in_store_trainer_group %}
                                 {% if user_in_store_trainer_group %}

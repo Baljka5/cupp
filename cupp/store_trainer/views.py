@@ -49,13 +49,12 @@ def index(request):
     if lic_id_nm_query:
         query &= Q(lic_id__lic_id_nm__icontains=lic_id_nm_query)
 
-    models = StoreTrainer.objects.all()
-    if not request.user.is_superuser:
+    models = StoreTrainer.objects.filter(query).distinct().order_by('id')
+
+    if not request.user.is_superuser and request.user.username != "Urtnasan":
         if request.user.is_authenticated:
             user_first_name = request.user.first_name
             models = models.filter(st_name__icontains=user_first_name)
-
-    models = models.filter(query).distinct().order_by('id')
 
     paginator = Paginator(models, 10)
     page_number = request.GET.get('page')
@@ -86,6 +85,24 @@ def update(request, id):
         form.save()
         return redirect("/st-index")
     return render(request, 'store_trainer/edit.html', {'model': model})
+
+
+# def update(request, id):
+#     model = StoreTrainer.objects.get(id=id)
+#     if request.method == 'POST':
+#         form = StoreTrainerForm(request.POST, instance=model)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, 'Store Trainer updated successfully.')
+#             return redirect('/st-index')
+#         else:
+#             # If form is not valid, print the errors to the console
+#             print(form.errors)
+#             messages.error(request, 'Error updating the Store Trainer. Please check the form for errors.')
+#     else:
+#         form = StoreTrainerForm(instance=model)
+#
+#     return render(request, 'store_trainer/edit.html', {'form': form, 'model': model})
 
 
 #
