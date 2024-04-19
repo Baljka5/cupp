@@ -1,0 +1,540 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block header %}
+{% endblock %}
+{% block content %}
+    <style>
+        .flex-container {
+            display: flex;
+            padding: 10px;
+            justify-content: space-between;
+        }
+
+        .flex-item {
+            flex: 1;
+            background-color: #F2F2F2;
+            border: 1px solid #FFC107;
+            margin-right: 10px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .flex-item:last-child {
+            margin-right: 0;
+        }
+    </style>
+    <div class="content">
+        <form method="POST" class="post-form" action="{% url 'sc-edit' model.id %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="row">
+                <div class="col-md-5">
+                    <div>
+                        <img src="../../static/images/brands/adwords.png">
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="card shadow-none border-0 m-0">
+                        <h5 class="card-title" style="padding: 10px; font-size: 20px;">
+                            Detail
+                        </h5>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="form-group col-md-3">
+                                    <label>Дугаар: </label>
+                                    <input type="text" class="form-control" name="id" id="id_id" readonly
+                                           value="{{ model.id }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Дэлгүүрийн дугаар: </label>
+                                    <input type="text" class="form-control" name="store_id" id="id_store_id" readonly
+                                           value="{{ model.store_id }}"/>
+                                </div>
+
+
+                                <div class="form-group col-md-6">
+                                    <label>Дэлгүүрийн нэр: </label>
+                                    <input type="text" class="form-control" name="store_name" id="id_store_name"
+                                           readonly
+                                           value="{{ model.store_name }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Дэлгүүрийн зөвлөх: </label>
+                                    <input type="text" class="form-control" name="sc_name" id="id_sc_name" readonly
+                                           value="{{ model.sc_name }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Менежерийн тоо: </label>
+                                    <input type="text" class="form-control" name="sm_num" id="id_num" readonly
+                                           value="{{ model.sm_num }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Туслах менежерийн тоо: </label>
+                                    <input type="text" class="form-control" name="am_num" id="id_am_num" readonly
+                                           value="{{ model.am_num }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Ажиллах цагийн хуваарийн төрөл: </label>
+                                    <input type="text" class="form-control" name="tt_type" id="id_tt_type"
+                                           readonly
+                                           value="{{ model.tt_type }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Цагийн хуваарь: </label>
+                                    <input type="text" class="form-control" name="wday_hours" id="id_wday_hours"
+                                           readonly
+                                           value="{{ model.wday_hours }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Цагийн хуваарь: </label>
+                                    <input type="text" class="form-control" name="wend_hours" id="id_wend_hours"
+                                           readonly
+                                           value="{{ model.wend_hours }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>АТМ машин тоо: </label>
+                                    <input type="text" class="form-control" name="atm" id="id_atm"
+                                           readonly
+                                           value="{{ model.atm }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Хэвтээ хөлдөөгчны тоо /Орос эсвэл Mонгол/: </label>
+                                    <input type="text" class="form-control" name="chest_frz_ru" id="id_chest_frz_ru"
+                                           readonly
+                                           value="{{ model.chest_frz_ru }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Хэвтээ хөлдөөгчны тоо /Солонгос/: </label>
+                                    <input type="text" class="form-control" name="chest_frz_kr" id="id_chest_frz_kr"
+                                           readonly
+                                           value="{{ model.chest_frz_kr }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Босоо хөлдөөгчны тоо /Солонгос/ </label>
+                                    <input type="text" class="form-control" name="up_frz_kr" id="id_up_frz_kr"
+                                           readonly
+                                           value="{{ model.up_frz_kr }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Baskin robbins ягаан хөлдөөгч: </label>
+                                    <input type="text" class="form-control" name="ba_rob_frz" id="id_ba_rob_frz"
+                                           readonly
+                                           value="{{ model.ba_rob_frz }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Босоо хөлдөөгч Сүү: </label>
+                                    <input type="text" class="form-control" name="up_frz_suu" id="id_up_frz_suu"
+                                           readonly
+                                           value="{{ model.up_frz_suu }}"/>
+                                </div>
+
+                                {#                                <div class="form-group col-md-6">#}
+                                {#                                    <label>Босоо хөлдөөгч Сүү: </label>#}
+                                {#                                    <input type="text" class="form-control" name="planned_date" id="id_planned_date"#}
+                                {#                                           readonly#}
+                                {#                                           value="{{ model.planned_date|date:"Y-m-d" }}"/>#}
+                                {#                                </div>#}
+                                <div class="form-group col-md-3">
+                                    <label>Босоо хөлдөөгч Icemark: </label>
+                                    <input type="text" class="form-control" name="up_frz_ice" id="id_up_frz_ice"
+                                           readonly
+                                           value="{{ model.up_frz_ice }}"/>
+                                </div>
+                                {#                    <div class="form-group col-md-6">#}
+                                {#                        <label>Өрөлт орсон огноо: </label>#}
+                                {#                        <input type="date" class="form-control" name="displayed_date" id="id_displayed_date"#}
+                                {#                               value="{{ model.displayed_date }}"/>#}
+                                {#                    </div>#}
+                                <div class="form-group col-md-3">
+                                    <label>Storabox: </label>
+                                    <input type="text" class="form-control" name="ser_storabox" id="id_ser_storabox"
+                                           readonly
+                                           value="{{ model.ser_storabox }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Автобусны карт цэнэглэгчтэй эсэх: </label>
+                                    <input type="text" class="form-control" name="ser_Umoney" id="id_ser_Umoney"
+                                           readonly
+                                           value="{{ model.ser_Umoney }}"/>
+                                </div>
+                                {#                    <div class="form-group col-md-6">#}
+                                {#                        <label>Дэлгүүр нээгдсэн цаг: </label>#}
+                                {#                        <input type="time" class="form-control" name="open_time" id="id_open_time"#}
+                                {#                               value="{{ model.open_time }}"/>#}
+                                {#                    </div>#}
+                                <div class="form-group col-md-3">
+                                    <label>Гэрэлт самбарны тоо: </label>
+                                    <input type="text" class="form-control" name="light_box" id="id_light_box" readonly
+                                           value="{{ model.light_box }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Зөөврийн цэнэглэгч түрээс: </label>
+                                    <input type="text" class="form-control" name="ser_pow_bank" id="id_ser_pow_bank"
+                                           readonly
+                                           value="{{ model.ser_pow_bank }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Сугалаа: </label>
+                                    <input type="text" class="form-control" name="ser_lottery" id="id_ser_lottery"
+                                           readonly
+                                           value="{{ model.ser_lottery }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Хүргэлт: </label>
+                                    <input type="text" class="form-control" name="ser_delivery" id="id_ser_delivery"
+                                           readonly
+                                           value="{{ model.ser_delivery }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Хэвлэл: </label>
+                                    <input type="text" class="form-control" name="ser_print" id="id_ser_print" readonly
+                                           value="{{ model.ser_print }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Тасалбар: </label>
+                                    <input type="text" class="form-control" name="ser_ticket" id="id_ser_ticket"
+                                           readonly
+                                           value="{{ model.ser_ticket }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Архины зөвшөөрөл: </label>
+                                    <input type="text" class="form-control" name="alc_reason" id="id_alc_reason"
+                                           readonly
+                                           value="{{ model.alc_reason }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Тамхины зөвшөөрөл: </label>
+                                    <input type="text" class="form-control" name="ciga_reason"
+                                           id="id_ciga_reason" readonly
+                                           value="{{ model.ciga_reason }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>24 цаг ажиллахгүй байгаа шалтгаан: </label>
+                                    <input type="text" class="form-control" name="reason_not_24"
+                                           id="id_reason_not_24" readonly
+                                           value="{{ model.reason_not_24 }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Дэлгүүр хаагдсан огноо: </label>
+                                    <input type="text" class="form-control" name="close_date" id="id_close_date"
+                                           readonly
+                                           value="{{ model.close_date|date:"Y-m-d" }}"/>
+                                </div>
+                                {#                                <div class="form-group col-md-3">#}
+                                {#                                    <label>Дэлгүүр хаагдсан огноо: </label>#}
+                                {#                                    <input type="date" class="form-control" name="close_date" id="id_close_date"#}
+                                {#                                           readonly#}
+                                {#                                           value="{{ model.close_date }}"/>#}
+                                {#                                </div>#}
+                                <div class="form-group col-md-3">
+                                    <label>Дэлгүүр хаагдсан шалтгаан: </label>
+                                    <input type="text" class="form-control" name="close_reason" id="id_close_reason"
+                                           readonly
+                                           value="{{ model.close_reason }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Ойрхон GS-н тоо.: </label>
+                                    <input type="text" class="form-control" name="near_gs" id="id_near_gs" readonly
+                                           value="{{ model.near_gs }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Дэлгүүрийн менежерийн нэр: </label>
+                                    <input type="text" class="form-control" name="sm_name" id="id_sm_name" readonly
+                                           value="{{ model.sm_name }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Дэлгүүрийн менежерийн утасны дугаар: </label>
+                                    <input type="text" class="form-control" name="sm_phone" id="id_sm_phone" readonly
+                                           value="{{ model.sm_phone }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Үнийн бодлого: </label>
+                                    <input type="text" class="form-control" name="prc_grade" id="id_prc_grade" readonly
+                                           value="{{ model.prc_grade }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>TV дэлгэцийн тоо: </label>
+                                    <input type="text" class="form-control" name="tv_screen" id="id_tv_screen" readonly
+                                           value="{{ model.tv_screen }}"/>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>00-н төрөл (Өөрийн, нийтийн): </label>
+                                    <input type="text" class="form-control" name="toilet_tp" id="id_toilet_tp" readonly
+                                           value="{{ model.toilet_tp }}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0 pt-0">
+                            <div align="right">
+                                <a href="{% url 'store-index' %}" class="btn btn-link text-purple-300">
+                                    Cancel
+                                </a>
+                                <button type="submit" class="btn bg-purple ml-1">
+                                    Edit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-container">
+                <div class="col" style="padding: 10px">
+                    <div class="card shadow-none border-0 m-0">
+                        <h5 class="card-title" style="padding: 10px; font-size: 20px;">
+                            Other:
+                        </h5>
+                        <div class="card-body">
+                            <div class="flex-container">
+                                <div class="flex-item">
+
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label>Талбайн хэмжээ/m2/: </label>
+                                                <input type="text" class="form-control" name="size" id="id_size"
+                                                       readonly
+                                                       value="{{ st_model.size }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Сууж үйлчлүүлэх хэсэг: </label>
+                                                <input type="text" class="form-control" name="sitting_size"
+                                                       id="id_sitting_size"
+                                                       readonly
+                                                       value="{{ st_model.sitting_size }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Агуулахын хэсэг: </label>
+                                                <input type="text" class="form-control" name="war_size"
+                                                       id="id_war_size"
+                                                       readonly
+                                                       value="{{ st_model.war_size }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>00 хэсэг: </label>
+                                                <input type="text" class="form-control" name="toilet_size"
+                                                       id="id_toilet_size"
+                                                       readonly
+                                                       value="{{ st_model.toilet_size }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Заалны цэвэр хэмжээ: </label>
+                                                <input type="text" class="form-control" name="resale_size"
+                                                       id="id_resale_size"
+                                                       readonly
+                                                       value="{{ st_model.resale_size }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Лангууны тоо: </label>
+                                                <input type="text" class="form-control" name="shelf"
+                                                       id="id_shelf"
+                                                       readonly
+                                                       value="{{ st_model.shelf }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Ханын лангууны тоо: </label>
+                                                <input type="text" class="form-control" name="wall_shelf"
+                                                       id="id_wall_shelf"
+                                                       readonly
+                                                       value="{{ st_model.wall_shelf }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Кассын тавиур /урт, богино/: </label>
+                                                <input type="text" class="form-control" name="cash_shelf"
+                                                       id="id_cash_shelf"
+                                                       readonly
+                                                       value="{{ st_model.cash_shelf }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Сандалны тоо: </label>
+                                                <input type="text" class="form-control" name="chair_size"
+                                                       id="id_chair_size"
+                                                       readonly
+                                                       value="{{ st_model.chair_size }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Ширээний тоо: </label>
+                                                <input type="text" class="form-control" name="desk_size"
+                                                       id="id_desk_size"
+                                                       readonly
+                                                       value="{{ st_model.desk_size }}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="flex-item">
+
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label>Хариуцсан ST: </label>
+                                                <input type="text" class="form-control" name="st_name" id="id_st_name"
+                                                       readonly
+                                                       value="{{ st_model.st_name }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Төлөвлөлт гаргасан огноо: </label>
+                                                <input type="text" class="form-control" name="planned_date"
+                                                       id="id_planned_date"
+                                                       readonly
+                                                       value="{{ st_model.planned_date|date:"Y-m-d" }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Өрөлт орсон огноо: </label>
+                                                <input type="text" class="form-control" name="displayed_date"
+                                                       id="id_displayed_date"
+                                                       readonly
+                                                       value="{{ st_model.displayed_date|date:"Y-m-d" }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Дэлгүүр нээгдсэн огноо: </label>
+                                                <input type="text" class="form-control" name="open_date"
+                                                       id="id_open_date"
+                                                       readonly
+                                                       value="{{ st_model.open_date|date:"Y-m-d" }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6 liquor-time">
+                                                <label>Дэлгүүр нээгдсэн цаг: </label>
+                                                <input type="time" id="id_alc_opentime" name="open_time"
+                                                       class="form-control"
+                                                       readonly
+                                                       value="{{ st_model.open_time|time:'H:i' }}">
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="flex-item">
+
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label>Гэрэлт самбарны тоо: </label>
+                                                <input type="text" class="form-control" name="light_box"
+                                                       id="id_light_box"
+                                                       readonly
+                                                       value="{{ st_model.light_box }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Sandwich Grill тоо: </label>
+                                                <input type="text" class="form-control" name="sand_grill"
+                                                       id="id_sand_grill"
+                                                       readonly
+                                                       value="{{ st_model.sand_grill }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Slushie машин тоо: </label>
+                                                <input type="text" class="form-control" name="slushie_mach"
+                                                       id="id_slushie_mach"
+                                                       readonly
+                                                       value="{{ st_model.slushie_mach }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Зайрмагны машин тоо: </label>
+                                                <input type="text" class="form-control" name="icecream_mach"
+                                                       id="id_icecream_mach"
+                                                       readonly
+                                                       value="{{ st_model.icecream_mach }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Ундааны машин: </label>
+                                                <input type="text" class="form-control" name="mcs_mach"
+                                                       id="id_mcs_mach"
+                                                       readonly
+                                                       value="{{ st_model.mcs_mach }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Зөв аарцны 5 цорготой тоо: </label>
+                                                <input type="text" class="form-control" name="disp_5_mach"
+                                                       id="id_disp_5_mach"
+                                                       readonly
+                                                       value="{{ st_model.disp_5_mach }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Цайны машин 3 цорготой тоо: </label>
+                                                <input type="text" class="form-control" name="disp_3_mach"
+                                                       id="id_disp_3_mach"
+                                                       readonly
+                                                       value="{{ st_model.disp_3_mach }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Хэвтээ хөлдөөгчны тоо: </label>
+                                                <input type="text" class="form-control" name="horizontal_freeze"
+                                                       id="id_horizontal_freeze"
+                                                       readonly
+                                                       value="{{ st_model.horizontal_freeze }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Кофены машины тоо: </label>
+                                                <input type="text" class="form-control" name="coffee_mach_button"
+                                                       id="id_coffee_mach_button"
+                                                       readonly
+                                                       value="{{ st_model.coffee_mach_button }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Кофены машин - Led screen тоо: </label>
+                                                <input type="text" class="form-control" name="coffee_mach_led"
+                                                       id="id_coffee_mach_led"
+                                                       readonly
+                                                       value="{{ st_model.coffee_mach_led }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Жигнүүр - мантуун буузны тоо: </label>
+                                                <input type="text" class="form-control" name="mcs_mach"
+                                                       id="id_mcs_mach"
+                                                       readonly
+                                                       value="{{ st_model.mcs_mach }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Кофены халуун баригч тоо: </label>
+                                                <input type="text" class="form-control" name="can_warmer"
+                                                       id="id_can_warmer"
+                                                       readonly
+                                                       value="{{ st_model.can_warmer }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Хоолны халуун баригч тоо: </label>
+                                                <input type="text" class="form-control" name="food_warmer"
+                                                       id="id_food_warmer"
+                                                       readonly
+                                                       value="{{ st_model.food_warmer }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>ISF Босоо хөлдөөгч тоо: </label>
+                                                <input type="text" class="form-control" name="vertical_freezer"
+                                                       id="id_vertical_freezer"
+                                                       readonly
+                                                       value="{{ st_model.vertical_freezer }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Tteok-bokki машин тоо: </label>
+                                                <input type="text" class="form-control" name="dogbuggi_cooker"
+                                                       id="id_dogbuggi_cooker"
+                                                       readonly
+                                                       value="{{ st_model.dogbuggi_cooker }}"/>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Ус буцалгагч тоо: </label>
+                                                <input type="text" class="form-control" name="hot_water_disp"
+                                                       id="id_hot_water_disp"
+                                                       readonly
+                                                       value="{{ st_model.hot_water_disp }}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.js"></script>
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.css"/>
+    </div>{% endblock content %}

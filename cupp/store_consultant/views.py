@@ -1,12 +1,67 @@
 import json
 
+from django.core.paginator import Paginator
+from django.db.models import Q
 from django.db import transaction
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from cupp.store_consultant.models import Area, Consultants, Allocation, StoreConsultant
-from cupp.point.models import Point
+from cupp.store_trainer.models import StoreTrainer
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect
+from cupp.store_consultant.forms import StoreConsultantForm
+
+
+def index(request):
+    # Retrieve filter values from GET request
+    store_id_query = request.GET.get('store_id', '')
+    lic_id_nm_query = request.GET.get('lic_id_nm', '')
+
+    # Build the query based on presence of filter values
+    query = Q()
+    if store_id_query:
+        query &= Q(store_id__icontains=store_id_query)
+    if lic_id_nm_query:
+        query &= Q(lic_id__lic_id_nm__icontains=lic_id_nm_query)
+
+    models = StoreConsultant.objects.filter(query).distinct().order_by('id')
+
+    if not request.user.is_superuser and request.user.username != "Urtnasan":
+        if request.user.is_authenticated:
+            user_first_name = request.user.first_name
+            models = models.filter(st_name__icontains=user_first_name)
+
+    paginator = Paginator(models, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "store_consultant/show.html", {
+        'page_obj': page_obj,
+        'store_id_query': store_id_query,
+        'lic_id_nm_query': lic_id_nm_query,
+        'user_name': request.user.username
+    })
+
+
+def sc_view(request, id):
+    model = StoreConsultant.objects.get(id=id)
+    st_model = StoreTrainer.objects.get(id=id)
+
+    return render(request, 'store_consultant/sc_index.html', {'model': model, 'st_model': st_model})
+
+
+def edit(request, id):
+    model = StoreConsultant.objects.get(id=id)
+    return render(request, 'store_consultant/edit.html', {'model': model})
+
+
+def update(request, id):
+    model = StoreConsultant.objects.get(id=id)
+    form = StoreConsultantForm(request.POST, instance=model)
+    if form.is_valid():
+        form.save()
+        return redirect("/store-index")
+    return render(request, 'store_consultant/edit.html', {'model': model})
 
 
 def scIndex(request):

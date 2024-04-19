@@ -46,6 +46,10 @@ urlpatterns = [
     # path('register-license/', license_views.MainTableCreateView, name='register_license'),
 
     path('sc-index/', sc_views.scIndex, name='sc-index'),
+    path('store-index/', sc_views.index, name='store-index'),
+    path('sc-view/<int:id>', sc_views.sc_view, name='sc-views'),
+    path('sc-edit/<int:id>', sc_views.edit, name='sc-edit'),
+    path('sc-update/<int:id>', sc_views.update, name='sc-update'),
     path('update_consultant_area/', sc_views.update_consultant_area, name='update_consultant_area'),
     path('save-allocations/', sc_views.save_allocations, name='save_allocations'),
     path('get-allocations/', sc_views.get_allocations, name='get_allocations'),
