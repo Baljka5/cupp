@@ -26,20 +26,30 @@ def index(request):
 
     models = StoreConsultant.objects.filter(query).distinct().order_by('id')
 
-    if not request.user.is_superuser and request.user.username != "Urtnasan":
-        if request.user.is_authenticated:
-            user_first_name = request.user.first_name
-            models = models.filter(st_name__icontains=user_first_name)
+    # Filter by user if not superuser
+    if not request.user.is_superuser and request.user.is_authenticated:
+        models = models.filter(sc_name__icontains=request.user.username)
 
+    # Paginator setup
     paginator = Paginator(models, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
+    # Fetching team manager, updated to handle a string directly
+    team_mgr = "User"
+    if request.user.is_authenticated:
+        consultant = StoreConsultant.objects.filter(sc_name=request.user.username).first()
+        if consultant:
+            # Handling team_mgr as a string, not an object with a 'name' attribute
+            team_mgr = consultant.team_mgr if consultant.team_mgr else team_mgr
+
+    # Render the page with context
     return render(request, "store_consultant/show.html", {
         'page_obj': page_obj,
         'store_id_query': store_id_query,
         'lic_id_nm_query': lic_id_nm_query,
-        'user_name': request.user.username
+        'user_name': request.user.username,
+        'team_mgr': team_mgr
     })
 
 

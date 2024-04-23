@@ -11,21 +11,21 @@
         <div class="row">
             <div class="col-md-12">
                 <div style="font-size: 20px;">
-                    <strong>БҮГ</strong>-н дэлгүүрийн сургагч
+                    <strong>{{ team_mgr }}</strong>-н дэлгүүрийн зөвлөх
                     <strong>
                         {% if user.is_authenticated %}
-                            {% if user.is_superuser or user.username == "Urtnasan" %}
-                                {{ user.username }} <!-- This will display the username if it's "Urtnasan" -->
+                            {% if user.is_superuser %}
+                                {{ user.username }}
                             {% else %}
-                                {% is_in_store_trainer_group as user_in_store_trainer_group %}
-                                {% if user_in_store_trainer_group %}
+                                {% is_in_store_consultant_group as user_in_store_consultant_group %}
+                                {% if user_in_store_consultant_group %}
                                     {{ user.first_name }}
                                 {% else %}
                                     User
                                 {% endif %}
                             {% endif %}
                         {% endif %}
-                    </strong> таны нээсэн дэлгүүрийн жагсаалтууд.
+                    </strong> таны хариуцсан дэлгүүрийн жагсаалт.
                 </div>
                 <div style="color: dimgray;">
                     Дэлгүүрийн датаг та үнэн зөв бөглөж хөтлөн явна уу.

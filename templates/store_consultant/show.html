@@ -11,21 +11,21 @@
         <div class="row">
             <div class="col-md-12">
                 <div style="font-size: 20px;">
-                    <strong>БҮГ</strong>-н дэлгүүрийн сургагч
+                    <strong>{{ team_mgr }}</strong>-н дэлгүүрийн зөвлөх
                     <strong>
                         {% if user.is_authenticated %}
-                            {% if user.is_superuser or user.username == "Urtnasan" %}
-                                {{ user.username }} <!-- This will display the username if it's "Urtnasan" -->
+                            {% if user.is_superuser %}
+                                {{ user.username }}
                             {% else %}
-                                {% is_in_store_trainer_group as user_in_store_trainer_group %}
-                                {% if user_in_store_trainer_group %}
+                                {% is_in_store_consultant_group as user_in_store_consultant_group %}
+                                {% if user_in_store_consultant_group %}
                                     {{ user.first_name }}
                                 {% else %}
                                     User
                                 {% endif %}
                             {% endif %}
                         {% endif %}
-                    </strong> таны нээсэн дэлгүүрийн жагсаалтууд.
+                    </strong> таны хариуцсан дэлгүүрийн жагсаалт.
                 </div>
                 <div style="color: dimgray;">
                     Дэлгүүрийн датаг та үнэн зөв бөглөж хөтлөн явна уу.
@@ -51,7 +51,6 @@
                     <table id="bootstrapdatatable" class="table table-striped table-bordered" width="100%">
                         <thead>
 
-
                         <th><input type="checkbox" id="checkall"/></th>
                         <th>ID</th>
                         <th>Дэлгүүрийн дугаар</th>
@@ -69,7 +68,7 @@
                         </thead>
                         <tbody>
                         {% for model in page_obj %}
-                            {% if user.is_superuser or user.first_name in model.st_name %}
+                            {% if user.is_superuser or user.username in model.sc_name %}
                                 <tr>
                                     <td><input type="checkbox" class="checkthis"/></td>
                                     <td>{{ model.id }}</td>

@@ -43,6 +43,11 @@ def is_in_store_trainer_group(context):
     request = context['request']
     return request.user.groups.filter(name='Store Trainer').exists() or request.user.is_superuser
 
+@register.simple_tag(takes_context=True)
+def is_in_store_consultant_group(context):
+    request = context['request']
+    return request.user.groups.filter(name='Store Consultant').exists() or request.user.is_superuser
+
 
 @login_required
 def custom_login_redirect(request):

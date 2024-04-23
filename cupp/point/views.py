@@ -263,5 +263,7 @@ def custom_login_redirect(request):
         return redirect('/rent-index/')
     elif request.user.groups.filter(name='Store Trainer').exists():
         return redirect('/st-index/')
+    elif request.user.groups.filter(name='Store Consultant').exists():
+        return redirect('/store-index/')
     else:
         return redirect('/default-redirect/')
