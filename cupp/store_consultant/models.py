@@ -37,7 +37,7 @@ class StoreConsultant(m.Model):
     near_gs = m.CharField('GS detail status', blank=True, null=True, max_length=100)
     sm_name = m.CharField('Store manager name', blank=True, null=True, max_length=50)
     sm_phone = m.IntegerField('Store manager phone', blank=True, null=True)
-    prc_grade = m.BooleanField('Pricing policy', blank=True, null=True)
+    prc_grade = m.CharField('Pricing policy', blank=True, null=True, max_length=50)
     tv_screen = m.IntegerField('Tv screen', blank=True, null=True)
     toilet_tp = m.BooleanField('00-н төрөл (Өөрийн, нийтийн)', blank=True, null=True)
     created_date = m.DateTimeField('Created date', auto_now_add=True, null=True)
