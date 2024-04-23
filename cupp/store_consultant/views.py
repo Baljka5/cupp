@@ -35,12 +35,10 @@ def index(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    # Fetching team manager, updated to handle a string directly
     team_mgr = "User"
     if request.user.is_authenticated:
-        consultant = StoreConsultant.objects.filter(sc_name=request.user.username).first()
+        consultant = StoreConsultant.objects.filter(sc_name__icontains=request.user.username).first()
         if consultant:
-            # Handling team_mgr as a string, not an object with a 'name' attribute
             team_mgr = consultant.team_mgr if consultant.team_mgr else team_mgr
 
     # Render the page with context
