@@ -4,7 +4,7 @@ from cupp.store_consultant.models import StoreConsultant
 
 
 class StoreConsultantForm(f.ModelForm):
-    close_date = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
+    close_date = f.DateField(required=False, input_formats=settings.DATE_INPUT_FORMATS)
     CONSEQUENCES_CHOICES = [
         ('', '---------'),
         (True, 'Тийм'),
@@ -33,7 +33,6 @@ class StoreConsultantForm(f.ModelForm):
     toilet_tp = f.ChoiceField(choices=TOILET_TYPE_CHOICES, widget=f.Select(attrs={'class': 'form-control'}),
                               required=False)
 
-
-class Meta:
-    model = StoreConsultant
-    fields = "__all__"
+    class Meta:
+        model = StoreConsultant
+        fields = "__all__"

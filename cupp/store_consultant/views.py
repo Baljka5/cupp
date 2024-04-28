@@ -76,7 +76,6 @@ def update(request, id):
         return redirect("/store-index")
     return render(request, 'store_consultant/edit.html', {'model': model})
 
-
 def scIndex(request):
     areas = Area.objects.all()
     consultants = Consultants.objects.all()

@@ -36,16 +36,16 @@ class StoreConsultant(m.Model):
     close_reason = m.TextField('Reason for closing store', blank=True, null=True)
     near_gs = m.CharField('GS detail status', blank=True, null=True, max_length=100)
     sm_name = m.CharField('Store manager name', blank=True, null=True, max_length=50)
-    sm_phone = m.IntegerField('Store manager phone', blank=True, null=True)
+    sm_phone = m.IntegerField('Store manager phone', blank=True, null=True, default=0)
     prc_grade = m.CharField('Pricing policy', blank=True, null=True, max_length=50)
     tv_screen = m.IntegerField('Tv screen', blank=True, null=True)
     toilet_tp = m.BooleanField('00-н төрөл (Өөрийн, нийтийн)', blank=True, null=True)
     created_date = m.DateTimeField('Created date', auto_now_add=True, null=True)
     modified_date = m.DateTimeField('Modified date', auto_now=True, null=True)
     created_by = m.ForeignKey(User, verbose_name='Created by', related_name='store_consultant_created',
-                              on_delete=m.PROTECT, null=True)
+                              on_delete=m.PROTECT, null=True, blank=True)
     modified_by = m.ForeignKey(User, verbose_name='Modified by', related_name='store_consultant_modified',
-                               on_delete=m.PROTECT, null=True)
+                               on_delete=m.PROTECT, null=True, blank=True)
 
     def __str__(self):
         return self.store_id

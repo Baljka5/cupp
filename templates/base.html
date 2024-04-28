@@ -97,7 +97,7 @@
                 <a href="{% url 'st-index' %}" class="d-inline-block">
                     <img src="/static/images/logo.png" alt="xbook logo">
                 </a>
-            {% elif user_in_store_consultant_group and user_in_area_group and user_in_sc_direct_group %}
+            {% elif user_in_store_consultant_group or user_in_area_group or user_in_sc_direct_group %}
                 <a href="{% url 'store-index' %}" class="d-inline-block">
                     <img src="/static/images/logo.png" alt="xbook logo">
                 </a>
