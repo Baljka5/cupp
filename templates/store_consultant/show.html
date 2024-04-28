@@ -11,21 +11,29 @@
         <div class="row">
             <div class="col-md-12">
                 <div style="font-size: 20px;">
-                    <strong>{{ team_mgr }}</strong> багийн дэлгүүрийн зөвлөх
-                    <strong>
-                        {% if user.is_authenticated %}
-                            {% if user.is_superuser %}
-                                {{ user.username }}
-                            {% else %}
-                                {% is_in_store_consultant_group as user_in_store_consultant_group %}
-                                {% if user_in_store_consultant_group %}
-                                    {{ user.first_name }}
-                                {% else %}
-                                    User
-                                {% endif %}
-                            {% endif %}
+                    {% if user.is_authenticated %}
+                        {% is_in_area_group as user_in_area_group %}
+                        {% is_in_store_consultant_group as user_in_store_consultant_group %}
+                        {% is_in_sc_direct_group as user_in_sc_direct_group %}
+                        <!-- Assuming this is a custom template tag you've defined -->
+                        {% if user_in_area_group %}
+                            <div style="font-size: 20px;">
+                                <strong>{{ user.first_name|default:"User" }}</strong> таны багийн хариуцсан дэлгүүрийн
+                                жагсаалт.
+                            </div>
+                        {% elif user.is_superuser or user_in_store_consultant_group %}
+                            <div style="font-size: 20px;">
+                                <strong>{{ team_mgr }}</strong> багийн дэлгүүрийн зөвлөх
+                                <strong>{{ user.first_name|default:"User" }}</strong> таны хариуцсан дэлгүүрийн
+                                жагсаалт.
+                            </div>
+                        {% elif user_in_sc_direct_group %}
+                            <div style="font-size: 20px;">
+                                <strong>{{ user.first_name|default:"User" }}</strong> Бүх дэлгүүрийн
+                                жагсаалт.
+                            </div>
                         {% endif %}
-                    </strong> таны хариуцсан дэлгүүрийн жагсаалт.
+                    {% endif %}
                 </div>
                 <div style="color: dimgray;">
                     Дэлгүүрийн датаг та үнэн зөв бөглөж хөтлөн явна уу.
@@ -64,30 +72,80 @@
                         <th>Дэлгүүрийн менежер</th>
                         <th>Дэлгүүрийн менежер утас</th>
                         <th>View</th>
-                        <th>Edit</th>
+                        {% if user.is_authenticated %}
+                            {% is_in_sc_direct_group as user_in_sc_direct_group %}
+                            {% is_in_area_group as user_in_area_group %}
+                            {% is_in_store_consultant_group as user_in_store_consultant_group %}
+
+                            <!-- Superuser or a member of specific groups can see the button unless they are also an SC Director -->
+                            {% if user.is_superuser or user_in_store_consultant_group or user_in_area_group %}
+                                {% if not user_in_sc_direct_group %}
+                                    <th>Edit</th>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
                         </thead>
                         <tbody>
                         {% for model in page_obj %}
-                            {% if user.is_superuser or user.username in model.sc_name %}
-                                <tr>
-                                    <td><input type="checkbox" class="checkthis"/></td>
-                                    <td>{{ model.id }}</td>
-                                    <td>{{ model.store_id }}</td>
-                                    <td>{{ model.store_name }}</td>
-                                    <td>{{ model.tt_type }}</td>
-                                    <td>{{ model.alc_reason }}</td>
-                                    <td>{{ model.ciga_reason }}</td>
-                                    <td>{{ model.ser_Umoney }}</td>
-                                    <td>{{ model.ser_lottery }}</td>
-                                    <td>{{ model.ser_storabox }}</td>
-                                    <td>{{ model.sm_name }}</td>
-                                    <td>{{ model.sm_phone }}</td>
-                                    <td><a href="/sc-view/{{ model.id }}" class="btn btn-danger"
-                                           style="background-color: #efc47f; color: black;">View</a>
-                                    <td><a href="/sc-edit/{{ model.id }}" class="btn btn-primary">Edit</a></td>
-                                    </td>
-                                </tr>
-                            {% endif %}
+                            <tr>
+                                <td><input type="checkbox" class="checkthis"/></td>
+                                <td>{{ model.id }}</td>
+                                <td>{{ model.store_id }}</td>
+                                <td>{{ model.store_name }}</td>
+                                <td>{{ model.tt_type }}</td>
+                                <td>{{ model.alc_reason }}</td>
+                                <td>{{ model.ciga_reason }}</td>
+                                {#                                <td>{{ model.ser_Umoney }}</td>#}
+                                <td>
+                                    {% if model.ser_Umoney is True %}
+                                        Тийм
+                                    {% elif model.ser_Umoney is False %}
+                                        Үгүй
+                                    {% else %}
+                                        None
+                                    {% endif %}
+                                </td>
+                                {#                                <td>{{ model.ser_lottery }}</td>#}
+                                <td>
+                                    {% if model.ser_lottery is True %}
+                                        Тийм
+                                    {% elif model.ser_lottery is False %}
+                                        Үгүй
+                                    {% else %}
+                                        None
+                                    {% endif %}
+                                </td>
+                                {#                                <td>{{ model.ser_storabox }}</td>#}
+                                <td>
+                                    {% if model.ser_storabox is True %}
+                                        Тийм
+                                    {% elif model.ser_storabox is False %}
+                                        Үгүй
+                                    {% else %}
+                                        None
+                                    {% endif %}
+                                </td>
+                                <td>{{ model.sm_name }}</td>
+                                <td>{{ model.sm_phone }}</td>
+                                <td><a href="/sc-view/{{ model.id }}" class="btn btn-danger"
+                                       style="background-color: #efc47f; color: black;">View</a>
+                                    {#                                <td><a href="/sc-edit/{{ model.id }}" class="btn btn-primary">Edit</a></td>#}
+                                    {% if user.is_authenticated %}
+                                        {% is_in_sc_direct_group as user_in_sc_direct_group %}
+                                        {% is_in_area_group as user_in_area_group %}
+                                        {% is_in_store_consultant_group as user_in_store_consultant_group %}
+
+                                        <!-- Superuser or a member of specific groups can see the button unless they are also an SC Director -->
+                                        {% if user.is_superuser or user_in_store_consultant_group or user_in_area_group %}
+                                            {% if not user_in_sc_direct_group %}
+                                                <td>
+                                                    <a href="{% url 'sc-edit' model.id %}"
+                                                       class="btn btn-primary">Edit</a>
+                                                </td>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %}
+                            </tr>
                         {% endfor %}
                         </tbody>
                     </table>

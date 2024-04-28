@@ -265,5 +265,9 @@ def custom_login_redirect(request):
         return redirect('/st-index/')
     elif request.user.groups.filter(name='Store Consultant').exists():
         return redirect('/store-index/')
+    elif request.user.groups.filter(name='Area').exists():
+        return redirect('/store-index/')
+    elif request.user.groups.filter(name='SC Director').exists():
+        return redirect('/store-index/')
     else:
         return redirect('/default-redirect/')

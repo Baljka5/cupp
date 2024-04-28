@@ -75,6 +75,8 @@
             {% is_in_rent_group as user_in_rent_group %}
             {% is_in_store_trainer_group as user_in_store_trainer_group %}
             {% is_in_store_consultant_group as user_in_store_consultant_group %}
+            {% is_in_area_group as user_in_area_group %}
+            {% is_in_sc_direct_group as user_in_sc_direct_group %}
             {% if user.is_superuser %}
                 <a href="{% url 'map' %}" class="d-inline-block">
                     <img src="/static/images/logo.png" alt="xbook logo">
@@ -95,7 +97,7 @@
                 <a href="{% url 'st-index' %}" class="d-inline-block">
                     <img src="/static/images/logo.png" alt="xbook logo">
                 </a>
-            {% elif user_in_store_consultant_group %}
+            {% elif user_in_store_consultant_group and user_in_area_group and user_in_sc_direct_group %}
                 <a href="{% url 'store-index' %}" class="d-inline-block">
                     <img src="/static/images/logo.png" alt="xbook logo">
                 </a>
@@ -121,7 +123,9 @@
 
             <ul class="navbar-nav ml-md-auto">
                 {% is_in_store_consultant_group as user_in_store_consultant_group %}
-                {% if user_in_store_consultant_group %}
+                {% is_in_area_group as user_in_area_group %}
+                {% is_in_sc_direct_group as user_in_sc_direct_group %}
+                {% if user_in_store_consultant_group and user_in_area_group and user_in_sc_direct_group %}
                     <li>
                         <a href="{% url 'store-index' %}" class="navbar-nav-link">
                             <i class="icon-store mr-1"></i>

@@ -1,5 +1,6 @@
 import json
 
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.db import transaction
@@ -10,27 +11,32 @@ from cupp.store_trainer.models import StoreTrainer
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect
 from cupp.store_consultant.forms import StoreConsultantForm
+from django.views import generic as g
 
 
 def index(request):
-    # Retrieve filter values from GET request
     store_id_query = request.GET.get('store_id', '')
     lic_id_nm_query = request.GET.get('lic_id_nm', '')
 
-    # Build the query based on presence of filter values
     query = Q()
     if store_id_query:
         query &= Q(store_id__icontains=store_id_query)
     if lic_id_nm_query:
         query &= Q(lic_id__lic_id_nm__icontains=lic_id_nm_query)
 
-    models = StoreConsultant.objects.filter(query).distinct().order_by('id')
+    if request.user.groups.filter(name='SC Director').exists() or request.user.is_superuser:
+        models = StoreConsultant.objects.all().order_by('id')
+    else:
+        models = StoreConsultant.objects.filter(query).distinct().order_by('id')
 
-    # Filter by user if not superuser
-    if not request.user.is_superuser and request.user.is_authenticated:
+    # Filtering for users in the "Store Consultant" group
+    if request.user.groups.filter(name='Store Consultant').exists():
         models = models.filter(sc_name__icontains=request.user.username)
 
-    # Paginator setup
+    # Additional filtering for users in the "Area" group
+    if request.user.groups.filter(name='Area').exists():
+        models = models.filter(team_mgr__icontains=request.user.username)
+
     paginator = Paginator(models, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -41,7 +47,6 @@ def index(request):
         if consultant:
             team_mgr = consultant.team_mgr if consultant.team_mgr else team_mgr
 
-    # Render the page with context
     return render(request, "store_consultant/show.html", {
         'page_obj': page_obj,
         'store_id_query': store_id_query,
@@ -141,3 +146,34 @@ def save_allocations(request):
 def get_allocations(request):
     allocations = Allocation.objects.all().values('id', 'consultant__id', 'area__id', 'year', 'month')
     return JsonResponse(list(allocations), safe=False)
+
+
+class StoreConsultantView(g.TemplateView):
+    template_name = 'base.html'
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in the is_event_member variable
+        context['is_event_member'] = self.request.user.groups.filter(name='Store Consultant').exists()
+        return context
+
+
+class AreaView(g.TemplateView):
+    template_name = 'base.html'
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        context['is_event_member'] = self.request.user.groups.filter(name='Area').exists()
+        return context
+
+
+class SCDirectorView(g.TemplateView):
+    template_name = 'base.html'
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        context['is_event_member'] = self.request.user.groups.filter(name='SC Director').exists()
+        return context
