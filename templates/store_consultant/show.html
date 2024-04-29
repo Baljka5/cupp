@@ -29,7 +29,7 @@
                             </div>
                         {% elif user_in_sc_direct_group %}
                             <div style="font-size: 20px;">
-                                <strong>{{ user.first_name|default:"User" }}</strong> Бүх дэлгүүрийн
+                                <strong>{{ user.first_name|default:"User" }}</strong> хэрэглэгч таны бүх дэлгүүрийн
                                 жагсаалт.
                             </div>
                         {% endif %}
@@ -75,11 +75,10 @@
                         {% if user.is_authenticated %}
                             {% is_in_sc_direct_group as user_in_sc_direct_group %}
                             {% is_in_area_group as user_in_area_group %}
-                            {% is_in_store_consultant_group as user_in_store_consultant_group %}
 
                             <!-- Superuser or a member of specific groups can see the button unless they are also an SC Director -->
-                            {% if user.is_superuser or user_in_store_consultant_group or user_in_area_group %}
-                                {% if not user_in_sc_direct_group %}
+                            {% if user.is_superuser %}
+                                {% if not user_in_sc_direct_group or user_in_area_group %}
                                     <th>Edit</th>
                                 {% endif %}
                             {% endif %}
@@ -131,13 +130,11 @@
                                        style="background-color: #efc47f; color: black;">View</a>
                                     {#                                <td><a href="/sc-edit/{{ model.id }}" class="btn btn-primary">Edit</a></td>#}
                                     {% if user.is_authenticated %}
-                                        {% is_in_sc_direct_group as user_in_sc_direct_group %}
                                         {% is_in_area_group as user_in_area_group %}
                                         {% is_in_store_consultant_group as user_in_store_consultant_group %}
 
-                                        <!-- Superuser or a member of specific groups can see the button unless they are also an SC Director -->
-                                        {% if user.is_superuser or user_in_store_consultant_group or user_in_area_group %}
-                                            {% if not user_in_sc_direct_group %}
+                                        {% if user.is_superuser %}
+                                            {% if not user_in_sc_direct_group or user_in_area_group %}
                                                 <td>
                                                     <a href="{% url 'sc-edit' model.id %}"
                                                        class="btn btn-primary">Edit</a>
