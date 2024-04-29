@@ -312,7 +312,7 @@
                                     {% is_in_area_group as user_in_area_group %}
                                     {% is_in_store_consultant_group as user_in_store_consultant_group %}
 
-                                    {% if user.is_superuser %}
+                                    {% if user.is_superuser or user_in_store_consultant_group %}
                                         {% if not user_in_sc_direct_group or user_in_area_group %}
 
                                             <button type="submit" class="btn bg-purple ml-1">
