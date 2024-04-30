@@ -33,10 +33,12 @@
                     <div class="team">
                         <div class="team-header-container">
                             <div class="team-header"
-                                 onclick="showTeamDetails('{{ area.id }}', '{{ area.team_no }}')">{{ area.team_no }}<span
-                                    class="sc-count"></span></div>
+                                 onclick="showTeamDetails('{{ area.id }}', '{{ area.team_no }}', event)">
+                                {{ area.team_no }}<span class="sc-count"></span>
+                            </div>
                         </div>
                         <div class="team-body-container">
+
                             <div class="team-body" id="area-{{ area.id }}" ondrop="drop(event)"
                                  ondragover="allowDrop(event)"
                                  data-area-id="{{ area.id }}">
@@ -75,6 +77,7 @@
                     {% endfor %}
                 </div>
             </div>
+
             {#            <div class="store-allocation-body" id="store-allocation" ondrop="drop(event)" ondragover="allowDrop(event)"#}
             {#                 data-area-id="store-allocation">#}
             {#                <div class="store-allocation">#}
@@ -214,7 +217,7 @@
         {#    z-index: -1;}#}
 
         .team-header {
-            background-color: #666; /* The color of the team header */
+            background-color: #ee0505; /* The color of the team header */
             color: white; /* Color of the text in the team header */
             font-weight: bold;
             padding: 10px 0; /* Add padding to the top and bottom */
@@ -318,10 +321,72 @@
             /* Your existing or additional styles here */
         }
 
+        .sc-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .detail-store {
+            flex: 1;
+            padding: 10px;
+            background-color: #ffcc99;
+            margin-right: 10px;
+        }
+
+        .detail-body {
+            flex: 2;
+            padding: 10px;
+            background-color: #f4e2d0;
+        }
+
+        .store-not-allocated {
+            display: flex; /* Apply flexbox */
+            flex-wrap: wrap; /* Allow items to wrap to the next line */
+            justify-content: flex-start; /* Align items to the start of the container */
+            gap: 10px; /* Space between each child */
+            padding: 10px; /* Padding inside the container */
+            background-color: #e2e2e2; /* Light grey background */
+            border: 1px solid #ccc; /* Subtle border around the container */
+            border-radius: 5px; /* Rounded corners */
+            margin-top: 20px; /* Space above the container */
+        }
+
+        .store-id {
+            padding: 5px 10px; /* Padding inside each store id */
+            background-color: #ffcc99; /* Background color for store ids */
+            border-radius: 3px; /* Rounded corners for store ids */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            white-space: nowrap; /* Ensure the text does not wrap */
+        }
+
+        .popup-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 40px;
+            border-radius: 5px;
+            text-align: center;
+            width: 50%;
+            max-height: 80%; /* Maximum height of the popup */
+            overflow: auto; /* Enables scrolling */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (max-width: 600px) {
+            .popup-content {
+                width: 90%; /* More appropriate for smaller screens */
+                padding: 20px;
+                max-height: 90%; /* Allows more height since screen real estate is less */
+            }
+        }
     </style>
 
 
     <script>
+
         function highlightTeam(teamId) {
             // Remove existing highlights
             document.querySelectorAll('.team').forEach(team => {
@@ -333,13 +398,54 @@
             selectedTeam.classList.add('highlighted');
         }
 
-        // Function to show team details and distribution
-        function showTeamDetails(teamId, teamNo) {
-            const popup = document.getElementById('popup');
-            const popupText = document.getElementById('popup-text');
-            // Set the team number and any other dynamic content you need
-            popupText.innerHTML = `Details for Team ${teamNo}`;
-            popup.style.display = 'block';
+        function showTeamDetails(teamId, teamNo, event) {
+            event.stopPropagation();  // Prevent the event from bubbling up
+
+            fetch(`/get-scs-by-team/${teamId}/`)  // Adjust the endpoint as needed
+                .then(response => response.json())
+                .then(data => {
+                    const popup = document.getElementById('popup');
+                    const popupText = document.getElementById('popup-text');
+                    let content = `<h2>Details for Team ${teamNo}</h2>`;
+
+                    if (data.scs && data.scs.length > 0) {
+                        data.scs.forEach(sc => {
+                            content += `
+                        <div class="sc-container">
+                            <div class="detail-store">${sc.name}</div>
+                            <div class="detail-body">Store allocation</div>
+                        </div>`;  // Display each SC's name and additional details side by side
+                        });
+                    } else {
+                        content += `<p>No consultants assigned</p>`;
+                    }
+
+                    // Add a section for unallocated stores
+                    content += `
+                <div class="store-not-allocated">
+    {% for store_consultant in store_consultants %}
+        <div class="store-id" id="sc{{ store_consultant.id }}
+                        " draggable="true" ondragstart="drag(event)" data-consultant-id="{{ store_consultant.id }}">
+            {{ store_consultant.store_id }}
+        </div>
+    {% endfor %}
+</div>
+<div id="popup" class="popup" style="display:none;">
+    <div class="popup-content">
+        <span class="close-btn" onclick="closePopup()">&times;</span>
+        <div id="popup-text">Team Details Go Here</div>
+        <button onclick="saveStoreAssignments()">Save Assignments</button>
+    </div>
+</div>
+            `;
+
+                    popupText.innerHTML = content;
+                    popup.style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error fetching SCs:', error);
+                    alert('Failed to load SC details. Please try again.');
+                });
         }
 
         function closePopup() {

@@ -76,6 +76,7 @@ def update(request, id):
         return redirect("/store-index")
     return render(request, 'store_consultant/edit.html', {'model': model})
 
+
 def scIndex(request):
     areas = Area.objects.all()
     consultants = Consultants.objects.all()
@@ -176,3 +177,14 @@ class SCDirectorView(g.TemplateView):
         context = super().get_context_data(**kwargs)
         context['is_event_member'] = self.request.user.groups.filter(name='SC Director').exists()
         return context
+
+
+def get_scs_by_team(request, team_id):
+    scs = Consultants.objects.filter(allocation__area_id=team_id)
+    sc_data = [{"id": sc.id, "name": sc.sc_name} for sc in scs]
+    return JsonResponse({'scs': sc_data})
+
+# def get_unallocated_stores(request):
+#     unallocated_stores = StoreConsultant.objects.filter(allocation__isnull=True)
+#     store_data = [{'store_id': store.store_id} for store in unallocated_stores]
+#     return JsonResponse({'stores': store_data})

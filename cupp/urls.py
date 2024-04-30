@@ -51,9 +51,11 @@ urlpatterns = [
     path('sc-edit/<int:id>', sc_views.edit, name='sc-edit'),
     path('sc-update/<int:id>', sc_views.update, name='sc-update'),
     path('update_consultant_area/', sc_views.update_consultant_area, name='update_consultant_area'),
+    # path('update_allocation/', sc_views.update_allocation, name='update_allocation'),
     path('save-allocations/', sc_views.save_allocations, name='save_allocations'),
     path('get-allocations/', sc_views.get_allocations, name='get_allocations'),
     path('get-team-data/<int:team_id>/', sc_views.get_team_data, name='get_team_data'),
+    path('get-scs-by-team/<int:team_id>/', sc_views.get_scs_by_team, name='get_scs_by_team'),
 
     path('log-index/', event_views.index, name='event_index'),
     path('log-create', event_views.event_addnew, name='event-create'),
