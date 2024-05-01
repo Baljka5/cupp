@@ -81,13 +81,13 @@
                                            value="{{ model.tt_type }}"/>
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label>Цагийн хуваарь: </label>
+                                    <label>Нээх цагийн хуваарь: </label>
                                     <input type="text" class="form-control" name="wday_hours" id="id_wday_hours"
                                            readonly
                                            value="{{ model.wday_hours }}"/>
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label>Цагийн хуваарь: </label>
+                                    <label>Хаах цагийн хуваарь: </label>
                                     <input type="text" class="form-control" name="wend_hours" id="id_wend_hours"
                                            readonly
                                            value="{{ model.wend_hours }}"/>
@@ -207,7 +207,7 @@
                                     </select>
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label>Хэвлэл: <span class="text-purple">*</span></label>
+                                    <label>Хэвлэл үйлчилгээ: <span class="text-purple">*</span></label>
                                     <select name="ser_print" id="id_ser_print" class="form-control" disabled>
                                         <option value="">{{ ser_print }}</option>
                                         <option value="True" {% if model.ser_print %}selected{% endif %}>Тийм

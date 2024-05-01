@@ -52,7 +52,7 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label>Ажиллах цагийн хуваарийн төрөл: <span class="text-purple">*</span></label>
-                        <select name="tt_type" id="id_tt_type" class="form-control" required>
+                        <select name="tt_type" id="id_tt_type" class="form-control">
                             <option value="">{{ form.tt_type.value|default_if_none:"Choose an option" }}</option>
                             <option value="24H" {% if model.tt_type == "24H" %}selected{% endif %}>24H</option>
                             <option value="17H" {% if model.tt_type == "17H" %}selected{% endif %}>17H</option>
@@ -68,7 +68,7 @@
                     <div class="form-group col-md-6 liquor-time">
                         <label>Нээх цагийн хуваарь: </label>
                         <input type="text" id="id_wday_hours" name="wday_hours" class="form-control"
-                               value="{{ model.wday_hours }}" placeholder="HH:MM:SS">
+                               value="{{ model.wday_hours }}" placeholder="HH:MM:SS" required>
                     </div>
                     {#                    <div class="form-group col-md-6">#}
                     {#                        <label>Цагийн хуваарь: </label>#}
@@ -78,7 +78,7 @@
                     <div class="form-group col-md-6 liquor-time">
                         <label>Хаах цагийн хуваарь: </label>
                         <input type="text" id="id_wend_hours" name="wend_hours" class="form-control"
-                               value="{{ model.wend_hours }}" placeholder="HH:MM:SS">
+                               value="{{ model.wend_hours }}" placeholder="HH:MM:SS" required>
                     </div>
                     <div class="form-group col-md-6">
                         <label>АТМ машин тоо: </label>
