@@ -15,7 +15,12 @@ class StoreConsultantForm(f.ModelForm):
         (True, 'Нийтийн'),
         (False, 'Өөрийн'),
     ]
-
+    TT_TYPE_CHOICES = [
+        ('24H', '24H'),
+        ('17H', '17H'),
+        ('SPECIFIC', 'SPECIFIC')
+    ]
+    tt_type = f.ChoiceField(choices=TT_TYPE_CHOICES, widget=f.Select(attrs={'class': 'form-control'}), required=False),
     ser_storabox = f.ChoiceField(choices=CONSEQUENCES_CHOICES, widget=f.Select(attrs={'class': 'form-control'}),
                                  required=False)
     ser_Umoney = f.ChoiceField(choices=CONSEQUENCES_CHOICES, widget=f.Select(attrs={'class': 'form-control'}),
@@ -32,6 +37,13 @@ class StoreConsultantForm(f.ModelForm):
                                required=False)
     toilet_tp = f.ChoiceField(choices=TOILET_TYPE_CHOICES, widget=f.Select(attrs={'class': 'form-control'}),
                               required=False)
+
+    wday_hours = f.TimeField(required=False, input_formats=['%H:%M:%S'],
+                             widget=f.TimeInput(attrs={'type': 'time', 'step': '1'})
+                             )
+    wend_hours = f.TimeField(required=False, input_formats=['%H:%M:%S'],
+                             widget=f.TimeInput(attrs={'type': 'time', 'step': '1'})
+                             )
 
     class Meta:
         model = StoreConsultant
