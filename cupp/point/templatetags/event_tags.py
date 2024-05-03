@@ -15,6 +15,12 @@ def is_in_manager_group(context):
 
 
 @register.simple_tag(takes_context=True)
+def is_in_sp_director_group(context):
+    request = context['request']
+    return request.user.groups.filter(name='SP Director').exists() or request.user.is_superuser
+
+
+@register.simple_tag(takes_context=True)
 def is_in_event_group(context):
     request = context['request']
     return request.user.groups.filter(name='Event').exists() or request.user.is_superuser
@@ -43,20 +49,24 @@ def is_in_store_trainer_group(context):
     request = context['request']
     return request.user.groups.filter(name='Store Trainer').exists() or request.user.is_superuser
 
+
 @register.simple_tag(takes_context=True)
 def is_in_store_consultant_group(context):
     request = context['request']
     return request.user.groups.filter(name='Store Consultant').exists() or request.user.is_superuser
+
 
 @register.simple_tag(takes_context=True)
 def is_in_area_group(context):
     request = context['request']
     return request.user.groups.filter(name='Area').exists() or request.user.is_superuser
 
+
 @register.simple_tag(takes_context=True)
 def is_in_sc_direct_group(context):
     request = context['request']
     return request.user.groups.filter(name='SC Director').exists() or request.user.is_superuser
+
 
 @login_required
 def custom_login_redirect(request):

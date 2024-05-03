@@ -21,7 +21,7 @@ class PointForm(f.ModelForm):
         user = kwargs.pop('user', None)
         super(PointForm, self).__init__(*args, **kwargs)
 
-        if not (user and (user.is_superuser or user.groups.filter(name='Manager').exists())):
+        if not (user and (user.is_superuser or user.groups.filter(name='SP Director').exists())):
             self.fields['type'].choices = [choice for choice in CHOICES_POINT_TYPE if choice[0] != 'CU']
 
     class Meta:

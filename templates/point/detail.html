@@ -524,7 +524,8 @@
                         {% else %}
                             {% if user.is_authenticated %}
                                 {% is_in_manager_group as user_in_manager_group %}
-                                {% if user.is_superuser or user_in_manager_group %}
+                                {% is_in_sp_director_group as user_in_sp_director_group %}
+                                {% if user.is_superuser or user_in_manager_group or user_in_sp_director_group %}
                                     <a href="{% url 'point_edit' object.id %}" class="btn btn-sm bg-purple mr-2">
                                         Edit
                                     </a>

@@ -6,7 +6,7 @@ class GroupMixin(AccessMixin):
         user = request.user
         if user.is_authenticated:
             if not user.is_superuser and \
-                    not user.groups.filter(name__in=['Store planner', 'Manager', 'Event']).exists():
+                    not user.groups.filter(name__in=['Store planner', 'Manager', 'Event', 'SP Director']).exists():
                 return self.handle_no_permission()
 
         return super().dispatch(request, *args, **kwargs)
@@ -20,6 +20,7 @@ class StorePlannerMixin(AccessMixin):
             return self.handle_no_permission()
 
         return super().dispatch(request, *args, **kwargs)
+
 
 class StorePlannerMixin(AccessMixin):
     def dispatch(self, request, *args, **kwargs):

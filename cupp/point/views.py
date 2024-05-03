@@ -199,7 +199,7 @@ class AjaxList(LoginRequiredMixin, g.ListView):
 
         qs = Point.objects.none()
 
-        if user.groups.filter(name='Manager').exists() or user.is_superuser:
+        if user.groups.filter(name='SP Director').exists() or user.is_superuser:
             pp_qs = Point.objects.filter(type='PP')  # Get all PP types for Managers and superusers
             qs = qs.union(pp_qs)
 
@@ -258,6 +258,8 @@ def custom_login_redirect(request):
     elif request.user.groups.filter(name='Store planner').exists():
         return redirect('/map/')
     elif request.user.groups.filter(name='Manager').exists():
+        return redirect('/map/')
+    elif request.user.groups.filter(name='SP Director').exists():
         return redirect('/map/')
     elif request.user.groups.filter(name='Rent').exists():
         return redirect('/rent-index/')
