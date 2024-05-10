@@ -56,13 +56,10 @@
                     <p id="popup-text">Team Details Go Here</p>
                 </div>
             </div>
-            {#            <div class="not-allocated-body" ondrop="drop(event)" ondragover="allowDrop(event)"#}
-            {#                 data-area-id="not-allocated">#}
             <div class="store-allocation-body" id="store-allocation" ondrop="drop(event)" ondragover="allowDrop(event)"
                  data-area-id="store-allocation">
                 <div class="store-allocation">
                     <h2>SC Allocation (Not Allocated)</h2>
-                    <!-- SCs will be dynamically added here via drag-and-drop -->
                 </div>
             </div>
             <div class="not-allocated-body" id="not-allocated" ondrop="drop(event)" ondragover="allowDrop(event)"
@@ -77,48 +74,7 @@
                     {% endfor %}
                 </div>
             </div>
-
-            {#            <div class="store-allocation-body" id="store-allocation" ondrop="drop(event)" ondragover="allowDrop(event)"#}
-            {#                 data-area-id="store-allocation">#}
-            {#                <div class="store-allocation">#}
-            {#                    <h2>Store Allocation (Not Allocated)</h2>#}
-            {#                    <!-- SCs will be dynamically added here via drag-and-drop -->#}
-            {#                </div>#}
-            {#            </div>#}
-            {#            <div class="not-allocated-body" id="not-allocated" ondrop="drop(event)" ondragover="allowDrop(event)"#}
-            {#                 data-area-id="not-allocated">#}
-            {##}
-            {#                <div class="not-allocated">#}
-            {#                    {% for store_consultant in store_consultants %}#}
-            {#                        <div class="sc" id="sc{{ store_consultant.id }}" draggable="true" ondragstart="drag(event)"#}
-            {#                             data-consultant-id="{{ store_consultant.id }}">#}
-            {#                            {{ store_consultant.store_id }}#}
-            {#                        </div>#}
-            {#                    {% endfor %}#}
-            {#                </div>#}
-            {#            </div>#}
-
-            {#            <div class="store-allocation-body" id="store-allocation" ondrop="drop(event)" ondragover="allowDrop(event)"#}
-            {#                 data-area-id="store-allocation">#}
-            {#                <div class="store-allocation">#}
-            {#                    <h2>Store Allocation (Not Allocated)</h2>#}
-            {#                    <!-- SCs will be dynamically added here via drag-and-drop -->#}
-            {#                </div>#}
-            {#            </div>#}
-            {#            <div class="not-allocated-body" id="not-allocated" ondrop="drop(event)" ondragover="allowDrop(event)"#}
-            {#                 data-area-id="not-allocated">#}
-            {##}
-            {#                <div class="not-allocated">#}
-            {#                    {% for store_consultant in store_consultants %}#}
-            {#                        <div class="sc" id="sc{{ store_consultant.id }}" draggable="true" ondragstart="drag(event)"#}
-            {#                             data-consultant-id="{{ store_consultant.id }}">#}
-            {#                            {{ store_consultant.store_id }}#}
-            {#                        </div>#}
-            {#                    {% endfor %}#}
-            {#                </div>#}
-            {#            </div>#}
             <div class="save-close-container">
-                {#                <button id="saveCloseBtn">SAVE & CLOSE</button>#}
                 <button id="saveCloseBtn" onclick="saveAllocations()">SAVE & CLOSE</button>
             </div>
         </div>
@@ -384,6 +340,12 @@
         }
     </style>
 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+    {#    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet"/>#}
+    {#    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>#}
+
 
     <script>
 
@@ -399,54 +361,56 @@
         }
 
         function showTeamDetails(teamId, teamNo, event) {
-            event.stopPropagation();  // Prevent the event from bubbling up
+    event.stopPropagation();  // Stop the event from propagating.
 
-            fetch(`/get-scs-by-team/${teamId}/`)  // Adjust the endpoint as needed
-                .then(response => response.json())
-                .then(data => {
-                    const popup = document.getElementById('popup');
-                    const popupText = document.getElementById('popup-text');
-                    let content = `<h2>Details for Team ${teamNo}</h2>`;
+    fetch(`/get-scs-by-team/${teamId}/`)
+        .then(response => response.json())
+        .then(data => {
+            const popup = document.getElementById('popup');
+            const popupText = document.getElementById('popup-text');
+            let content = `<h2>Details for Team ${teamNo}</h2>`;
 
-                    if (data.scs && data.scs.length > 0) {
-                        data.scs.forEach(sc => {
-                            content += `
+            if (data.scs && data.scs.length > 0) {
+                data.scs.forEach(sc => {
+                    content += `
                         <div class="sc-container">
                             <div class="detail-store">${sc.name}</div>
-                            <div class="detail-body">Store allocation</div>
-                        </div>`;  // Display each SC's name and additional details side by side
-                        });
-                    } else {
-                        content += `<p>No consultants assigned</p>`;
-                    }
-
-                    // Add a section for unallocated stores
-                    content += `
-                <div class="store-not-allocated">
-    {% for store_consultant in store_consultants %}
-        <div class="store-id" id="sc{{ store_consultant.id }}
-                        " draggable="true" ondragstart="drag(event)" data-consultant-id="{{ store_consultant.id }}">
-            {{ store_consultant.store_id }}
-        </div>
-    {% endfor %}
-</div>
-<div id="popup" class="popup" style="display:none;">
-    <div class="popup-content">
-        <span class="close-btn" onclick="closePopup()">&times;</span>
-        <div id="popup-text">Team Details Go Here</div>
-        <button onclick="saveStoreAssignments()">Save Assignments</button>
-    </div>
-</div>
-            `;
-
-                    popupText.innerHTML = content;
-                    popup.style.display = 'block';
-                })
-                .catch(error => {
-                    console.error('Error fetching SCs:', error);
-                    alert('Failed to load SC details. Please try again.');
+                            <div class="detail-body">
+                                <select id="id_store_id_${sc.id}" class="form-control" name="store_id[]" multiple="multiple">
+                                    <option value="" disabled>------</option>
+                                    {% for store_consultant in store_consultants %}
+                                        <option value="{{ store_consultant.store_id }}">{{ store_consultant.store_id }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>`;
                 });
-        }
+            } else {
+                content += `<p>No consultants assigned</p>`;
+            }
+
+            popupText.innerHTML = content;
+            popup.style.display = 'block';
+
+            // Initialize Select2 for each select element after the content is updated
+            data.scs.forEach(sc => {
+                $(`#id_store_id_${sc.id}`).select2({
+                    width: '100%',
+                    placeholder: "Select Store IDs",
+                    allowClear: true,
+                    tags: true // Enables tagging
+                });
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching SC details:', error);
+            alert('Failed to load SC details. Please try again.');
+        });
+}
+
+
+
+
 
         function closePopup() {
             const popup = document.getElementById('popup');
@@ -478,6 +442,7 @@
                 fetchAllocationsAndRender().then(updateScCounts);
             });
         });
+
 
         function fetchAllocationsAndRender() {
             return fetch('/get-allocations/')
@@ -516,7 +481,8 @@
             const consultantElement = document.getElementById(data);
             let target = event.target;
 
-            // Ensure we're dropping the consultant into a valid area or back to the not-allocated container
+
+
             if (!target.classList.contains('team-body')) {
                 target = target.closest('.team-body, .not-allocated-body');
             }
@@ -590,6 +556,17 @@
             }
             return cookieValue;
         }
+
+        $(document).ready(function () {
+            $('#id_store_id').select2({
+                width: '100%',
+                placeholder: "Select Store IDs",
+                allowClear: true,
+                tags: true, // Enable the tagging system
+                tokenSeparators: [',', ' '] // Optional: Specify separators for typing the tags
+            });
+        });
+
     </script>
 
 {% endblock %}

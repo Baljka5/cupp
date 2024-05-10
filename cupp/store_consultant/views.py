@@ -116,6 +116,24 @@ def update_consultant_area(request):
 
 
 @require_POST
+def update_consultant_store(request):
+    consultant_id = request.POST.get('consultantId')
+    target_area_id = request.POST.get('targetAreaId')
+
+    try:
+        consultant = Consultants.objects.get(id=consultant_id)
+
+        if target_area_id == 'not-allocated':
+            consultant.area = None
+        else:
+            consultant.area = Area.objects.get(id=target_area_id)
+        consultant.save()
+        return JsonResponse({'status': 'success'})
+    except (Consultants.DoesNotExist, Area.DoesNotExist) as e:
+        return JsonResponse({'status': 'failed', 'message': str(e)}, status=400)
+
+
+@require_POST
 def save_allocations(request):
     try:
         data = json.loads(request.body)
@@ -184,6 +202,22 @@ def get_scs_by_team(request, team_id):
     sc_data = [{"id": sc.id, "name": sc.sc_name} for sc in scs]
     return JsonResponse({'scs': sc_data})
 
+
+def assign_stores(request):
+    if request.method == 'POST':
+        store_ids = request.POST.getlist('store_ids')
+        consultant_id = request.POST.get('consultant_id')
+        consultant = Consultants.objects.get(id=consultant_id)
+
+        # Clear previous stores assignments
+        consultant.stores.clear()
+
+        # Add new stores based on selected options
+        consultant.stores.add(*store_ids)
+        return redirect('some-view-name')
+    else:
+        stores = StoreConsultant.objects.all()
+        return render(request, 'assign_stores.html', {'stores': stores})
 # def get_unallocated_stores(request):
 #     unallocated_stores = StoreConsultant.objects.filter(allocation__isnull=True)
 #     store_data = [{'store_id': store.store_id} for store in unallocated_stores]

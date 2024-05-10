@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+
 from django.views import generic as g
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
@@ -29,7 +30,8 @@ class FormBase(GroupMixin):
         context = self.get_context_data()
         photo_formset = context['photo_formset']
         if photo_formset.is_valid():
-            form.instance.created_by = self.request.user
+            form.instance.created_by = self.request.user if not form.instance.pk else form.instance.created_by
+            form.instance.modified_by = self.request.user
             instance = form.save()
 
             photo_formset.instance = instance
@@ -199,7 +201,8 @@ class AjaxList(LoginRequiredMixin, g.ListView):
 
         qs = Point.objects.none()
 
-        if user.groups.filter(name='Manager').exists() or user.is_superuser or user.groups.filter(name='SP Director').exists():
+        if user.groups.filter(name='Manager').exists() or user.is_superuser or user.groups.filter(
+                name='SP Director').exists():
             pp_qs = Point.objects.filter(type='PP')  # Get all PP types for Managers and superusers
             qs = qs.union(pp_qs)
 
