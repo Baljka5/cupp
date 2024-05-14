@@ -11,21 +11,21 @@
         <div class="row">
             <div class="col-md-12">
                 <div style="font-size: 20px;">
-                    <strong>БҮГ</strong>-н дэлгүүрийн сургагч
-                    <strong>
-                        {% if user.is_authenticated %}
-                            {% if user.is_superuser or user.username == "Urtnasan" %}
-                                {{ user.username }} <!-- This will display the username if it's "Urtnasan" -->
-                            {% else %}
-                                {% is_in_store_trainer_group as user_in_store_trainer_group %}
-                                {% if user_in_store_trainer_group %}
-                                    {{ user.first_name }}
-                                {% else %}
-                                    User
-                                {% endif %}
-                            {% endif %}
+                    {% if user.is_authenticated %}
+                        {% is_in_store_trainer_group as user_in_is_store_trainer_group %}
+                        {% is_in_st_manager_group as user_in_is_st_manager_group %}
+                        {% if user_in_is_st_manager_group %}
+                            <div style="font-size: 20px;">
+                                <strong>БҮГ</strong>-н менежер <strong>{{ user.first_name|default:"User" }}</strong>
+                            </div>
+                        {% elif user_in_is_store_trainer_group %}
+                            <div style="font-size: 20px;">
+                                <strong>БҮГ</strong>-н дэлгүүрийн сургагч
+                                <strong>{{ user.first_name|default:"User" }}</strong> таны нээсэн дэлгүүрийн
+                                жагсаалтууд.
+                            </div>
                         {% endif %}
-                    </strong> таны нээсэн дэлгүүрийн жагсаалтууд.
+                    {% endif %}
                 </div>
                 <div style="color: dimgray;">
                     Дэлгүүрийн датаг та үнэн зөв бөглөж хөтлөн явна уу.
@@ -68,25 +68,23 @@
                         </thead>
                         <tbody>
                         {% for model in page_obj %}
-                            {% if user.is_superuser or user.first_name in model.st_name %}
-                                <tr>
-                                    <td><input type="checkbox" class="checkthis"/></td>
-                                    <td>{{ model.id }}</td>
-                                    <td>{{ model.store_id }}</td>
-                                    <td>{{ model.store_name }}</td>
-                                    <td>{{ model.size }}</td>
-                                    <td>{{ model.shelf }}</td>
-                                    <td>{{ model.open_date }}</td>
-                                    <td>{{ model.displayed_date }}</td>
-                                    <td>{{ model.chair_size }}</td>
-                                    <td>{{ model.desk_size }}</td>
-                                    <td>{{ model.sitting_size }}</td>
-                                    <td><a href="/st-view/{{ model.id }}" class="btn btn-danger"
-                                           style="background-color: #efc47f; color: black;">View</a>
-                                    <td><a href="/st-edit/{{ model.id }}" class="btn btn-primary">Edit</a></td>
-                                    </td>
-                                </tr>
-                            {% endif %}
+                            <tr>
+                                <td><input type="checkbox" class="checkthis"/></td>
+                                <td>{{ model.id }}</td>
+                                <td>{{ model.store_id }}</td>
+                                <td>{{ model.store_name }}</td>
+                                <td>{{ model.size }}</td>
+                                <td>{{ model.shelf }}</td>
+                                <td>{{ model.open_date }}</td>
+                                <td>{{ model.displayed_date }}</td>
+                                <td>{{ model.chair_size }}</td>
+                                <td>{{ model.desk_size }}</td>
+                                <td>{{ model.sitting_size }}</td>
+                                <td><a href="/st-view/{{ model.id }}" class="btn btn-danger"
+                                       style="background-color: #efc47f; color: black;">View</a>
+                                <td><a href="/st-edit/{{ model.id }}" class="btn btn-primary">Edit</a></td>
+                                </td>
+                            </tr>
                         {% endfor %}
                         </tbody>
                     </table>

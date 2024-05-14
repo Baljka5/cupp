@@ -38,33 +38,42 @@ from django.views import generic as g
 #     return render(request, "license/show.html", {'models': models})
 
 def index(request):
-    # Retrieve filter values from GET request
     store_id_query = request.GET.get('store_id', '')
     lic_id_nm_query = request.GET.get('lic_id_nm', '')
 
-    # Build the query based on presence of filter values
     query = Q()
     if store_id_query:
         query &= Q(store_id__icontains=store_id_query)
     if lic_id_nm_query:
         query &= Q(lic_id__lic_id_nm__icontains=lic_id_nm_query)
 
-    models = StoreTrainer.objects.filter(query).distinct().order_by('id')
+    if request.user.groups.filter(name='ST Manager').exists() or request.user.is_superuser:
+        models = StoreTrainer.objects.all().order_by('id')
+    else:
+        models = StoreTrainer.objects.filter(query).distinct().order_by('id')
 
-    if not request.user.is_superuser and request.user.username != "Urtnasan":
-        if request.user.is_authenticated:
-            user_first_name = request.user.first_name
-            models = models.filter(st_name__icontains=user_first_name)
+    # Filtering for users in the "Store Consultant" group
+    if request.user.groups.filter(name='Store Trainer').exists():
+        models = models.filter(st_name__icontains=request.user.username)
+
+    # Additional filtering for users in the "Area" group
 
     paginator = Paginator(models, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
+    team_mgr = "User"
+    if request.user.is_authenticated:
+        consultant = StoreTrainer.objects.filter(st_name__icontains=request.user.username).first()
+        if consultant:
+            team_mgr = consultant.team_mgr if consultant.team_mgr else team_mgr
+
     return render(request, "store_trainer/show.html", {
         'page_obj': page_obj,
         'store_id_query': store_id_query,
         'lic_id_nm_query': lic_id_nm_query,
-        'user_name': request.user.username
+        'user_name': request.user.username,
+        'team_mgr': team_mgr
     })
 
 
@@ -120,4 +129,15 @@ class StoreTrainerView(g.TemplateView):
         context = super().get_context_data(**kwargs)
         # Add in the is_event_member variable
         context['is_event_member'] = self.request.user.groups.filter(name='Store Trainer').exists()
+        return context
+
+
+class StoreTrainerManagerView(g.TemplateView):
+    template_name = 'base.html'
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in the is_event_member variable
+        context['is_event_member'] = self.request.user.groups.filter(name='ST Manager').exists()
         return context
