@@ -54,7 +54,9 @@ def index(request):
 
     # Filtering for users in the "Store Consultant" group
     if request.user.groups.filter(name='Store Trainer').exists():
-        models = models.filter(st_name__icontains=request.user.username)
+        if request.user.is_authenticated:
+            user_first_name = request.user.first_name
+            models = models.filter(st_name__icontains=user_first_name)
 
     # Additional filtering for users in the "Area" group
 
@@ -62,18 +64,12 @@ def index(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    team_mgr = "User"
-    if request.user.is_authenticated:
-        consultant = StoreTrainer.objects.filter(st_name__icontains=request.user.username).first()
-        if consultant:
-            team_mgr = consultant.team_mgr if consultant.team_mgr else team_mgr
 
     return render(request, "store_trainer/show.html", {
         'page_obj': page_obj,
         'store_id_query': store_id_query,
         'lic_id_nm_query': lic_id_nm_query,
         'user_name': request.user.username,
-        'team_mgr': team_mgr
     })
 
 
