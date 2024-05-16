@@ -149,6 +149,7 @@ class Point(m.Model):
             'turnover_rent_percent': self.turnover_rent_percent,
             'address': self.address,
             'created_by': self.created_by,
+            'modified_by': self.modified_by
             # 'cluster': self.cluster,  # Uncomment and modify if cluster exists in Point and needs to be copied
         }
         if creating or not creating:
@@ -163,13 +164,15 @@ class Point(m.Model):
                     # Update or create StoreTrainer instance
                     StoreTrainer.objects.update_or_create(
                         store_id=self.store_id,
-                        defaults={'store_name': self.store_name, 'created_by': self.created_by}
+                        defaults={'store_name': self.store_name, 'created_by': self.created_by,
+                                  'modified_by_id': self.modified_by}
                     )
 
                     # Update or create StoreConsultant instance
                     StoreConsultant.objects.update_or_create(
                         store_id=self.store_id,
-                        defaults={'store_name': self.store_name, 'created_by': self.created_by}
+                        defaults={'store_name': self.store_name, 'created_by': self.created_by,
+                                  'modified_by_id': self.modified_by}
                     )
             except MultipleObjectsReturned:
                 # Handle the case where multiple objects were returned when only one was expected.
