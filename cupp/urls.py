@@ -56,6 +56,7 @@ urlpatterns = [
     path('get-allocations/', sc_views.get_allocations, name='get_allocations'),
     path('get-team-data/<int:team_id>/', sc_views.get_team_data, name='get_team_data'),
     path('get-scs-by-team/<int:team_id>/', sc_views.get_scs_by_team, name='get_scs_by_team'),
+    path('save-consultant-stores/', sc_views.save_consultant_stores, name='save-consultant-stores'),
 
     path('log-index/', event_views.index, name='event_index'),
     path('log-create', event_views.event_addnew, name='event-create'),

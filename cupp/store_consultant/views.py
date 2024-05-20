@@ -133,31 +133,66 @@ def update_consultant_store(request):
         return JsonResponse({'status': 'failed', 'message': str(e)}, status=400)
 
 
+@csrf_protect
 @require_POST
 def save_allocations(request):
     try:
         data = json.loads(request.body)
-        print(data)
         allocations = data.get('allocations', [])
+        store_allocations = data.get('storeAllocations', [])
 
         with transaction.atomic():
-            # Process each allocation
             for allocation in allocations:
                 consultant_id = allocation.get('consultantId')
                 area_id = allocation.get('areaId') if allocation.get('areaId') != 'not-allocated' else None
+                tags = allocation.get('tags', [])
 
-                # Assuming consultant_id and area_id are enough to uniquely identify an allocation,
-                # adjust according to your model fields and logic.
-                # Ensure you are referencing the correct foreign key fields in your update_or_create call.
                 obj, created = Allocation.objects.update_or_create(
-                    consultant_id=consultant_id,  # Make sure this matches your model's field name
-                    defaults={'area_id': area_id}  # And this as well
+                    consultant_id=consultant_id,
+                    defaults={'area_id': area_id, 'tags': tags}
                 )
-
                 obj.save()
+
+            for store_allocation in store_allocations:
+                consultant_id = store_allocation.get('consultantId')
+                store_ids = store_allocation.get('storeIds', [])
+                consultant = Consultants.objects.get(id=consultant_id)
+
+                consultant.stores.set(store_ids)
+                consultant.save()
 
             return JsonResponse({'status': 'success'})
     except Exception as e:
+        return JsonResponse({'status': 'failed', 'message': str(e)}, status=500)
+
+
+@csrf_protect
+@require_POST
+def save_consultant_stores(request):
+    try:
+        data = json.loads(request.body)
+        store_allocations = data.get('storeAllocations', [])
+        print("Data received:", store_allocations)
+
+        with transaction.atomic():
+            for store_allocation in store_allocations:
+                consultant_id = store_allocation.get('consultantId')
+                store_ids = store_allocation.get('storeIds', [])
+                print(f"Processing consultant {consultant_id} with stores {store_ids}")
+
+                consultant = Consultants.objects.get(id=consultant_id)
+
+                # Clear previous stores assignments
+                consultant.stores.clear()
+
+                # Add new store based on selected option
+                if store_ids:
+                    consultant.stores.add(store_ids[0])
+
+                consultant.save()
+        return JsonResponse({'status': 'success'})
+    except Exception as e:
+        print("Error:", e)
         return JsonResponse({'status': 'failed', 'message': str(e)}, status=500)
 
 

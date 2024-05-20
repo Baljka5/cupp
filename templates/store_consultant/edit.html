@@ -255,6 +255,16 @@
                             <option value="False" {% if model.toilet_tp == False %}selected{% endif %}>Өөрийн</option>
                         </select>
                     </div>
+                    <div class="form-group col-md-6">
+                        <label>Ус ундааны босоо хөргүүрийн хаалганы тоо: </label>
+                        <input type="text" class="form-control" name="walkin_chiller" id="id_walkin_chiller"
+                               value="{{ model.walkin_chiller }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Хоолны хөргүүрийн тоо: </label>
+                        <input type="text" class="form-control" name="lunch_case_L8" id="id_lunch_case_L8"
+                               value="{{ model.lunch_case_L8 }}"/>
+                    </div>
 
                 </div>
 

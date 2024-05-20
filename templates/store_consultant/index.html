@@ -38,13 +38,9 @@
                             </div>
                         </div>
                         <div class="team-body-container">
-
                             <div class="team-body" id="area-{{ area.id }}" ondrop="drop(event)"
                                  ondragover="allowDrop(event)"
                                  data-area-id="{{ area.id }}">
-
-                                {#                        <div class="team-body" ondrop="drop(event)" ondragover="allowDrop(event)"#}
-                                {#                             data-area-id="{{ area.id }}">#}
                             </div>
                         </div>
                     </div>
@@ -135,64 +131,47 @@
             transition: margin-top 0.3s ease;
             background-color: #813f00;
             padding: 10px;
-            margin: 10px; /* This will ensure space around each team container */
+            margin: 10px;
             flex: 1;
-            position: relative; /* Required for the positioning of the pseudo-element */
+            position: relative;
             display: flex;
-            flex-direction: column; /* Ensure .team-header can take full width */
-            box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.1); /* Adds a shadow effect for depth */
+            flex-direction: column;
+            box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.1);
         }
 
         .team-header-container {
             width: 100%;
-            background-color: #666; /* The color of the team header */
+            background-color: #666;
             color: white;
-            margin-bottom: 10px; /* Color of the text in the team header */
+            margin-bottom: 10px;
         }
 
         .team-body-container {
             background-color: #F4E2D0;
             padding: 10px;
             width: 100%;
-            box-sizing: border-box; /* Ensures padding does not affect overall width */
+            box-sizing: border-box;
         }
 
         .team-header, .team-body {
             width: 100%;
         }
 
-
-        {#.team::after {#}
-        {#    content: '';#}
-        {#    position: absolute;#}
-        {#    bottom: -10px;#}
-        {#    left: 5px;#}
-        {#    right: 5px;#}
-        {#    height: 10px;#}
-        {#    background: linear-gradient(to top, rgba(252, 2, 2, 0.4), transparent); /* Creates the reflection gradient */#}
-        {#    z-index: -1;}#}
-
         .team-header {
-            background-color: #ee0505; /* The color of the team header */
-            color: white; /* Color of the text in the team header */
+            background-color: #ee0505;
+            color: white;
             font-weight: bold;
-            padding: 10px 0; /* Add padding to the top and bottom */
-            text-align: center; /* Center the text */
-            width: 100%; /* Ensure it spans the full width of .team */
-            box-sizing: border-box; /* Ensures padding does not affect overall width */
+            padding: 10px 0;
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
         }
-
 
         .team-body {
             background-color: #ff8000;
             padding: 10px;
-            margin-top: 10px; /* Add space to the top of team body */
+            margin-top: 10px;
         }
-
-        .team-body:last-child {
-            margin-bottom: 0;
-        }
-
 
         .sc {
             background-color: #ffcc99;
@@ -229,18 +208,18 @@
         .dropdown-section {
             display: flex;
             justify-content: start;
-            margin-bottom: 20px; /* Adjust as needed */
+            margin-bottom: 20px;
         }
 
         .dropdown-container {
-            margin-right: 20px; /* Adjust space between dropdowns as needed */
+            margin-right: 20px;
         }
 
         .dropdown-container select {
             display: block;
-            width: 100%; /* Adjust width as needed */
+            width: 100%;
             padding: 5px;
-            margin-top: 5px; /* Adjust as needed */
+            margin-top: 5px;
             border: 1px solid #ccc;
             border-radius: 4px;
             background-color: #f8f8f8;
@@ -249,7 +228,7 @@
         .dropdown-container label {
             display: block;
             text-align: center;
-            background-color: #666; /* Adjust color as needed */
+            background-color: #666;
             color: white;
             padding: 5px;
             border-radius: 4px;
@@ -257,24 +236,22 @@
         }
 
         .team-details {
-            display: none; /* Hidden by default */
+            display: none;
             flex-direction: column;
             padding: 10px;
             margin-top: 20px;
-            background-color: #f4e2d0; /* Match your color scheme */
+            background-color: #f4e2d0;
         }
 
         .team-details.visible {
-            display: flex; /* Or 'block', depending on your layout */
+            display: flex;
             flex-direction: column;
             padding: 10px;
             margin-top: 20px;
-            background-color: #f4e2d0; /* Background color for the details section */
+            background-color: #f4e2d0;
         }
 
-        /* Additional styles for .sc-detail and .stores-detail */
         .sc-detail, .stores-detail {
-            /* Your existing or additional styles here */
         }
 
         .sc-container {
@@ -297,23 +274,23 @@
         }
 
         .store-not-allocated {
-            display: flex; /* Apply flexbox */
-            flex-wrap: wrap; /* Allow items to wrap to the next line */
-            justify-content: flex-start; /* Align items to the start of the container */
-            gap: 10px; /* Space between each child */
-            padding: 10px; /* Padding inside the container */
-            background-color: #e2e2e2; /* Light grey background */
-            border: 1px solid #ccc; /* Subtle border around the container */
-            border-radius: 5px; /* Rounded corners */
-            margin-top: 20px; /* Space above the container */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            gap: 10px;
+            padding: 10px;
+            background-color: #e2e2e2;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 20px;
         }
 
         .store-id {
-            padding: 5px 10px; /* Padding inside each store id */
-            background-color: #ffcc99; /* Background color for store ids */
-            border-radius: 3px; /* Rounded corners for store ids */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-            white-space: nowrap; /* Ensure the text does not wrap */
+            padding: 5px 10px;
+            background-color: #ffcc99;
+            border-radius: 3px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            white-space: nowrap;
         }
 
         .popup-content {
@@ -326,16 +303,16 @@
             border-radius: 5px;
             text-align: center;
             width: 50%;
-            max-height: 80%; /* Maximum height of the popup */
-            overflow: auto; /* Enables scrolling */
+            max-height: 80%;
+            overflow: auto;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
         }
 
         @media (max-width: 600px) {
             .popup-content {
-                width: 90%; /* More appropriate for smaller screens */
+                width: 90%;
                 padding: 20px;
-                max-height: 90%; /* Allows more height since screen real estate is less */
+                max-height: 90%;
             }
         }
     </style>
@@ -343,78 +320,67 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
-    {#    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet"/>#}
-    {#    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>#}
-
-
     <script>
-
         function highlightTeam(teamId) {
-            // Remove existing highlights
             document.querySelectorAll('.team').forEach(team => {
                 team.classList.remove('highlighted');
             });
-
-            // Highlight the selected team
             const selectedTeam = document.getElementById(`team-${teamId}`);
             selectedTeam.classList.add('highlighted');
         }
 
         function showTeamDetails(teamId, teamNo, event) {
-    event.stopPropagation();  // Stop the event from propagating.
+            event.stopPropagation();
 
-    fetch(`/get-scs-by-team/${teamId}/`)
-        .then(response => response.json())
-        .then(data => {
-            const popup = document.getElementById('popup');
-            const popupText = document.getElementById('popup-text');
-            let content = `<h2>Details for Team ${teamNo}</h2>`;
+            fetch(`/get-scs-by-team/${teamId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    const popup = document.getElementById('popup');
+                    const popupText = document.getElementById('popup-text');
+                    let content = `<h2>Details for Team ${teamNo}</h2>`;
 
-            if (data.scs && data.scs.length > 0) {
-                data.scs.forEach(sc => {
-                    content += `
-                        <div class="sc-container">
-                            <div class="detail-store">${sc.name}</div>
-                            <div class="detail-body">
-                                <select id="id_store_id_${sc.id}" class="form-control" name="store_id[]" multiple="multiple">
-                                    <option value="" disabled>------</option>
-                                    {% for store_consultant in store_consultants %}
-                                        <option value="{{ store_consultant.store_id }}">{{ store_consultant.store_id }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>`;
+                    if (data.scs && data.scs.length > 0) {
+                        data.scs.forEach(sc => {
+                            content += `
+                                <div class="sc-container">
+                                    <div class="detail-store">${sc.name}</div>
+                                    <div class="detail-body">
+                                        <select id="id_store_id_${sc.id}" class="form-control store-select" name="store_id[]" multiple="multiple">
+                                            <option value="" disabled>------</option>
+                                            {% for store_consultant in store_consultants %}
+                                                <option value="{{ store_consultant.store_id }}">{{ store_consultant.store_id }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>`;
+                        });
+                    } else {
+                        content += `<p>No consultants assigned</p>`;
+                    }
+
+                    content += `<button id="saveBtn" onclick="saveConsultantStores(${teamId})">Save</button>`;
+                    popupText.innerHTML = content;
+                    popup.style.display = 'block';
+
+                    data.scs.forEach(sc => {
+                        $(`#id_store_id_${sc.id}`).select2({
+                            width: '100%',
+                            placeholder: "Select Store IDs",
+                            allowClear: true,
+                            tags: true
+                        }).on('change', function() {
+                            hideSelectedOptions();
+                        });
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching SC details:', error);
+                    alert('Failed to load SC details. Please try again.');
                 });
-            } else {
-                content += `<p>No consultants assigned</p>`;
-            }
-
-            popupText.innerHTML = content;
-            popup.style.display = 'block';
-
-            // Initialize Select2 for each select element after the content is updated
-            data.scs.forEach(sc => {
-                $(`#id_store_id_${sc.id}`).select2({
-                    width: '100%',
-                    placeholder: "Select Store IDs",
-                    allowClear: true,
-                    tags: true // Enables tagging
-                });
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching SC details:', error);
-            alert('Failed to load SC details. Please try again.');
-        });
-}
-
-
-
-
+        }
 
         function closePopup() {
-            const popup = document.getElementById('popup');
-            popup.style.display = 'none';
+            document.getElementById('popup').style.display = 'none';
         }
 
         window.onclick = function (event) {
@@ -424,7 +390,6 @@
             }
         }
 
-        // Event listeners for teams
         document.querySelectorAll('.team').forEach(team => {
             team.addEventListener('click', function () {
                 showTeamDetails(this.dataset.teamId);
@@ -432,26 +397,17 @@
         });
 
         document.addEventListener('DOMContentLoaded', function () {
-            const teams = document.querySelectorAll('.team');
-            teams.forEach(team => {
+            document.querySelectorAll('.team').forEach(team => {
                 team.addEventListener('click', function () {
-                    showTeamDetails(this.dataset.areaId); // this assumes your team divs have data-area-id attributes
+                    showTeamDetails(this.dataset.areaId);
                 });
-
-                // Initially fetch and render allocations, then update SC counts
                 fetchAllocationsAndRender().then(updateScCounts);
             });
         });
 
-
         function fetchAllocationsAndRender() {
             return fetch('/get-allocations/')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(data => {
                     data.forEach(allocation => {
                         const consultantElement = document.getElementById(`sc${allocation.consultant__id}`);
@@ -462,9 +418,7 @@
                         }
                     });
                 })
-                .catch(error => {
-                    console.error('Error fetching allocations:', error);
-                });
+                .catch(error => console.error('Error fetching allocations:', error));
         }
 
         function allowDrop(event) {
@@ -480,17 +434,13 @@
             const data = event.dataTransfer.getData("text");
             const consultantElement = document.getElementById(data);
             let target = event.target;
-
-
-
             if (!target.classList.contains('team-body')) {
                 target = target.closest('.team-body, .not-allocated-body');
             }
-
             if (target) {
                 target.appendChild(consultantElement);
-                updateScCounts(); // Update the SC counts after each drop operation
-                saveCurrentStateToLocal(); // Save the current state to local storage
+                updateScCounts();
+                saveCurrentStateToLocal();
             }
         }
 
@@ -510,29 +460,84 @@
 
         function saveAllocations() {
             const allocations = JSON.parse(localStorage.getItem('allocations')) || [];
+            const storeAllocations = [];
+
+            document.querySelectorAll('.sc-container').forEach(container => {
+                const scId = container.querySelector('select').id.split('_').pop();
+                const storeIds = $(`#id_store_id_${scId}`).val();
+                const tags = storeIds;
+
+                storeAllocations.push({
+                    consultantId: scId,
+                    storeIds: storeIds,
+                    tags: tags
+                });
+            });
+
             fetch('/save-allocations/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': getCookie('csrftoken'),
                 },
-                body: JSON.stringify({allocations})
+                body: JSON.stringify({ allocations, storeAllocations })
             })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok.');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Success:', data);
-                    alert('Allocations saved successfully!');
-                    localStorage.removeItem('allocations'); // Clear local storage after successful save
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Failed to save the allocations. Please try again.');
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Success:', data);
+                alert('Allocations saved successfully!');
+                localStorage.removeItem('allocations');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to save the allocations. Please try again.');
+            });
+        }
+
+        function saveConsultantStores(teamId) {
+            const storeAllocations = [];
+            document.querySelectorAll('.sc-container').forEach(container => {
+                const scId = container.querySelector('select').id.split('_').pop();
+                const storeIds = $(`#id_store_id_${scId}`).val();
+                storeAllocations.push({
+                    consultantId: scId,
+                    storeIds: storeIds
                 });
+            });
+
+            fetch('/save-consultant-stores/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: JSON.stringify({
+                    teamId: teamId,
+                    storeAllocations: storeAllocations
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Success:', data);
+                alert('Store allocations saved successfully!');
+                document.querySelectorAll('.store-select').forEach(select => {
+                    $(select).val(null).trigger('change');
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to save the store allocations. Please try again.');
+            });
         }
 
         function updateScCounts() {
@@ -546,7 +551,7 @@
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
                 const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
+                for (let i = 0; cookies.length; i++) {
                     const cookie = cookies[i].trim();
                     if (cookie.substring(0, name.length + 1) === (name + '=')) {
                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
@@ -557,16 +562,37 @@
             return cookieValue;
         }
 
+        function hideSelectedOptions() {
+            const selectedOptions = [];
+            document.querySelectorAll('.store-select').forEach(select => {
+                $(select).find('option:selected').each(function() {
+                    selectedOptions.push($(this).val());
+                });
+            });
+
+            document.querySelectorAll('.store-select').forEach(select => {
+                $(select).find('option').each(function() {
+                    if (selectedOptions.includes($(this).val())) {
+                        $(this).attr('disabled', 'disabled');
+                    } else {
+                        $(this).removeAttr('disabled');
+                    }
+                });
+            });
+
+            document.querySelectorAll('.store-select').forEach(select => {
+                $(select).select2();
+            });
+        }
+
         $(document).ready(function () {
-            $('#id_store_id').select2({
+            $('.store-select').select2({
                 width: '100%',
                 placeholder: "Select Store IDs",
                 allowClear: true,
-                tags: true, // Enable the tagging system
-                tokenSeparators: [',', ' '] // Optional: Specify separators for typing the tags
+                tags: true,
+                tokenSeparators: [',', ' ']
             });
         });
-
     </script>
-
 {% endblock %}

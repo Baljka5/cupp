@@ -40,6 +40,8 @@ class StoreConsultant(m.Model):
     prc_grade = m.CharField('Pricing policy', blank=True, null=True, max_length=50)
     tv_screen = m.IntegerField('Tv screen', blank=True, null=True)
     toilet_tp = m.BooleanField('00-н төрөл (Өөрийн, нийтийн)', blank=True, null=True)
+    walkin_chiller = m.IntegerField('Уух ус ундааны босоо хөргүүрийн хаалганы тоо', blank=True, null=True, default=0)
+    lunch_case_L8 = m.IntegerField('Хоолны хөргүүрийн тоо ', blank=True, null=True, default=0)
     created_date = m.DateTimeField('Created date', auto_now_add=True, null=True)
     modified_date = m.DateTimeField('Modified date', auto_now=True, null=True)
     created_by = m.ForeignKey(User, verbose_name='Created by', related_name='store_consultant_created',

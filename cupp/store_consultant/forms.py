@@ -1,6 +1,6 @@
 from django import forms as f
 from django.conf import settings
-from cupp.store_consultant.models import StoreConsultant
+from cupp.store_consultant.models import StoreConsultant, Allocation
 
 
 class StoreConsultantForm(f.ModelForm):
@@ -48,3 +48,11 @@ class StoreConsultantForm(f.ModelForm):
     class Meta:
         model = StoreConsultant
         fields = "__all__"
+
+    class AllocationForm(f.ModelForm):
+        tags = f.CharField(widget=f.TextInput(attrs={'class': 'form-control'}), required=False)
+
+        class Meta:
+            model = Allocation
+            fields = ['consultant', 'area', 'year', 'month', 'team_no', 'store_cons', 'storeID', 'store_name',
+                      'tags']

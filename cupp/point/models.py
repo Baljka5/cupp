@@ -175,7 +175,7 @@ class Point(m.Model):
                                   'modified_by_id': self.modified_by}
                     )
             except MultipleObjectsReturned:
-                # Handle the case where multiple objects were returned when only one was expected.
+
                 pass
             except IntegrityError:
                 # Handle database integrity errors, such as violations of unique constraints.
