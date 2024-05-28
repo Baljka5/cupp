@@ -16,13 +16,12 @@ from django.views import generic as g
 
 def index(request):
     store_id_query = request.GET.get('store_id', '')
-    lic_id_nm_query = request.GET.get('lic_id_nm', '')
 
     query = Q()
     if store_id_query:
         query &= Q(store_id__icontains=store_id_query)
-    if lic_id_nm_query:
-        query &= Q(lic_id__lic_id_nm__icontains=lic_id_nm_query)
+
+    models = StoreConsultant.objects.filter(query).distinct()
 
     if request.user.groups.filter(name='SC Director').exists() or request.user.is_superuser:
         models = StoreConsultant.objects.all().order_by('id')
@@ -50,9 +49,9 @@ def index(request):
     return render(request, "store_consultant/show.html", {
         'page_obj': page_obj,
         'store_id_query': store_id_query,
-        'lic_id_nm_query': lic_id_nm_query,
         'user_name': request.user.username,
-        'team_mgr': team_mgr
+        'team_mgr': team_mgr,
+        'model': models
     })
 
 
@@ -133,67 +132,72 @@ def update_consultant_store(request):
         return JsonResponse({'status': 'failed', 'message': str(e)}, status=400)
 
 
-@csrf_protect
 @require_POST
 def save_allocations(request):
     try:
         data = json.loads(request.body)
         allocations = data.get('allocations', [])
-        store_allocations = data.get('storeAllocations', [])
 
         with transaction.atomic():
             for allocation in allocations:
                 consultant_id = allocation.get('consultantId')
                 area_id = allocation.get('areaId') if allocation.get('areaId') != 'not-allocated' else None
-                tags = allocation.get('tags', [])
+                team_no = allocation.get('teamNo')  # Ensure this key is sent from the frontend
+                store_cons = allocation.get('storeCons')  # Ensure this key is sent from the frontend
 
+                # Retrieve or create the consultant and area instances
+                consultant = Consultants.objects.filter(id=consultant_id).first()
+                area = Area.objects.filter(id=area_id).first() if area_id else None
+
+                # Update or create the Allocation instance
                 obj, created = Allocation.objects.update_or_create(
-                    consultant_id=consultant_id,
-                    defaults={'area_id': area_id, 'tags': tags}
+                    consultant=consultant,
+                    area=area,
+                    defaults={
+                        'team_no': team_no if team_no else (area.team_no if area else None),
+                        'store_cons': store_cons if store_cons else consultant.sc_name
+                    }
                 )
                 obj.save()
 
-            for store_allocation in store_allocations:
-                consultant_id = store_allocation.get('consultantId')
-                store_ids = store_allocation.get('storeIds', [])
-                consultant = Consultants.objects.get(id=consultant_id)
-
-                consultant.stores.set(store_ids)
-                consultant.save()
-
-            return JsonResponse({'status': 'success'})
-    except Exception as e:
-        return JsonResponse({'status': 'failed', 'message': str(e)}, status=500)
-
-
-@csrf_protect
-@require_POST
-def save_consultant_stores(request):
-    try:
-        data = json.loads(request.body)
-        store_allocations = data.get('storeAllocations', [])
-        print("Data received:", store_allocations)
-
-        with transaction.atomic():
-            for store_allocation in store_allocations:
-                consultant_id = store_allocation.get('consultantId')
-                store_ids = store_allocation.get('storeIds', [])
-                print(f"Processing consultant {consultant_id} with stores {store_ids}")
-
-                consultant = Consultants.objects.get(id=consultant_id)
-
-                # Clear previous stores assignments
-                consultant.stores.clear()
-
-                # Add new store based on selected option
-                if store_ids:
-                    consultant.stores.add(store_ids[0])
-
-                consultant.save()
         return JsonResponse({'status': 'success'})
     except Exception as e:
-        print("Error:", e)
         return JsonResponse({'status': 'failed', 'message': str(e)}, status=500)
+
+
+@require_POST
+@csrf_protect
+def save_consultant_stores(request):
+    data = json.loads(request.body)
+    store_allocations = data.get('storeAllocations', [])
+
+    try:
+        with transaction.atomic():
+            for allocation in store_allocations:
+                consultant_id = allocation.get('consultantId')
+                store_ids = allocation.get('storeIds', [])
+                store_names = allocation.get('storeNames', [])
+                tags = allocation.get('tags', '')  # Make sure tags are received
+
+                consultant = Consultants.objects.get(id=consultant_id)
+                consultant.stores.clear()  # Assuming ManyToMany relationship with stores
+
+                # Logic for updating store information and tags
+                for store_id, store_name in zip(store_ids, store_names):
+                    consultant.stores.add(store_id)
+                    Allocation.objects.update_or_create(
+                        consultant=consultant,
+                        storeID=store_id,
+                        defaults={
+                            'store_name': store_name,
+                            'tags': tags  # Make sure tags are being saved
+                        }
+                    )
+        return JsonResponse({'status': 'success'})
+    except Exception as e:
+        return JsonResponse({'status': 'failed', 'message': str(e)}, status=400)
+
+
 
 
 def get_allocations(request):

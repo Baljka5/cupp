@@ -50,6 +50,7 @@
                 <div class="popup-content">
                     <span class="close-btn" onclick="closePopup()">&times;</span>
                     <p id="popup-text">Team Details Go Here</p>
+
                 </div>
             </div>
             <div class="store-allocation-body" id="store-allocation" ondrop="drop(event)" ondragover="allowDrop(event)"
@@ -459,18 +460,17 @@
         }
 
         function saveAllocations() {
-            const allocations = JSON.parse(localStorage.getItem('allocations')) || [];
-            const storeAllocations = [];
-
-            document.querySelectorAll('.sc-container').forEach(container => {
-                const scId = container.querySelector('select').id.split('_').pop();
-                const storeIds = $(`#id_store_id_${scId}`).val();
-                const tags = storeIds;
-
-                storeAllocations.push({
-                    consultantId: scId,
-                    storeIds: storeIds,
-                    tags: tags
+            const allocations = [];
+            document.querySelectorAll('.team-body').forEach(team => {
+                const areaId = team.getAttribute('data-area-id');
+                const teamNo = team.getAttribute('data-team-no');  // Make sure this attribute is set in your HTML
+                team.querySelectorAll('.sc').forEach(consultant => {
+                    allocations.push({
+                        consultantId: consultant.getAttribute('data-consultant-id'),
+                        areaId: areaId,
+                        teamNo: teamNo,
+                        storeCons: consultant.textContent.trim()  // Assuming the consultant's name is displayed
+                    });
                 });
             });
 
@@ -480,18 +480,12 @@
                     'Content-Type': 'application/json',
                     'X-CSRFToken': getCookie('csrftoken'),
                 },
-                body: JSON.stringify({ allocations, storeAllocations })
+                body: JSON.stringify({allocations})
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok.');
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
                 console.log('Success:', data);
                 alert('Allocations saved successfully!');
-                localStorage.removeItem('allocations');
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -499,46 +493,60 @@
             });
         }
 
-        function saveConsultantStores(teamId) {
-            const storeAllocations = [];
-            document.querySelectorAll('.sc-container').forEach(container => {
-                const scId = container.querySelector('select').id.split('_').pop();
-                const storeIds = $(`#id_store_id_${scId}`).val();
-                storeAllocations.push({
-                    consultantId: scId,
-                    storeIds: storeIds
-                });
-            });
+function saveConsultantStores(teamId) {
+    const storeAllocations = [];
+    document.querySelectorAll('.sc-container').forEach(container => {
+        const scId = container.dataset.consultantId;
+        const storeSelect = container.querySelector('.store-select');
+        const storeNameInput = container.querySelector('.store-name-input'); // Ensure this exists
+        const tagInput = container.querySelector('.tag-input'); // Ensure this is the correct selector
+        const storeIds = Array.from(storeSelect.selectedOptions).map(opt => opt.value);
+        const storeNames = storeNameInput ? storeNameInput.value : '';
+        const tags = tagInput ? tagInput.value : ''; // Ensure tags are collected
 
-            fetch('/save-consultant-stores/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken'),
-                },
-                body: JSON.stringify({
-                    teamId: teamId,
-                    storeAllocations: storeAllocations
-                })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok.');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Success:', data);
-                alert('Store allocations saved successfully!');
-                document.querySelectorAll('.store-select').forEach(select => {
-                    $(select).val(null).trigger('change');
-                });
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Failed to save the store allocations. Please try again.');
-            });
-        }
+        storeAllocations.push({
+            consultantId: scId,
+            storeIds: storeIds,
+            storeNames: storeNames,
+            tags: tags // Ensure this is being sent
+        });
+    });
+
+    fetch('/save-consultant-stores/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: JSON.stringify({teamId, storeAllocations})
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert('Store allocations saved successfully!');
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to save the store allocations. Please try again.');
+    });
+}
+
+function gatherStoreAllocations() {
+    const storeAllocations = [];
+    document.querySelectorAll('.allocation-form').forEach(form => {
+        const storeId = form.querySelector('.store-id-select').value;
+        const storeName = form.querySelector('.store-name-input').value;
+        const tags = form.querySelector('.tags-input').value;
+        storeAllocations.push({
+            storeId: storeId,
+            storeName: storeName,
+            tags: tags
+        });
+    });
+    return storeAllocations;
+}
+
+
+
 
         function updateScCounts() {
             document.querySelectorAll('.team').forEach(team => {

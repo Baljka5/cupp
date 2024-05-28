@@ -140,6 +140,7 @@ class Allocation(m.Model):
     store_cons = m.CharField('Store Consultant', max_length=50, blank=True, null=True)
     storeID = m.CharField('Store ID', max_length=5, blank=True, null=True)
     store_name = m.CharField('Store Name', max_length=50, blank=True, null=True)
+    tags = m.CharField(max_length=255, blank=True, null=True)
     created_date = m.DateTimeField('Created date', auto_now_add=True)
     created_by = m.ForeignKey(User, verbose_name='Created by', related_name='allocation_created', on_delete=m.PROTECT,
                               null=True)
