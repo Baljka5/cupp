@@ -1,20 +1,35 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.http import JsonResponse
 
 from .forms import StoreDailyLogForm
 from django.views import generic as g
 from .models import StoreDailyLog, ActionCategory, ActionOwner
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from cupp.store_trainer.models import StoreTrainer
 from cupp.point.models import Point
 
 
 @login_required
 def event_addnew(request):
+    store_id_to_name = {event.store_id: event.store_name for event in StoreTrainer.objects.all()}
     if request.method == "POST":
         form = StoreDailyLogForm(request.POST)
         if form.is_valid():
+            store_id = request.POST.get('store_no')
+            if store_id:
+                try:
+                    store_trainer_instance = StoreTrainer.objects.get(pk=store_id)
+                    form.instance.store_id = store_trainer_instance
+                except StoreTrainer.DoesNotExist:
+                    messages.error(request, "Store ID is invalid.")
+                    return render(request, 'event/event_index.html',
+                                  {'form': form, 'store_id_to_name': store_id_to_name})
+            else:
+                messages.error(request, "Store ID is missing.")
+                return render(request, 'event/event_index.html', {'form': form, 'store_id_to_name': store_id_to_name})
             try:
                 form.instance.created_by = request.user if not form.instance.pk else form.instance.created_by
                 form.instance.modified_by = request.user
@@ -29,7 +44,7 @@ def event_addnew(request):
                     messages.error(request, f"{field}: {error}")
     else:
         form = StoreDailyLogForm()
-    return render(request, 'event/event_index.html', {'form': form})
+    return render(request, 'event/event_index.html', {'form': form, 'store_id_to_name': store_id_to_name})
 
 
 # def event_addnew(request):
@@ -106,6 +121,18 @@ def destroy(request, id):
     model = StoreDailyLog.objects.get(id=id)
     model.delete()
     return redirect("/log-index")
+
+
+def store_id_search(request):
+    # Your logic to search for store ID based on query
+    search_query = request.GET.get('q', '')
+    if search_query:
+        stores = StoreTrainer.objects.filter(name__icontains=search_query)
+    else:
+        stores = StoreTrainer.objects.none()
+
+    store_list = [{'id': store.pk, 'text': store.name} for store in stores]
+    return JsonResponse({'items': store_list})
 
 
 class EventView(g.TemplateView):
