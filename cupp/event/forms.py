@@ -7,8 +7,8 @@ class StoreDailyLogForm(f.ModelForm):
     date = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
     CONSEQUENCES_CHOICES = [
         ('', '---------'),
-        (True, 'Сайн'),  # Represents True
-        (False, 'Муу'),  # Represents False
+        (True, 'Сайн'),
+        (False, 'Муу'),
     ]
 
     consequences = f.ChoiceField(choices=CONSEQUENCES_CHOICES, widget=f.Select(attrs={'class': 'form-control'}),

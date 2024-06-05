@@ -18,11 +18,12 @@
                         <input type="text" class="form-control" name="id" id="id_id" readonly
                                value="{{ model.id }}"/>
                     </div>
+
                     <div class="form-group col-md-6">
                         <label>Store ID: <span class="text-purple">*</span></label>
                         <select id="id_store_id" class="form-control" name="store_id">
                             {% for store_id, store_name in store_id_to_name.items %}
-                                <option value="{{ store_id }}"
+                                <option value="{{ store_id }}" data-name="{{ store_name }}"
                                         {% if model.store_id.store_id == store_id %}selected{% endif %}>
                                     {{ store_id }}
                                 </option>
@@ -101,25 +102,30 @@
                         <input type="text" class="form-control" name="cntr_num3" id="id_cntr_num3"
                                value="{{ model.cntr_num3 }}"/>
                     </div>
+                    {#                    <div class="form-group col-md-6">#}
+                    {#                        <label>Гэрээ эхлэх хугацаа: </label>#}
+                    {#                        <input type="date" class="form-control" name="st_dt" id="id_st_dt"#}
+                    {#                               value="{{ model.st_dt }}"/>#}
+                    {#                    </div>#}
                     <div class="form-group col-md-6">
                         <label>Гэрээ эхлэх хугацаа: </label>
                         <input type="date" class="form-control" name="st_dt" id="id_st_dt"
-                               value="{{ model.st_dt }}"/>
+                               value="{{ model.st_dt|date:"Y-m-d" }}"/>
                     </div>
                     <div class="form-group col-md-6">
                         <label>Дуусах хугацаа: </label>
                         <input type="date" class="form-control" name="ed_dt" id="id_ed_dt"
-                               value="{{ model.ed_dt }}"/>
+                               value="{{ model.ed_dt|date:"Y-m-d" }}"/>
                     </div>
                     <div class="form-group col-md-6">
                         <label>Сунгагдсан хугацаа: </label>
                         <input type="date" class="form-control" name="ext_ed_dt" id="id_ext_ed_dt"
-                               value="{{ model.ext_ed_dt }}"/>
+                               value="{{ model.ext_ed_dt|date:"Y-m-d" }}"/>
                     </div>
                     <div class="form-group col-md-6">
                         <label>Талбай хүлээлцсэн актын өдөр: </label>
-                        <input type="text" class="form-control" name="hand_over_dt" id="id_hand_over_dt"
-                               value="{{ model.hand_over_dt }}"/>
+                        <input type="date" class="form-control" name="hand_over_dt" id="id_hand_over_dt"
+                               value="{{ model.hand_over_dt|date:"Y-m-d" }}"/>
                     </div>
                     <div class="form-group col-md-6">
                         <label>Түрээсийн төлбөр: </label>
@@ -319,12 +325,12 @@
                 </div>
 
                 <div class="form-group col-md-6">
-                    <a href="{% url 'index' %}" class="btn btn-link text-purple-300">
+                    <a href="{% url 'rent_index' %}" class="btn btn-link text-purple-300">
                         Cancel
                     </a>
                 </div>
                 <div class="form-group col-md-6">
-                    <button type="submit" class="btn btn-success btn-lg">Update</button>
+                    <button type="submit" class="btn btn-success btn-lg">Save</button>
                 </div>
 
             </div>
@@ -342,36 +348,12 @@
                 });
 
                 $('#id_store_id').change(function () {
-                    var selectedName = $(this).find('option:selected').data('name');
+                    var selectedName = $(this).find('option:selected').attr('data-name');
                     $('#id_store_name').val(selectedName);
                     $('#id_store_name').prop('readonly', true);
-
                 });
 
 
-                {#$('#id_store_id').select2({#}
-                {#    ajax: {#}
-                {#        url: '/api/store-id-search/',#}
-                {#        dataType: 'json',#}
-                {#        delay: 250,#}
-                {#        data: function (params) {#}
-                {#            return {#}
-                {#                q: params.term, // search term#}
-                {#                page: params.page#}
-                {#            };#}
-                {#        },#}
-                {#        processResults: function (data, params) {#}
-                {#            // parse the results into the format expected by Select2#}
-                {#            params.page = params.page || 1;#}
-                {#            return {#}
-                {#                results: data.items,#}
-                {#                pagination: {#}
-                {#                    more: (params.page * 30) < data.total_count#}
-                {#                }#}
-                {#            };#}
-                {#        },#}
-                {#        cache: true#}
-                {#    },});#}
                 $('#id_st_dt, #id_ed_dt, #id_ext_ed_dt, #id_hand_over_dt').daterangepicker({
                     singleDatePicker: true,
                     applyClass: 'bg-purple btn-sm',
@@ -380,20 +362,6 @@
                         format: 'YYYY/MM/DD'
                     }
                 });
-
-                {#$('#id_alc_opentime, #id_alc_closetime').timepicker({#}
-                {#    timeFormat: 'H:i',#}
-                {#    interval: 30,#}
-                {#    scrollDefault: 'now',#}
-                {#    dynamic: false,#}
-                {#    dropdown: true,#}
-                {#    scrollbar: true,#}
-                {#    change: function (time) {#}
-                {#        var element = $(this), text;#}
-                {#        var timepicker = element.timepicker();#}
-                {#        text = timepicker.format(time);#}
-                {#        element.siblings('.helper-text').text(text);#}
-                {#    }});#}
             });
         </script>
     </div>{% endblock content %}
