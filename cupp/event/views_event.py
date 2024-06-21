@@ -19,14 +19,16 @@ def event_addnew(request):
         form = StoreDailyLogForm(request.POST)
         if form.is_valid():
             store_id = request.POST.get('store_no')
+            print("Store No Received:", store_id)  # Debugging output
             if store_id:
                 try:
                     store_trainer_instance = StoreTrainer.objects.get(pk=store_id)
                     form.instance.store_id = store_trainer_instance
                 except StoreTrainer.DoesNotExist:
-                    messages.error(request, "Store ID is invalid.")
+                    messages.error(request, f"Store ID {store_id} is invalid.")
                     return render(request, 'event/event_index.html',
                                   {'form': form, 'store_id_to_name': store_id_to_name})
+
             else:
                 messages.error(request, "Store ID is missing.")
                 return render(request, 'event/event_index.html', {'form': form, 'store_id_to_name': store_id_to_name})
@@ -104,17 +106,23 @@ def edit(request, id):
     model = StoreDailyLog.objects.get(id=id)
     categories = ActionCategory.objects.all()
     owners = ActionOwner.objects.all()
-    return render(request, 'event/edit.html', {'model': model, 'categories': categories, 'owners': owners})
+    store_id_to_name = {event.store_id: event.store_name for event in StoreTrainer.objects.all()}
+    return render(request, 'event/edit.html',
+                  {'model': model, 'categories': categories, 'owners': owners, 'store_id_to_name': store_id_to_name})
 
 
 def update(request, id):
     model = StoreDailyLog.objects.get(id=id)
     form = StoreDailyLogForm(request.POST, instance=model)
-    if form.is_valid():
-        form.instance.modified_by = request.user
-        form.save()
-        return redirect("/log-index")
-    return render(request, 'event/edit.html', {'model': model})
+    if request.method == 'POST':
+        if form.is_valid():
+            form.instance.modified_by = request.user
+            form.save()
+            messages.success(request, 'Update successful.')
+            return redirect('/log-index')
+        else:
+            messages.error(request, 'Error updating the form. Please check your data.')
+    return render(request, 'event/edit.html', {'form': form, 'model': model})
 
 
 def destroy(request, id):

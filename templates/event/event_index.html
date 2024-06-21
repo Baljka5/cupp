@@ -41,11 +41,19 @@
                     <div class="form-group col-md-6">
                         <label>Дэлгүүрийн дугаар: <span class="text-purple">*</span></label>
                         <select id="id_store_no" class="form-control" name="store_no">
-                            <option value="" disabled selected>------</option>
+                            <option value="" disabled selected>Select Store ID</option>
                             {% for store_id, store_name in store_id_to_name.items %}
                                 <option value="{{ store_id }}" data-name="{{ store_name }}">{{ store_id }}</option>
                             {% endfor %}
                         </select>
+
+
+                        {#                        <select id="id_store_no" class="form-control" name="store_no">#}
+                        {#                            <option value="" disabled selected>------</option>#}
+                        {#                            {% for store_id, store_name in store_id_to_name.items %}#}
+                        {#                                <option value="{{ store_id }}" data-name="{{ store_name }}">{{ store_id }}</option>#}
+                        {#                            {% endfor %}#}
+                        {#                        </select>#}
                     </div>
 
                     <div class="form-group col-md-6">
@@ -110,7 +118,6 @@
                     var selectedName = $(this).find('option:selected').data('name');
                     $('#id_store_name').val(selectedName);
                     $('#id_store_name').prop('readonly', true);
-
                 });
 
                 $(function () {

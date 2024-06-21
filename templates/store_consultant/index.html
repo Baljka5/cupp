@@ -418,6 +418,7 @@
                             targetContainer.appendChild(consultantElement);
                         }
                     });
+                    updateScCounts();  // Update counts after fetching and rendering
                 })
                 .catch(error => console.error('Error fetching allocations:', error));
         }
@@ -440,7 +441,7 @@
             }
             if (target) {
                 target.appendChild(consultantElement);
-                updateScCounts();
+                updateScCounts();  // Update counts after dropping an SC
                 saveCurrentStateToLocal();
             }
         }
@@ -493,57 +494,57 @@
             });
         }
 
-function saveConsultantStores(teamId) {
-    const storeAllocations = [];
-    document.querySelectorAll('.sc-container').forEach(container => {
-        const scId = container.dataset.consultantId;
-        const storeSelect = container.querySelector('.store-select');
-        const storeNameInput = container.querySelector('.store-name-input'); // Ensure this exists
-        const tagInput = container.querySelector('.tag-input'); // Ensure this is the correct selector
-        const storeIds = Array.from(storeSelect.selectedOptions).map(opt => opt.value);
-        const storeNames = storeNameInput ? storeNameInput.value : '';
-        const tags = tagInput ? tagInput.value : ''; // Ensure tags are collected
+        function saveConsultantStores(teamId) {
+            const storeAllocations = [];
+            document.querySelectorAll('.sc-container').forEach(container => {
+                const scId = container.dataset.consultantId;
+                const storeSelect = container.querySelector('.store-select');
+                const storeNameInput = container.querySelector('.store-name-input'); // Ensure this exists
+                const tagInput = container.querySelector('.tag-input'); // Ensure this is the correct selector
+                const storeIds = Array.from(storeSelect.selectedOptions).map(opt => opt.value);
+                const storeNames = storeNameInput ? storeNameInput.value : '';
+                const tags = tagInput ? tagInput.value : ''; // Ensure tags are collected
 
-        storeAllocations.push({
-            consultantId: scId,
-            storeIds: storeIds,
-            storeNames: storeNames,
-            tags: tags // Ensure this is being sent
-        });
-    });
+                storeAllocations.push({
+                    consultantId: scId,
+                    storeIds: storeIds,
+                    storeNames: storeNames,
+                    tags: tags // Ensure this is being sent
+                });
+            });
 
-    fetch('/save-consultant-stores/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken'),
-        },
-        body: JSON.stringify({teamId, storeAllocations})
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert('Store allocations saved successfully!');
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Failed to save the store allocations. Please try again.');
-    });
-}
+            fetch('/save-consultant-stores/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: JSON.stringify({teamId, storeAllocations})
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Store allocations saved successfully!');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to save the store allocations. Please try again.');
+            });
+        }
 
-function gatherStoreAllocations() {
-    const storeAllocations = [];
-    document.querySelectorAll('.allocation-form').forEach(form => {
-        const storeId = form.querySelector('.store-id-select').value;
-        const storeName = form.querySelector('.store-name-input').value;
-        const tags = form.querySelector('.tags-input').value;
-        storeAllocations.push({
-            storeId: storeId,
-            storeName: storeName,
-            tags: tags
-        });
-    });
-    return storeAllocations;
-}
+        function gatherStoreAllocations() {
+            const storeAllocations = [];
+            document.querySelectorAll('.allocation-form').forEach(form => {
+                const storeId = form.querySelector('.store-id-select').value;
+                const storeName = form.querySelector('.store-name-input').value;
+                const tags = form.querySelector('.tags-input').value;
+                storeAllocations.push({
+                    storeId: storeId,
+                    storeName: storeName,
+                    tags: tags
+                });
+            });
+            return storeAllocations;
+        }
 
 
 
