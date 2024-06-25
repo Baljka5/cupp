@@ -1,9 +1,10 @@
 from django import forms as f
 from django.conf import settings
-from cupp.store_consultant.models import StoreConsultant, Allocation
+from cupp.store_consultant.models import StoreConsultant, Allocation, Tag
 
 
 class StoreConsultantForm(f.ModelForm):
+    tags = f.ModelMultipleChoiceField(queryset=Tag.objects.all(), widget=f.CheckboxSelectMultiple, required=False)
     close_date = f.DateField(required=False, input_formats=settings.DATE_INPUT_FORMATS)
     CONSEQUENCES_CHOICES = [
         ('', '---------'),

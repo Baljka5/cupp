@@ -128,6 +128,17 @@
                 {% is_in_sc_direct_group as user_in_sc_direct_group %}
                 {% if user_in_store_consultant_group and user_in_area_group and user_in_sc_direct_group %}
                     <li>
+                        <a href="{% url 'comp_index' %}" class="navbar-nav-link">
+                            <i class="icon-warning mr-1"></i>
+                            <span>Competitors</span>
+                        </a>
+                    </li>
+                {% endif %}
+                {% is_in_store_consultant_group as user_in_store_consultant_group %}
+                {% is_in_area_group as user_in_area_group %}
+                {% is_in_sc_direct_group as user_in_sc_direct_group %}
+                {% if user_in_store_consultant_group and user_in_area_group and user_in_sc_direct_group %}
+                    <li>
                         <a href="{% url 'store-index' %}" class="navbar-nav-link">
                             <i class="icon-store mr-1"></i>
                             <span>Store Consultant</span>

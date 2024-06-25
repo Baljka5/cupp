@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from cupp.store_consultant.models import Area, Consultants, Allocation, StoreConsultant
+from cupp.store_consultant.models import Area, Consultants, Allocation, StoreConsultant, Tag
 from cupp.store_trainer.models import StoreTrainer
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect
@@ -166,45 +166,38 @@ def save_allocations(request):
         return JsonResponse({'status': 'failed', 'message': str(e)}, status=500)
 
 
+@csrf_protect
 @require_POST
 def save_consultant_stores(request):
     try:
         data = json.loads(request.body)
         store_allocations = data.get('storeAllocations', [])
-        print("Store Allocations Received:", store_allocations)
 
         results = []
         with transaction.atomic():
             for store_allocation in store_allocations:
-                consultant_id = store_allocation.get('consultant_id')
-                if not consultant_id:
-                    print("No consultant ID provided for some entries")
-                    results.append({'status': 'failed', 'message': 'No consultant ID provided'})
-                    continue
+                consultant_id = store_allocation.get('consultantId')
+                store_ids = store_allocation.get('storeIds', [])
+                tags = store_allocation.get('tags', [])
 
                 try:
-                    consultant = Consultants.objects.get(id=consultant_id)
-                except Consultants.DoesNotExist:
-                    print(f"Consultant with ID {consultant_id} does not exist")
+                    consultant = StoreConsultant.objects.get(id=consultant_id)
+
+                    # Update store assignments
+                    consultant.stores.set(store_ids)
+
+                    # Update tags
+                    tag_objects = [Tag.objects.get_or_create(name=tag)[0] for tag in tags]
+                    consultant.tags.set(tag_objects)
+
+                    consultant.save()
+                    results.append({'status': 'success', 'consultant_id': consultant_id})
+                except StoreConsultant.DoesNotExist:
                     results.append({'status': 'failed', 'message': f'Consultant {consultant_id} does not exist'})
                     continue
 
-                store_ids = store_allocation.get('storeIds', [])
-                tags = store_allocation.get('tags', '')
-
-                # Clear existing stores if any and add the new ones
-                consultant.stores.clear()
-                consultant.stores.add(*store_ids)
-
-                # Assuming tags need to be handled here, add a mechanism to save them
-                # For example, if you have a tags field or related model
-                consultant.tags = tags  # Update how tags are handled based on your model structure
-                consultant.save()
-                results.append({'status': 'success', 'consultant_id': consultant_id})
-
         return JsonResponse({'results': results})
     except Exception as e:
-        print("Error during saving consultant stores:", str(e))
         return JsonResponse({'status': 'failed', 'message': str(e)}, status=500)
 
 

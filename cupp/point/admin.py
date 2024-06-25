@@ -7,6 +7,7 @@ from .models import Point, City, District, Type
 from cupp.license.models import DimensionTable, DimensionTableLicenseProvider, MainTable
 from cupp.event.models import ActionOwner, ActionCategory, StoreDailyLog
 from cupp.store_consultant.models import Area, Consultants
+from cupp.competitors.models import DimCluster, DimCompType
 
 # Registering models
 admin.site.register(City)
@@ -19,6 +20,8 @@ admin.site.register(StoreDailyLog)
 admin.site.register(DimensionTableLicenseProvider)
 admin.site.register(Consultants)
 admin.site.register(Area)
+admin.site.register(DimCluster)
+admin.site.register(DimCompType)
 
 
 # Custom admin class for the Point model
@@ -47,8 +50,6 @@ class CUPPUserAdmin(UserAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         return qs.exclude(username='su')
-
-
 
 # from django.contrib import admin
 # from django.contrib.auth.admin import UserAdmin

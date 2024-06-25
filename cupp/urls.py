@@ -29,6 +29,7 @@ from cupp.event import views_event as event_views
 from cupp.rent import views_rent as rent_views
 from cupp.store_consultant import views as sc_views
 from cupp.store_trainer import views as st_views
+from cupp.competitors import views as comp_views
 
 # from cupp.ajax_table_list import ajax_table_list
 
@@ -63,6 +64,12 @@ urlpatterns = [
     path('log-edit/<int:id>', event_views.edit, name='event-edit'),
     path('log-update/<int:id>', event_views.update, name='event_update'),
     path('log-delete/<int:id>', event_views.destroy, name='log-delete'),
+
+    path('comp-index/', comp_views.index, name='comp_index'),
+    path('comp-create/', comp_views.comp_addnew, name='comp-create'),
+    path('comp-edit/<int:id>', comp_views.edit, name='comp-edit'),
+    path('comp-update/<int:id>', comp_views.update, name='comp_update'),
+    path('comp-delete/<int:id>', comp_views.destroy, name='comp-delete'),
 
     path('rent-index/', rent_views.index, name='rent_index'),
     path('rent-create', rent_views.rent_addnew, name='rent-create'),

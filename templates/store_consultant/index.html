@@ -494,42 +494,44 @@
             });
         }
 
-        function saveConsultantStores(teamId) {
-            const storeAllocations = [];
-            document.querySelectorAll('.sc-container').forEach(container => {
-                const scId = container.dataset.consultantId;
-                const storeSelect = container.querySelector('.store-select');
-                const storeNameInput = container.querySelector('.store-name-input'); // Ensure this exists
-                const tagInput = container.querySelector('.tag-input'); // Ensure this is the correct selector
-                const storeIds = Array.from(storeSelect.selectedOptions).map(opt => opt.value);
-                const storeNames = storeNameInput ? storeNameInput.value : '';
-                const tags = tagInput ? tagInput.value : ''; // Ensure tags are collected
+function saveConsultantStores() {
+    const storeAllocations = [];
+    document.querySelectorAll('.sc-container').forEach(container => {
+        const scId = container.querySelector('.sc').dataset.consultantId;
+        const storeSelect = container.querySelector('.store-select');
+        const tagSelect = container.querySelector('.tag-input');
 
-                storeAllocations.push({
-                    consultantId: scId,
-                    storeIds: storeIds,
-                    storeNames: storeNames,
-                    tags: tags // Ensure this is being sent
-                });
-            });
+        const storeIds = Array.from(storeSelect.selectedOptions).map(opt => opt.value);
+        const tags = Array.from(tagSelect.selectedOptions).map(opt => opt.value);
 
-            fetch('/save-consultant-stores/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken'),
-                },
-                body: JSON.stringify({teamId, storeAllocations})
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert('Store allocations saved successfully!');
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Failed to save the store allocations. Please try again.');
-            });
+        storeAllocations.push({
+            consultantId: scId,
+            storeIds: storeIds,
+            tags: tags
+        });
+    });
+
+    fetch('/save-consultant-stores/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: JSON.stringify({storeAllocations})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Store allocations saved successfully!');
+        } else {
+            alert('Failed to save store allocations.');
         }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to save the store allocations. Please try again.');
+    });
+}
 
         function gatherStoreAllocations() {
             const storeAllocations = [];

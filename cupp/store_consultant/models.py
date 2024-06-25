@@ -131,6 +131,13 @@ class Consultants(m.Model):
         verbose_name = 'Consultant'
 
 
+class Tag(m.Model):
+    name = m.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+
 class Allocation(m.Model):
     consultant = m.ForeignKey(Consultants, on_delete=m.CASCADE, null=True, blank=True)
     area = m.ForeignKey(Area, on_delete=m.SET_NULL, null=True, blank=True)
@@ -140,7 +147,7 @@ class Allocation(m.Model):
     store_cons = m.CharField('Store Consultant', max_length=50, blank=True, null=True)
     storeID = m.CharField('Store ID', max_length=5, blank=True, null=True)
     store_name = m.CharField('Store Name', max_length=50, blank=True, null=True)
-    tags = m.CharField(max_length=255, blank=True, null=True)
+    tags = m.ManyToManyField(Tag, blank=True)
     created_date = m.DateTimeField('Created date', auto_now_add=True)
     created_by = m.ForeignKey(User, verbose_name='Created by', related_name='allocation_created', on_delete=m.PROTECT,
                               null=True)
