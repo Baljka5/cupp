@@ -18,28 +18,24 @@ def event_addnew(request):
     if request.method == "POST":
         form = StoreDailyLogForm(request.POST)
         if form.is_valid():
-            store_id = request.POST.get('store_no')
+            store_id = form.cleaned_data.get('store_no')
             print("Store No Received:", store_id)  # Debugging output
             if store_id:
                 try:
-                    store_trainer_instance = StoreTrainer.objects.get(pk=store_id)
+                    store_trainer_instance = StoreTrainer.objects.get(store_id=store_id)
                     form.instance.store_id = store_trainer_instance
                 except StoreTrainer.DoesNotExist:
                     messages.error(request, f"Store ID {store_id} is invalid.")
                     return render(request, 'event/event_index.html',
                                   {'form': form, 'store_id_to_name': store_id_to_name})
-
             else:
                 messages.error(request, "Store ID is missing.")
                 return render(request, 'event/event_index.html', {'form': form, 'store_id_to_name': store_id_to_name})
-            try:
-                form.instance.created_by = request.user if not form.instance.pk else form.instance.created_by
-                form.instance.modified_by = request.user
-                form.save()
-                messages.success(request, "Event added successfully!")
-                return redirect('/log-index')
-            except Exception as e:
-                messages.error(request, f"Error saving event: {e}")
+            form.instance.created_by = request.user if not form.instance.pk else form.instance.created_by
+            form.instance.modified_by = request.user
+            form.save()
+            messages.success(request, "Event added successfully!")
+            return redirect('/log-index')
         else:
             for field, errors in form.errors.items():
                 for error in errors:
