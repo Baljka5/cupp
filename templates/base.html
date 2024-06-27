@@ -185,7 +185,6 @@
                 {% is_in_store_planner_group as user_in_store_planner_group %}
                 {% is_in_manager_group as user_in_manager_group %}
                 {% is_in_sp_director_group as user_in_sp_director_group %}
-                <!-- Assume you have a similar tag for checking manager group or superuser status -->
 
                 {% if user_in_store_planner_group or user_in_manager_group or user_in_sp_director_group %}
                     <li class="nav-item">

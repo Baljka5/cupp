@@ -30,13 +30,13 @@ from cupp.rent import views_rent as rent_views
 from cupp.store_consultant import views as sc_views
 from cupp.store_trainer import views as st_views
 from cupp.competitors import views as comp_views
-# from cupp.master_api.views import StoreMasterAPI
+from cupp.master_api.views import StoreMasterAPI
 
 # from cupp.ajax_table_list import ajax_table_list
 
 urlpatterns = [
 
-    # path('api/storemaster/', StoreMasterAPI.as_view(), name='storemaster-api'),
+    path('api/storemaster/', StoreMasterAPI.as_view(), name='storemaster-api'),
 
     path('ajax/get_districts/', get_districts, name='ajax_get_districts'),
     path('', auth_views.LoginView.as_view(redirect_authenticated_user=True), name='login'),
