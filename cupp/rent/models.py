@@ -1,13 +1,15 @@
 from django.db import models
 from cupp.store_trainer.models import StoreTrainer
 from cupp.constants import CONTRACT_TYPE_CHOICES
+from django.core.validators import RegexValidator
 
 
 # Create your models here.
 
 
 class StrRent(models.Model):
-    store_id = models.ForeignKey(StoreTrainer, on_delete=models.CASCADE, verbose_name="Store ID", null=True)
+    five_digit_validator = RegexValidator(r'^\d{5}$', 'Store number must be a 5-digit number')
+    store_id = models.CharField(max_length=5, validators=[five_digit_validator], null=True, blank=True)
     str_name = models.CharField('Салбарын нэр', null=True, max_length=200)
     str_address = models.CharField('Албан ёсны хаяг', null=True, max_length=200)
     lesser1 = models.CharField('Түрээслүүлэгч 1', null=True, max_length=100)
@@ -59,7 +61,7 @@ class StrRent(models.Model):
     other_cont = models.CharField('Бусад гэрээ', blank=True, null=True, max_length=200)
     franchise_yn = models.BooleanField('Франчайз санал болгох заалттай', null=True)
     fr_rent_yn = models.BooleanField('Дамжуулан түрээсийн заалт', null=True)
-    dedication = models.BooleanField('Үл хөдлөх хөрөнгийн зориулалт', null=True)
+    dedication = models.CharField('Үл хөдлөх хөрөнгийн зориулалт', null=True, blank=True, max_length=100)
     notariat_yn = models.BooleanField('Нотариат', null=True)
     real_estate_yn = models.BooleanField('ҮХХ-н гэрчилгээтэй эсэх', null=True)
     special_terms = models.CharField('Гэрээний онцгой нөхцөл', blank=True, null=True, max_length=30)
