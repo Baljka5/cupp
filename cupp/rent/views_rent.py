@@ -63,25 +63,20 @@ def rent_addnew(request):
 
 
 def index(request):
-    # Retrieve filter values from GET request
     store_id_query = request.GET.get('store_id', '')
     str_name_query = request.GET.get('str_name', '')
 
-    # Build the query based on presence of filter values
     query = Q()
-    if store_id_query.isdigit():  # Assuming store_id_query should be an ID (integer)
-        # We perform an exact match if store_id_query is a digit
+    if store_id_query.isdigit():
         query &= Q(store_id=store_id_query)
     elif store_id_query:
-        # If store_id_query is not a digit, replace this with the appropriate string field
-        # For example, if StoreTrainer has a 'name' field you'd like to filter by:
         query &= Q(store_id__name__icontains=store_id_query)
 
     if str_name_query:
         query &= Q(str_name__icontains=str_name_query)
 
     models = StrRent.objects.filter(query).distinct().order_by('id')
-    paginator = Paginator(models, 10)  # Show 10 rents per page
+    paginator = Paginator(models, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -90,11 +85,6 @@ def index(request):
         'store_id_query': store_id_query,
         'str_name_query': str_name_query
     })
-
-
-# def index(request):
-#     models = StoreDailyLog.objects.all()
-#     return render(request, "event/show.html", {'models': models})
 
 
 def edit(request, id):
