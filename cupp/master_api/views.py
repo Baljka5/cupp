@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
 from cupp.store_consultant.models import StoreConsultant
 from cupp.store_trainer.models import StoreTrainer
 from cupp.point.models import Point, StorePlanning
@@ -12,23 +13,18 @@ class StoreMasterAPI(APIView):
 
         store_consultants = StoreConsultant.objects.filter(
             store_id=branch_no) if branch_no else StoreConsultant.objects.all()
-
         data = []
+
+        if not store_consultants.exists() and branch_no:
+            # If no consultants found for a specific branchNo, return a custom message
+            return Response({'message': 'Store not found', 'success': False}, status=status.HTTP_404_NOT_FOUND)
+
         for store_consultant in store_consultants:
             try:
                 store_planning = StorePlanning.objects.get(store_id=store_consultant.store_id)
                 store_trainer = StoreTrainer.objects.get(store_id=store_consultant.store_id)
             except (StorePlanning.DoesNotExist, StoreTrainer.DoesNotExist):
                 continue
-
-            # def truncate_after_second_comma(address):
-            #     parts = address.split(',', 2)
-            #     if len(parts) > 2:
-            #         return ', '.join(parts[:2])
-            #     return address
-            #
-            # address_detail = truncate_after_second_comma(store_planning.address_det) if store_planning and hasattr(
-            #     store_planning, 'address_det') else 'Address not available'
 
             is_24h_open = store_consultant.tt_type == "24H" if store_consultant else False
 
@@ -56,6 +52,11 @@ class StoreMasterAPI(APIView):
                 'closeDate': store_consultant.close_date,
                 'closedDescription': store_consultant.close_reason,
             })
+        if not data:
+            # Return a custom message if no data was added to the list
+            return Response({'message': 'Store not found', 'success': False}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = CompositeStoreSerializer(data, many=True)
         return Response(serializer.data)
+
+# Ensure to import status from rest_framework
