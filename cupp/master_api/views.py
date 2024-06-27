@@ -6,6 +6,14 @@ from cupp.store_trainer.models import StoreTrainer
 from cupp.point.models import Point, StorePlanning
 from cupp.master_api.serializers import CompositeStoreSerializer
 
+from django.shortcuts import render
+from django.http import HttpResponseNotFound
+
+
+def my_custom_page_not_found_view(request, exception=None):
+    context = {}
+    return render(request, '404.html', context, status=404)
+
 
 class StoreMasterAPI(APIView):
     def get(self, request, *args, **kwargs):

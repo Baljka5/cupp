@@ -19,6 +19,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
+from django.conf.urls import handler404
 
 from django.contrib.auth import views as auth_views
 from cupp.common import views as common_views
@@ -30,9 +31,10 @@ from cupp.rent import views_rent as rent_views
 from cupp.store_consultant import views as sc_views
 from cupp.store_trainer import views as st_views
 from cupp.competitors import views as comp_views
-from cupp.master_api.views import StoreMasterAPI
+from cupp.master_api.views import StoreMasterAPI, my_custom_page_not_found_view
 
 # from cupp.ajax_table_list import ajax_table_list
+
 
 urlpatterns = [
 
@@ -121,3 +123,5 @@ if settings.DEBUG:
 admin.site.site_title = 'PP Management'
 admin.site.site_header = 'PP Management'
 admin.site.index_title = 'Administration'
+
+handler404 = 'cupp.master_api.views.my_custom_page_not_found_view'
