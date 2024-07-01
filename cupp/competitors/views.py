@@ -18,28 +18,37 @@ def comp_addnew(request):
     if request.method == "POST":
         form = StoreCompetitorsForm(request.POST)
         if form.is_valid():
+            # Handle schedule type logic
+            schedule_type = form.cleaned_data.get('comp_schedule_tp')
+            if schedule_type == '24H':
+                form.instance.comp_schedule_time = '00:00-23:59'
+            elif schedule_type == '17H':
+                form.instance.comp_schedule_time = '07:00-00:00'
+
+            # Handle store ID assignment
             store_id = request.POST.get('store_no')
-            print("Store No Received:", store_id)  # Debugging output
             if store_id:
                 try:
                     store_trainer_instance = StoreTrainer.objects.get(pk=store_id)
-                    form.instance.store_id = store_trainer_instance
+                    form.instance.store_id = store_trainer_instance.store_id
                 except StoreTrainer.DoesNotExist:
                     messages.error(request, f"Store ID {store_id} is invalid.")
                     return render(request, 'competitors/index.html',
                                   {'form': form, 'store_id_to_name': store_id_to_name})
-
             else:
                 messages.error(request, "Store ID is missing.")
                 return render(request, 'competitors/index.html', {'form': form, 'store_id_to_name': store_id_to_name})
+
+            # Attempt to save form
             try:
-                form.instance.created_by = request.user if not form.instance.pk else form.instance.created_by
+                form.instance.created_by = request.user
                 form.instance.modified_by = request.user
                 form.save()
                 messages.success(request, "Event added successfully!")
                 return redirect('/comp-index')
             except Exception as e:
                 messages.error(request, f"Error saving event: {e}")
+
         else:
             for field, errors in form.errors.items():
                 for error in errors:
@@ -107,20 +116,41 @@ def edit(request, id):
     dim_clusters = DimCluster.objects.all()
     dim_types = DimCompType.objects.all()
     store_id_to_name = {competitor.store_id: competitor.store_name for competitor in StoreTrainer.objects.all()}
-    return render(request, 'competitors/edit.html',
-                  {'model': model, 'dim_clusters': dim_clusters, 'dim_types': dim_types,
-                   'store_id_to_name': store_id_to_name})
+    return render(request, 'competitors/edit.html', {
+        'model': model,
+        'dim_clusters': dim_clusters,
+        'dim_types': dim_types,
+        'store_id_to_name': store_id_to_name
+    })
 
 
+@login_required
 def update(request, id):
     model = StoreCompetitors.objects.get(id=id)
     form = StoreCompetitorsForm(request.POST, instance=model)
     if request.method == 'POST':
         if form.is_valid():
-            messages.success(request, 'Update successful.')
-            return redirect('/comp-index')
+            # Handle schedule type logic
+            schedule_type = form.cleaned_data.get('comp_schedule_tp')
+            if schedule_type == '24H':
+                form.instance.comp_schedule_time = '00:00-23:59'
+            elif schedule_type == '17H':
+                form.instance.comp_schedule_time = '07:00-00:00'
+
+            # Attempt to save form
+            try:
+                form.instance.modified_by = request.user
+                form.save()
+                messages.success(request, 'Update successful.')
+                return redirect('/comp-index')
+            except Exception as e:
+                messages.error(request, f"Error updating the form: {e}")
+
         else:
-            messages.error(request, 'Error updating the form. Please check your data.')
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+
     return render(request, 'competitors/edit.html', {'form': form, 'model': model})
 
 

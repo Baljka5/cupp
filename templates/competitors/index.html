@@ -144,6 +144,27 @@
                     width: '100%',
                     placeholder: "Select a Store ID",
                 });
+                $('#id_comp_schedule_tp').change(function () {
+                    var scheduleType = $(this).val();
+
+                    switch (scheduleType) {
+                        case '24H':
+                            $('#id_comp_schedule_time').val('00:00-23:59');
+                            $('#id_comp_schedule_time').prop('readonly', true); // Makes the field read-only
+                            break;
+                        case '17H':
+                            $('#id_comp_schedule_time').val('07:00-00:00');
+                            $('#id_comp_schedule_time').prop('readonly', true); // Makes the field read-only
+                            break;
+                        case 'SPECIFIC':
+                            $('#id_comp_schedule_time').val(''); // Clears the field
+                            $('#id_comp_schedule_time').prop('readonly', false); // Makes the field editable
+                            break;
+                        default:
+                            $('#id_comp_schedule_time').val(''); // Clears the field if no valid option is selected
+                            $('#id_comp_schedule_time').prop('readonly', false); // Ensures field is editable
+                    }
+                });
 
                 $('#id_store_no').change(function () {
                     var selectedName = $(this).find('option:selected').data('name');

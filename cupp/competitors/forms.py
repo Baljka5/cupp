@@ -13,8 +13,8 @@ class StoreCompetitorsForm(f.ModelForm):
     ]
     comp_schedule_tp = f.ChoiceField(choices=COMP_SCHEDULE_TP_CHOICES, widget=f.Select(attrs={'class': 'form-control'}),
                                      required=False)
-    comp_schedule_time = f.TimeField(required=False, input_formats=['%H:%M:%S'],
-                                     widget=f.TimeInput(attrs={'type': 'time', 'step': '1'}))
+    # comp_schedule_time = f.TimeField(required=False, input_formats=['%H:%M:%S'],
+    #                                  widget=f.TimeInput(attrs={'type': 'time', 'step': '1'}))
 
     class Meta:
         model = StoreCompetitors

@@ -12,200 +12,202 @@
                 <div class="col-12">
                     <h3>Update Details</h3>
                 </div>
-                <div class="form-group col-md-6">
-                    <label>Дугаар: </label>
-                    <input type="text" class="form-control" name="id" id="id_id" required readonly
-                           value="{{ model.id }}"/>
-                </div>
-                {#                <div class="form-group col-md-6">#}
-                {#                    <label>Огноо: </label>#}
-                {#                    <input type="date" class="form-control" name="date" id="id_date"#}
-                {#                           value="{{ model.date|date:"Y-m-d" }}"/>#}
-                {#                </div>#}
-                <div class="form-group col-md-6">
-                    <label>Дэлгүүрийн дугаар: <span class="text-purple">*</span></label>
-                    <select id="id_store_no" class="form-control" name="store_no">
-                        {% for store_id, store_name in store_id_to_name.items %}
-                            <option value="{{ store_id }}" data-name="{{ store_name }}"
-                                    {% if model.store_no == store_id %}selected{% endif %}>
-                                {{ store_id }}
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label>Дугаар: </label>
+                        <input type="text" class="form-control" name="id" id="id_id" required readonly
+                               value="{{ model.id }}"/>
+                    </div>
+                    {#                <div class="form-group col-md-6">#}
+                    {#                    <label>Огноо: </label>#}
+                    {#                    <input type="date" class="form-control" name="date" id="id_date"#}
+                    {#                           value="{{ model.date|date:"Y-m-d" }}"/>#}
+                    {#                </div>#}
+                    <div class="form-group col-md-6">
+                        <label>Дэлгүүрийн дугаар: <span class="text-purple">*</span></label>
+                        <select id="id_store_no" class="form-control" name="store_no">
+                            {% for store_id, store_name in store_id_to_name.items %}
+                                <option value="{{ store_id }}" data-name="{{ store_name }}"
+                                        {% if model.store_id == store_id %}selected{% endif %}>
+                                    {{ store_id }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Урсгалд нөлөөлөх өрсөлдөгч байгаа эсэх<span class="text-purple">*</span></label>
+                        <select name="comp_yn" id="id_comp_yn" class="form-control" required>
+                            <option value="">{{ comp_yn }}</option>
+                            <option value="True" {% if model.comp_yn %}selected{% endif %}>Yes</option>
+                            <option value="False" {% if model.comp_yn == False %}selected{% endif %}>No</option>
+                        </select>
+                    </div>
+                    {#                <div class="form-group col-md-6">#}
+                    {#                    <label>Урсгалд нөлөөлөх өрсөлдөгч байгаа эсэх</label>#}
+                    {#                    <input type="text" class="form-control" name="comp_yn" id="id_comp_yn" required#}
+                    {#                           value="{{ model.comp_yn }}"/>#}
+                    {#                </div>#}
+                    {#                <div class="form-group col-md-6">#}
+                    {#                    <label>Ангилал: </label>#}
+                    {#                    <select name="activ_cat" id="id_activ_cat" class="form-control">#}
+                    {#                        {% for category in categories %}#}
+                    {#                            <option value="{{ category.activ_id }}"#}
+                    {#                                    {% if category.activ_id == model.activ_cat.activ_id %}selected{% endif %}>#}
+                    {#                                {{ category.activ_cat }}#}
+                    {#                            </option>#}
+                    {#                        {% endfor %}#}
+                    {#                    </select>#}
+                    {#                </div>#}
+                    <div class="form-group col-md-6">
+                        <label>Өрсөлдөгчийн төрөл: </label>
+                        <select name="comp_type" id="id_comp_type" class="form-control">
+                            {% for dim_type in dim_types %}
+                                <option value="{{ dim_type.comp_tp }}"
+                                        {% if dim_type.comp_tp == model.comp_type.comp_tp %}selected{% endif %}>
+                                    {{ dim_type.comp_tp }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Өрсөлдөгчийн нэр</label>
+                        <input type="text" class="form-control" name="comp_name" id="id_comp_name" required
+                               value="{{ model.comp_name }}"/>
+                    </div>
+                    {#                <div class="form-group col-md-6">#}
+                    {#                    <label>Нөлөө: <span class="text-purple">*</span></label>#}
+                    {#                    <select name="consequences" id="id_consequences" class="form-control" required>#}
+                    {#                        <option value="">{{ consequences }}</option>#}
+                    {#                        <option value="True" {% if model.consequences %}selected{% endif %}>Сайн</option>#}
+                    {#                        <option value="False" {% if model.consequences == False %}selected{% endif %}>Муу</option>#}
+                    {#                    </select>#}
+                    {#                </div>#}
+                    <div class="form-group col-md-6">
+                        <label>Өрсөлдөгчийн зай /метер/ </label>
+                        <input type="text" class="form-control" name="comp_range_meter" id="id_comp_range_meter"
+                               maxlength="255"
+                               value="{{ model.comp_range_meter }}"/>
+                    </div>
+                    {#                <div class="form-group col-md-6">#}
+                    {#                    <label>Өрсөлдөгчийн байршилын бүс </label>#}
+                    {#                    <input type="text" class="form-control" name="comp_cluster" id="id_comp_cluster"#}
+                    {#                           maxlength="255"#}
+                    {#                           value="{{ model.comp_cluster }}"/>#}
+                    {#                </div>#}
+                    <div class="form-group col-md-6">
+                        <label>Өрсөлдөгчийн байршилын бүс</label>
+                        <select name="comp_cluster" id="id_comp_cluster" class="form-control">
+                            {% for dim_cluster in dim_clusters %}
+                                <option value="{{ dim_cluster.common_code }}"
+                                        {% if dim_cluster.common_code == model.comp_cluster.common_code %}selected{% endif %}>
+                                    {{ dim_cluster.common_code_name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Өрсөлдөгч хэзээ нээсэн огноо </label>
+                        <input type="date" class="form-control" name="comp_open_dt" id="id_comp_open_dt"
+                               maxlength="255"
+                               value="{{ model.comp_open_dt|date:"Y-m-d" }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Өрсөлдөгч хэвийн ажиллаж байгаа эсэх<span class="text-purple">*</span></label>
+                        <select name="comp_status" id="id_comp_status" class="form-control" required>
+                            <option value="">{{ comp_status }}</option>
+                            <option value="True" {% if model.comp_status %}selected{% endif %}>Yes</option>
+                            <option value="False" {% if model.comp_status == False %}selected{% endif %}>No</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Өрсөлдөгч хаасан бол хэзээ хаасан огноо</label>
+                        <input type="date" class="form-control" name="comp_close_dt" id="id_comp_close_dt"
+                               value="{{ model.comp_close_dt|date:"Y-m-d" }}"/>
+                    </div>
+                    {#                <div class="form-group col-md-6">#}
+                    {#                    <label>Өрсөлдөгчийн цагийн хуваарийн төрөл</label>#}
+                    {#                    <input type="text" class="form-control" name="comp_schedule_tp" id="id_comp_schedule_tp"#}
+                    {#                           maxlength="255"#}
+                    {#                           value="{{ model.comp_schedule_tp }}"/>#}
+                    {#                </div>#}
+                    <div class="form-group col-md-6">
+                        <label>Өрсөлдөгчийн цагийн хуваарийн төрөл<span class="text-purple">*</span></label>
+                        <select name="comp_schedule_tp" id="id_comp_schedule_tp" class="form-control">
+                            <option value="">{{ form.comp_schedule_tp.value|default_if_none:"Choose an option" }}</option>
+                            <option value="24H" {% if model.comp_schedule_tp == "24H" %}selected{% endif %}>24H</option>
+                            <option value="17H" {% if model.comp_schedule_tp == "17H" %}selected{% endif %}>17H</option>
+                            <option value="SPECIFIC" {% if model.comp_schedule_tp == "SPECIFIC" %}selected{% endif %}>
+                                SPECIFIC
                             </option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="form-group col-md-6">
-                    <label>Урсгалд нөлөөлөх өрсөлдөгч байгаа эсэх<span class="text-purple">*</span></label>
-                    <select name="comp_yn" id="id_comp_yn" class="form-control" required>
-                        <option value="">{{ comp_yn }}</option>
-                        <option value="True" {% if model.comp_yn %}selected{% endif %}>Yes</option>
-                        <option value="False" {% if model.comp_yn == False %}selected{% endif %}>No</option>
-                    </select>
-                </div>
-                {#                <div class="form-group col-md-6">#}
-                {#                    <label>Урсгалд нөлөөлөх өрсөлдөгч байгаа эсэх</label>#}
-                {#                    <input type="text" class="form-control" name="comp_yn" id="id_comp_yn" required#}
-                {#                           value="{{ model.comp_yn }}"/>#}
-                {#                </div>#}
-                {#                <div class="form-group col-md-6">#}
-                {#                    <label>Ангилал: </label>#}
-                {#                    <select name="activ_cat" id="id_activ_cat" class="form-control">#}
-                {#                        {% for category in categories %}#}
-                {#                            <option value="{{ category.activ_id }}"#}
-                {#                                    {% if category.activ_id == model.activ_cat.activ_id %}selected{% endif %}>#}
-                {#                                {{ category.activ_cat }}#}
-                {#                            </option>#}
-                {#                        {% endfor %}#}
-                {#                    </select>#}
-                {#                </div>#}
-                <div class="form-group col-md-6">
-                    <label>Өрсөлдөгчийн төрөл: </label>
-                    <select name="comp_type" id="id_comp_type" class="form-control">
-                        {% for dim_type in dim_types %}
-                            <option value="{{ dim_type.comp_type }}"
-                                    {% if dim_type.comp_type == model.comp_type.comp_type %}selected{% endif %}>
-                                {{ dim_type.comp_type }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="form-group col-md-6">
-                    <label>Өрсөлдөгчийн нэр</label>
-                    <input type="text" class="form-control" name="comp_name" id="id_comp_name" required
-                           value="{{ model.comp_name }}"/>
-                </div>
-                {#                <div class="form-group col-md-6">#}
-                {#                    <label>Нөлөө: <span class="text-purple">*</span></label>#}
-                {#                    <select name="consequences" id="id_consequences" class="form-control" required>#}
-                {#                        <option value="">{{ consequences }}</option>#}
-                {#                        <option value="True" {% if model.consequences %}selected{% endif %}>Сайн</option>#}
-                {#                        <option value="False" {% if model.consequences == False %}selected{% endif %}>Муу</option>#}
-                {#                    </select>#}
-                {#                </div>#}
-                <div class="form-group col-md-6">
-                    <label>Өрсөлдөгчийн зай /метер/ </label>
-                    <input type="text" class="form-control" name="comp_range_meter" id="id_comp_range_meter"
-                           maxlength="255"
-                           value="{{ model.comp_range_meter }}"/>
-                </div>
-                {#                <div class="form-group col-md-6">#}
-                {#                    <label>Өрсөлдөгчийн байршилын бүс </label>#}
-                {#                    <input type="text" class="form-control" name="comp_cluster" id="id_comp_cluster"#}
-                {#                           maxlength="255"#}
-                {#                           value="{{ model.comp_cluster }}"/>#}
-                {#                </div>#}
-                <div class="form-group col-md-6">
-                    <label>Өрсөлдөгчийн байршилын бүс</label>
-                    <select name="common_code_name" id="id_common_code_name" class="form-control">
-                        {% for dim_cluster in dim_clusters %}
-                            <option value="{{ dim_cluster.common_code_name }}"
-                                    {% if dim_cluster.common_code_name == model.comp_cluster.common_code_name %}selected{% endif %}>
-                                {{ dim_cluster.common_code_name }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="form-group col-md-6">
-                    <label>Өрсөлдөгч хэзээ нээсэн огноо </label>
-                    <input type="date" class="form-control" name="comp_open_dt" id="id_comp_open_dt"
-                           maxlength="255"
-                           value="{{ model.comp_open_dt|date:"Y-m-d" }}"/>
-                </div>
-                <div class="form-group col-md-6">
-                    <label>Өрсөлдөгч хэвийн ажиллаж байгаа эсэх<span class="text-purple">*</span></label>
-                    <select name="comp_status" id="id_comp_status" class="form-control" required>
-                        <option value="">{{ comp_status }}</option>
-                        <option value="True" {% if model.comp_status %}selected{% endif %}>Yes</option>
-                        <option value="False" {% if model.comp_status == False %}selected{% endif %}>No</option>
-                    </select>
-                </div>
-                <div class="form-group col-md-6">
-                    <label>Өрсөлдөгч хаасан бол хэзээ хаасан огноо</label>
-                    <input type="date" class="form-control" name="comp_close_dt" id="id_comp_close_dt"
-                           value="{{ model.comp_close_dt|date:"Y-m-d" }}"/>
-                </div>
-                {#                <div class="form-group col-md-6">#}
-                {#                    <label>Өрсөлдөгчийн цагийн хуваарийн төрөл</label>#}
-                {#                    <input type="text" class="form-control" name="comp_schedule_tp" id="id_comp_schedule_tp"#}
-                {#                           maxlength="255"#}
-                {#                           value="{{ model.comp_schedule_tp }}"/>#}
-                {#                </div>#}
-                <div class="form-group col-md-6">
-                    <label>Өрсөлдөгчийн цагийн хуваарийн төрөл<span class="text-purple">*</span></label>
-                    <select name="comp_schedule_tp" id="id_comp_schedule_tp" class="form-control">
-                        <option value="">{{ form.comp_schedule_tp.value|default_if_none:"Choose an option" }}</option>
-                        <option value="24H" {% if model.comp_schedule_tp == "24H" %}selected{% endif %}>24H</option>
-                        <option value="17H" {% if model.comp_schedule_tp == "17H" %}selected{% endif %}>17H</option>
-                        <option value="SPECIFIC" {% if model.comp_schedule_tp == "SPECIFIC" %}selected{% endif %}>
-                            SPECIFIC
-                        </option>
-                    </select>
-                </div>
-                <div class="form-group col-md-6">
-                    <label>Өрсөлдөгчийн цагийн хуваарь</label>
-                    <input type="time" class="form-control" name="comp_schedule_time" id="id_comp_schedule_time"
-                           value="{{ model.comp_schedule_time|time:'H:i:s' }}"/>
-                </div>
-                <div class="form-group col-md-6">
-                    <label>Өрсөлдөгчийн талбай</label>
-                    <input type="text" class="form-control" name="comp_size" id="id_comp_size"
-                           maxlength="255"
-                           value="{{ model.comp_size }}"/>
-                </div>
-                <div class="form-group col-md-6">
-                    <label>Өрсөлдөгчийн лангууны тоо</label>
-                    <input type="text" class="form-control" name="comp_shelf_qty" id="id_comp_shelf_qty"
-                           maxlength="255"
-                           value="{{ model.comp_shelf_qty }}"/>
-                </div>
-                <div class="form-group col-md-6">
-                    <label>Өрсөлдөгч архи зардаг эсэх<span class="text-purple">*</span></label>
-                    <select name="comp_alcohol" id="id_comp_alcohol" class="form-control" required>
-                        <option value="">{{ comp_alcohol }}</option>
-                        <option value="True" {% if model.comp_alcohol %}selected{% endif %}>Yes</option>
-                        <option value="False" {% if model.comp_alcohol == False %}selected{% endif %}>No</option>
-                    </select>
-                </div>
-                <div class="form-group col-md-6">
-                    <label>Өрсөлдөгч тамхи зардаг эсэх<span class="text-purple">*</span></label>
-                    <select name="comp_tabacco" id="id_comp_tabacco" class="form-control" required>
-                        <option value="">{{ comp_tabacco }}</option>
-                        <option value="True" {% if model.comp_tabacco %}selected{% endif %}>Yes</option>
-                        <option value="False" {% if model.comp_tabacco == False %}selected{% endif %}>No</option>
-                    </select>
-                </div>
-                <div class="form-group col-md-6">
-                    <label>Өрсөлдөгч хүргэлттэй эсэх<span class="text-purple">*</span></label>
-                    <select name="comp_delivery" id="id_comp_delivery" class="form-control" required>
-                        <option value="">{{ comp_delivery }}</option>
-                        <option value="True" {% if model.comp_delivery %}selected{% endif %}>Yes</option>
-                        <option value="False" {% if model.comp_delivery == False %}selected{% endif %}>No</option>
-                    </select>
-                </div>
-                <div class="form-group col-md-6">
-                    <label>Өрсөлдөгчийн давуу тал</label>
-                    <input type="text" class="form-control" name="comp_pros" id="id_comp_pros"
-                           maxlength="255"
-                           value="{{ model.comp_pros }}"/>
-                </div>
-                <div class="form-group col-md-6">
-                    <label>Өрсөлдөгчийн Уртраг</label>
-                    <input type="text" class="form-control" name="comp_long" id="id_comp_long"
-                           maxlength="255"
-                           value="{{ model.comp_long }}"/>
-                </div>
-                <div class="form-group col-md-6">
-                    <label>Өрсөлдөгчийн Өргөрөг</label>
-                    <input type="text" class="form-control" name="comp_latt" id="id_comp_latt"
-                           maxlength="255"
-                           value="{{ model.comp_latt }}"/>
-                </div>
-                <div class="form-group col-md-6">
-                    <a href="{% url 'comp_index' %}" class="btn btn-link text-purple-300">
-                        Cancel
-                    </a>
-                </div>
-                <div class="form-group col-md-6">
-                    <button type="submit" class="btn btn-success btn-lg">Save</button>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Өрсөлдөгчийн цагийн хуваарь</label>
+                        <input type="text" class="form-control" name="comp_schedule_time" id="id_comp_schedule_time"
+                               value="{{ model.comp_schedule_time|time:'H:i:s' }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Өрсөлдөгчийн талбай</label>
+                        <input type="text" class="form-control" name="comp_size" id="id_comp_size"
+                               maxlength="255"
+                               value="{{ model.comp_size }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Өрсөлдөгчийн лангууны тоо</label>
+                        <input type="text" class="form-control" name="comp_shelf_qty" id="id_comp_shelf_qty"
+                               maxlength="255"
+                               value="{{ model.comp_shelf_qty }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Өрсөлдөгч архи зардаг эсэх<span class="text-purple">*</span></label>
+                        <select name="comp_alcohol" id="id_comp_alcohol" class="form-control" required>
+                            <option value="">{{ comp_alcohol }}</option>
+                            <option value="True" {% if model.comp_alcohol %}selected{% endif %}>Yes</option>
+                            <option value="False" {% if model.comp_alcohol == False %}selected{% endif %}>No</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Өрсөлдөгч тамхи зардаг эсэх<span class="text-purple">*</span></label>
+                        <select name="comp_tabacco" id="id_comp_tabacco" class="form-control" required>
+                            <option value="">{{ comp_tabacco }}</option>
+                            <option value="True" {% if model.comp_tabacco %}selected{% endif %}>Yes</option>
+                            <option value="False" {% if model.comp_tabacco == False %}selected{% endif %}>No</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Өрсөлдөгч хүргэлттэй эсэх<span class="text-purple">*</span></label>
+                        <select name="comp_delivery" id="id_comp_delivery" class="form-control" required>
+                            <option value="">{{ comp_delivery }}</option>
+                            <option value="True" {% if model.comp_delivery %}selected{% endif %}>Yes</option>
+                            <option value="False" {% if model.comp_delivery == False %}selected{% endif %}>No</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Өрсөлдөгчийн давуу тал</label>
+                        <input type="text" class="form-control" name="comp_pros" id="id_comp_pros"
+                               maxlength="255"
+                               value="{{ model.comp_pros }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Өрсөлдөгчийн Уртраг</label>
+                        <input type="text" class="form-control" name="comp_long" id="id_comp_long"
+                               maxlength="255"
+                               value="{{ model.comp_long }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Өрсөлдөгчийн Өргөрөг</label>
+                        <input type="text" class="form-control" name="comp_latt" id="id_comp_latt"
+                               maxlength="255"
+                               value="{{ model.comp_latt }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <a href="{% url 'comp_index' %}" class="btn btn-link text-purple-300">
+                            Cancel
+                        </a>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <button type="submit" class="btn btn-success btn-lg">Save</button>
+                    </div>
                 </div>
             </div>
         </form>
@@ -219,6 +221,28 @@
                 $('#id_store_no').select2({
                     width: '100%',
                     placeholder: "Select a Store ID",
+                });
+
+                $('#id_comp_schedule_tp').change(function () {
+                    var scheduleType = $(this).val();
+
+                    switch (scheduleType) {
+                        case '24H':
+                            $('#id_comp_schedule_time').val('00:00-23:59');
+                            $('#id_comp_schedule_time').prop('readonly', true); // Makes the field read-only
+                            break;
+                        case '17H':
+                            $('#id_comp_schedule_time').val('07:00-00:00');
+                            $('#id_comp_schedule_time').prop('readonly', true); // Makes the field read-only
+                            break;
+                        case 'SPECIFIC':
+                            $('#id_comp_schedule_time').val(''); // Clears the field
+                            $('#id_comp_schedule_time').prop('readonly', false); // Makes the field editable
+                            break;
+                        default:
+                            $('#id_comp_schedule_time').val(''); // Clears the field if no valid option is selected
+                            $('#id_comp_schedule_time').prop('readonly', false); // Ensures field is editable
+                    }
                 });
 
                 $('#id_store_no').change(function () {
