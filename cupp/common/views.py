@@ -28,6 +28,12 @@ class Map(LoginRequiredMixin, g.TemplateView):
             return ['common/map.html']
         elif self.request.user.groups.filter(name='Store Consultant').exists():
             return ['store_consultant/show.html']
+        elif self.request.user.groups.filter(name='Store Consultant').exists():
+            return ['competitors/show.html']
+        elif self.request.user.groups.filter(name='Area').exists():
+            return ['competitors/show.html']
+        elif self.request.user.groups.filter(name='SC Direct').exists():
+            return ['competitors/show.html']
         elif self.request.user.groups.filter(name='Area').exists():
             return ['store_consultant/show.html']
         elif self.request.user.groups.filter(name='SC Direct').exists():
