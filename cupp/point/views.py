@@ -18,6 +18,10 @@ from django import template
 # from cupp.store_planning.models import StorePlanning
 
 
+def custom_404_view(request, exception):
+    return render(request, '404.html', status=404)
+
+
 class FormBase(GroupMixin):
     model = Point
     # st_model = StorePlanning

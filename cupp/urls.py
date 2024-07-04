@@ -118,6 +118,8 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+handler404 = 'cupp.point.views.custom_404_view'
+
 admin.site.site_title = 'PP Management'
 admin.site.site_header = 'PP Management'
 admin.site.index_title = 'Administration'

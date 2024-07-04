@@ -6,14 +6,6 @@ from cupp.store_trainer.models import StoreTrainer
 from cupp.point.models import Point, StorePlanning
 from cupp.master_api.serializers import CompositeStoreSerializer
 
-from django.shortcuts import render
-from django.http import HttpResponseNotFound
-
-
-def my_custom_page_not_found_view(request, exception=None):
-    context = {}
-    return render(request, '404.html', context, status=404)
-
 
 class StoreMasterAPI(APIView):
     def get(self, request, *args, **kwargs):
@@ -48,9 +40,9 @@ class StoreMasterAPI(APIView):
                 'branchAddress': store_planning.address_simple if store_trainer else None,
                 'branchName': store_consultant.store_name,
                 'branchOpeningDate': store_trainer.open_date if store_trainer else None,
-                'branchInChargeName': store_consultant.sc_name,
+                'branchInChargeEmail': store_consultant.sc_name,
                 'branchInChargePhone': '',
-                'areaManagerName': store_consultant.team_mgr,
+                'areaManagerEmail': store_consultant.team_mgr,
                 'areaManagerPhone': '',
                 'branchEmployees': employees_data,
                 'openTime': store_consultant.wday_hours,
