@@ -16,14 +16,13 @@ class StoreMasterAPI(APIView):
         data = []
 
         if not store_consultants.exists() and branch_no:
-            # If no consultants found for a specific branchNo, return a custom message
             return Response({'message': 'Store not found', 'success': False}, status=status.HTTP_404_NOT_FOUND)
 
         for store_consultant in store_consultants:
-            try:
-                store_planning = StorePlanning.objects.get(store_id=store_consultant.store_id)
-                store_trainer = StoreTrainer.objects.get(store_id=store_consultant.store_id)
-            except (StorePlanning.DoesNotExist, StoreTrainer.DoesNotExist):
+            store_plannings = StorePlanning.objects.filter(store_id=store_consultant.store_id)
+            store_trainer = StoreTrainer.objects.filter(store_id=store_consultant.store_id).first()
+
+            if not store_plannings.exists() or not store_trainer:
                 continue
 
             is_24h_open = store_consultant.tt_type == "24H" if store_consultant else False
@@ -34,29 +33,28 @@ class StoreMasterAPI(APIView):
                 'phone': store_consultant.sm_phone if store_consultant else "",
             }]
 
-            data.append({
-                'branchType': 'Direct',
-                'branchNo': store_consultant.store_id,
-                'branchAddress': store_planning.address_simple if store_trainer else None,
-                'branchName': store_consultant.store_name,
-                'branchOpeningDate': store_trainer.open_date if store_trainer else None,
-                'branchInChargeEmail': store_consultant.sc_name,
-                'branchInChargePhone': '',
-                'areaManagerEmail': store_consultant.team_mgr,
-                'areaManagerPhone': '',
-                'branchEmployees': employees_data,
-                'openTime': store_consultant.wday_hours,
-                'closeTime': store_consultant.wend_hours,
-                'roZone': store_planning.cluster if store_planning else '',
-                'is24Open': is_24h_open,
-                'closeDate': store_consultant.close_date,
-                'closedDescription': store_consultant.close_reason,
-            })
+            for store_planning in store_plannings:
+                data.append({
+                    'branchType': 'Direct',
+                    'branchNo': store_consultant.store_id,
+                    'branchAddress': store_planning.address_simple if store_planning else None,
+                    'branchName': store_consultant.store_name,
+                    'branchOpeningDate': store_trainer.open_date if store_trainer else None,
+                    'branchInChargeEmail': store_consultant.sc_name,
+                    'branchInChargePhone': '',
+                    'areaManagerEmail': store_consultant.team_mgr,
+                    'areaManagerPhone': '',
+                    'branchEmployees': employees_data,
+                    'openTime': store_consultant.wday_hours,
+                    'closeTime': store_consultant.wend_hours,
+                    'roZone': store_planning.cluster if store_planning else '',
+                    'is24Open': is_24h_open,
+                    'closeDate': store_consultant.close_date,
+                    'closedDescription': store_consultant.close_reason,
+                })
+
         if not data:
-            # Return a custom message if no data was added to the list
             return Response({'message': 'Store not found', 'success': False}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = CompositeStoreSerializer(data, many=True)
         return Response(serializer.data)
-
-# Ensure to import status from rest_framework
