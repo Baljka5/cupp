@@ -19,29 +19,29 @@ class Map(LoginRequiredMixin, g.TemplateView):
         if self.request.user.is_superuser:
             return [self.template_name]
         elif self.request.user.groups.filter(name='Event').exists():
-            return ['event/show.html']
+            return ['404.html']
         elif self.request.user.groups.filter(name='Store Trainer').exists():
-            return ['store_trainer/show.html']
+            return ['404.html']
         elif self.request.user.groups.filter(name='license').exists():
-            return ['license/show.html']
+            return ['404.html']
         elif self.request.user.groups.filter(name='Store planner').exists():
-            return ['common/map.html']
+            return ['404.html']
         elif self.request.user.groups.filter(name='Store Consultant').exists():
-            return ['store_consultant/show.html']
+            return ['404.html']
         elif self.request.user.groups.filter(name='Store Consultant').exists():
-            return ['competitors/show.html']
+            return ['404.html']
         elif self.request.user.groups.filter(name='Area').exists():
-            return ['competitors/show.html']
+            return ['404.html']
         elif self.request.user.groups.filter(name='SC Direct').exists():
-            return ['competitors/show.html']
+            return ['404.html']
         elif self.request.user.groups.filter(name='Area').exists():
-            return ['store_consultant/show.html']
+            return ['404.html']
         elif self.request.user.groups.filter(name='SC Direct').exists():
-            return ['store_consultant/show.html']
+            return ['404.html']
         elif self.request.user.groups.filter(name='Rent').exists():
-            return ['rent/show.html']
+            return ['404.html']
         elif self.request.user.groups.filter(name='ST Manager').exists():
-            return ['store_trainer/show.html']
+            return ['404.html']
         return [self.template_name]
 
     def get_context_data(self, **kwargs):

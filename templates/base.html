@@ -2,16 +2,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>PP Management</title>
     <link rel="shortcut icon" type="/static/images/favicon.png" href="/static/images/favicon.png"/>
-    {#    <link rel="stylesheet" type="text/css"#}
-    {#          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"/>#}
-    {#    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.0/css/jquery.dataTables.min.css"/>#}
-    {#    <!-- Stylesheets -->#}
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet"
           type="text/css">
     <link href="/static/css/icons/icomoon/styles.css" rel="stylesheet" type="text/css">
@@ -41,33 +36,14 @@
     <script src="/static/js/plugins/forms/styling/uniform.min.js"></script>
     <script src="/static/js/plugins/forms/selects/select2.min.js"></script>
     <script src="/static/js/plugins/media/fancybox.min.js"></script>
-    {#    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>#}
-    {#    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>#}
-    {#    <script src="https://cdn.datatables.net/1.12.0/js/jquery.dataTables.min.js"></script>#}
-    {#    <script>#}
-    {#        $(document).ready(function () {#}
-    {#            $('#bootstrapdatatable').DataTable({#}
-    {#                    "aLengthMenu": [[3, 5, 10, 25, -1], [3, 5, 10, 25, "All"]],#}
-    {#                    "iDisplayLength": 10#}
-    {#                }#}
-    {#            );#}
-    {#        });#}
-    {#    </script>#}
-
     <script src="/static/js/app.js"></script>
     <script src="/static/js/custom.js"></script>
     <!-- /theme JS files -->
 </head>
 
 <body class="navbar-top">
-
 <!-- Main navbar -->
 <div class="navbar navbar-expand-md navbar-dark bg-purple fixed-top">
-    {#    <div class="navbar-brand">#}
-    {#        <a href="{% url 'map' %}" class="d-inline-block">#}
-    {#            <img src="/static/images/logo.png" alt="xbook logo">#}
-    {#        </a>#}
-    {#    </div>#}
     <div class="navbar-brand">
         {% if user.is_authenticated %}
             {% is_in_event_group as user_in_event_group %}
@@ -121,33 +97,17 @@
 
     <div class="collapse navbar-collapse" id="navbar-mobile">
         {% if user.is_authenticated %}
-
             <ul class="navbar-nav ml-md-auto">
-                {#                {% is_in_store_consultant_group as user_in_store_consultant_group %}#}
-                {#                {% is_in_area_group as user_in_area_group %}#}
-                {#                {% is_in_sc_direct_group as user_in_sc_direct_group %}#}
-                {#                {% if user_in_store_consultant_group and user_in_area_group and user_in_sc_direct_group %}#}
-                {#                    <li>#}
-                {#                        <a href="{% url 'comp_index' %}" class="navbar-nav-link">#}
-                {#                            <i class="icon-warning mr-1"></i>#}
-                {#                            <span>Competitors</span>#}
-                {#                        </a>#}
-                {#                    </li>#}
-                {#                {% endif %}#}
                 {% is_in_store_consultant_group as user_in_store_consultant_group %}
-                {% if user_in_store_consultant_group %}
+                {% is_in_area_group as user_in_area_group %}
+                {% is_in_sc_direct_group as user_in_sc_direct_group %}
+                {% if user_in_store_consultant_group or user_in_area_group or user_in_sc_direct_group %}
                     <li>
                         <a href="{% url 'comp_index' %}" class="navbar-nav-link">
                             <i class="icon-warning mr-1"></i>
                             <span>Competitors</span>
                         </a>
                     </li>
-                {% endif %}
-                {% is_in_store_consultant_group as user_in_store_consultant_group %}
-                {% is_in_area_group as user_in_area_group %}
-                {% is_in_sc_direct_group as user_in_sc_direct_group %}
-                {% if user_in_store_consultant_group and user_in_area_group and user_in_sc_direct_group %}
-
                     <li>
                         <a href="{% url 'store-index' %}" class="navbar-nav-link">
                             <i class="icon-store mr-1"></i>
@@ -195,7 +155,6 @@
                 {% is_in_store_planner_group as user_in_store_planner_group %}
                 {% is_in_manager_group as user_in_manager_group %}
                 {% is_in_sp_director_group as user_in_sp_director_group %}
-
                 {% if user_in_store_planner_group or user_in_manager_group or user_in_sp_director_group %}
                     <li class="nav-item">
                         <a href="{% url 'map' %}" class="navbar-nav-link">
@@ -223,7 +182,6 @@
                             <span>SC & Store Allocation</span>
                         </a>
                     </li>
-
                 {% endif %}
                 <li class="nav-item">
                     <a href="{% url 'password_change' %}" class="navbar-nav-link">
@@ -258,6 +216,5 @@
     </div>
 </div>
 <!-- /page content -->
-
 </body>
 </html>

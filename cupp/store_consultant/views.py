@@ -172,6 +172,7 @@ def save_consultant_stores(request):
     try:
         data = json.loads(request.body)
         store_allocations = data.get('storeAllocations', [])
+        print(store_allocations)
 
         results = []
         with transaction.atomic():

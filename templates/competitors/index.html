@@ -150,23 +150,28 @@
                 });
                 $('#id_comp_schedule_tp').change(function () {
                     var scheduleType = $(this).val();
+                    var timeInput = $('#id_comp_schedule_time');
 
                     switch (scheduleType) {
                         case '24H':
-                            $('#id_comp_schedule_time').val('00:00-23:59');
-                            $('#id_comp_schedule_time').prop('readonly', true); // Makes the field read-only
+                            timeInput.val('00:00-23:59').prop('readonly', true);
                             break;
                         case '17H':
-                            $('#id_comp_schedule_time').val('07:00-00:00');
-                            $('#id_comp_schedule_time').prop('readonly', true); // Makes the field read-only
+                            timeInput.val('07:00-00:00').prop('readonly', true);
                             break;
                         case 'SPECIFIC':
-                            $('#id_comp_schedule_time').val(''); // Clears the field
-                            $('#id_comp_schedule_time').prop('readonly', false); // Makes the field editable
+                            timeInput.val('').prop('readonly', false);
                             break;
                         default:
-                            $('#id_comp_schedule_time').val(''); // Clears the field if no valid option is selected
-                            $('#id_comp_schedule_time').prop('readonly', false); // Ensures field is editable
+                            timeInput.val('').prop('readonly', false);
+                    }
+                });
+
+                $('#id_comp_schedule_time').on('change', function () {
+                    var timePattern = /^\d{2}:\d{2}-\d{2}:\d{2}$/;
+                    if (!timePattern.test($(this).val()) && $('#id_comp_schedule_tp').val() === 'SPECIFIC') {
+                        alert("Please enter time in XX:XX-XX:XX format.");
+                        $(this).val('');
                     }
                 });
 
@@ -185,14 +190,13 @@
                         $('#type_form').submit();
                     })
 
-                    $('#id_comp_open_dt, #id_comp_close_dt').daterangepicker({
-                        singleDatePicker: true,
-                        applyClass: 'bg-purple btn-sm',
-                        cancelClass: 'btn-light btn-sm',
-                        locale: {
-                            format: 'YYYY/MM/DD'
-                        }
-                    });
+                    {#$('#id_comp_open_dt, #id_comp_close_dt').daterangepicker({#}
+                    {#    singleDatePicker: true,#}
+                    {#    applyClass: 'bg-purple btn-sm',#}
+                    {#    cancelClass: 'btn-light btn-sm',#}
+                    {#    locale: {#}
+                    {#        format: 'YYYY/MM/DD'#}
+                    {#    } });#}
 
                     renderPPFileds();
                 });
