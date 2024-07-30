@@ -28,8 +28,6 @@ class Map(LoginRequiredMixin, g.TemplateView):
             return ['404.html']
         elif self.request.user.groups.filter(name='Store Consultant').exists():
             return ['404.html']
-        elif self.request.user.groups.filter(name='Store Consultant').exists():
-            return ['404.html']
         elif self.request.user.groups.filter(name='Area').exists():
             return ['404.html']
         elif self.request.user.groups.filter(name='SC Direct').exists():
