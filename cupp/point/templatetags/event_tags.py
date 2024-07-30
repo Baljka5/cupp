@@ -29,7 +29,7 @@ def is_in_event_group(context):
 @register.simple_tag(takes_context=True)
 def is_in_store_planner_group(context):
     request = context['request']
-    return request.user.groups.filter(name='Store Planner').exists() or request.user.is_superuser
+    return request.user.groups.filter(name='Store planner').exists() or request.user.is_superuser
 
 
 @register.simple_tag(takes_context=True)
