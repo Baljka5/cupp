@@ -19,27 +19,29 @@ class Map(LoginRequiredMixin, g.TemplateView):
         if self.request.user.is_superuser:
             return [self.template_name]
         elif self.request.user.groups.filter(name='Event').exists():
-            return ['404.html']
+            return ['event/show.html']
         elif self.request.user.groups.filter(name='Store Trainer').exists():
-            return ['404.html']
+            return ['store_trainer/show.html']
         elif self.request.user.groups.filter(name='license').exists():
-            return ['404.html']
+            return ['license/show.html']
         elif self.request.user.groups.filter(name='Store planner').exists():
-            return ['404.html']
+            return ['common/map.html']
         elif self.request.user.groups.filter(name='Store Consultant').exists():
-            return ['404.html']
+            return ['store_consultant/show.html']
+        elif self.request.user.groups.filter(name='Store Consultant').exists():
+            return ['competitors/show.html']
         elif self.request.user.groups.filter(name='Area').exists():
-            return ['404.html']
+            return ['competitors/show.html']
         elif self.request.user.groups.filter(name='SC Direct').exists():
-            return ['404.html']
+            return ['competitors/show.html']
         elif self.request.user.groups.filter(name='Area').exists():
-            return ['404.html']
+            return ['store_consultant/show.html']
         elif self.request.user.groups.filter(name='SC Direct').exists():
-            return ['404.html']
+            return ['store_consultant/show.html']
         elif self.request.user.groups.filter(name='Rent').exists():
-            return ['404.html']
+            return ['rent/show.html']
         elif self.request.user.groups.filter(name='ST Manager').exists():
-            return ['404.html']
+            return ['store_trainer/show.html']
         return [self.template_name]
 
     def get_context_data(self, **kwargs):
