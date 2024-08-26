@@ -38,7 +38,7 @@ class StoreDailyLog(m.Model):
     date = m.DateField()
     store_no = m.CharField(max_length=5, validators=[five_digit_validator])
     store_name = m.CharField(max_length=255)
-    activ_desc = m.TextField()
+    activ_desc = m.TextField(null=True, blank=True)
     activ_cat = m.ForeignKey('ActionCategory', on_delete=m.CASCADE)
     resp_action = m.TextField(null=True, blank=True)
     action_owner = m.ForeignKey('ActionOwner', on_delete=m.CASCADE)

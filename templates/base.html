@@ -88,14 +88,14 @@
         {% endif %}
     </div>
 
-    <div class="d-md-none">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-mobile"
-                aria-expanded="true">
-            <i class="icon-menu"></i>
-        </button>
-    </div>
+{#    <div class="d-md-none">#}
+{#        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-mobile"#}
+{#                aria-expanded="true">#}
+{#            <i class="icon-menu"></i>#}
+{#        </button>#}
+{#    </div>#}
 
-    <div class="collapse navbar-collapse" id="navbar-mobile">
+    <div class="collapse navbar-collapse">
         {% if user.is_authenticated %}
             <ul class="navbar-nav ml-md-auto">
                 {% is_in_store_consultant_group as user_in_store_consultant_group %}

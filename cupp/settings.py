@@ -80,7 +80,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'cupp.common.middleware.OneSessionPerUserMiddleware',
+    # 'cupp.common.middleware.OneSessionPerUserMiddleware',
     'cupp.common.middleware.AutoLogout'
 ]
 
@@ -120,7 +120,7 @@ DATABASES = {
 
 # Login
 
-SESSION_COOKIE_AGE = 900
+SESSION_COOKIE_AGE = 3600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 LOGIN_URL = '/'

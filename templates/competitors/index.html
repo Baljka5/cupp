@@ -10,9 +10,7 @@
             {% csrf_token %}
 
             <div class="row">
-
                 <div class="container">
-
                     <div class="col-12">
                         <h3>Enter Details</h3>
                     </div>
@@ -32,13 +30,11 @@
                                     <option value="{{ store_id }}" data-name="{{ store_name }}">{{ store_id }}</option>
                                 {% endfor %}
                             </select>
-
                         </div>
                         <div class="form-group col-md-6">
                             <label>Дэлгүүрийн нэр: <span class="text-purple">*</span></label>
                             <input id="id_store_name" class="form-control" name="store_name" readonly type="text">
                         </div>
-
                         <div class="form-group col-md-6">
                             <label>Урсгалд нөлөөлөх өрсөлдөгч байгаа эсэх <span class="text-purple">*</span> </label>
                             {% render_field form.comp_yn class+="form-control" %}
@@ -47,82 +43,79 @@
                             <label>Өрсөлдөгчийн төрөл <span class="text-purple">*</span></label>
                             {% render_field form.comp_type class+="form-control" %}
                         </div>
-                        <div class="form-group col-md-6">
-                            <label>Өрсөлдөгчийн нэр <span class="text-purple">*</span></label>
-                            {% render_field form.comp_name class+="form-control" %}
+                        <div id="comp-gs25-cu-details" class="col-12">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Өрсөлдөгчийн нэр <span class="text-purple">*</span></label>
+                                    {% render_field form.comp_name class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Өрсөлдөгчийн зай /метер/ </label>
+                                    {% render_field form.comp_range_meter class+="form-control" %}
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group col-md-6">
-                            <label>Өрсөлдөгчийн зай /метер/ </label>
-                            {% render_field form.comp_range_meter class+="form-control" %}
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label>Өрсөлдөгчийн байршилын бүс <span class="text-purple">*</span></label>
-                            {% render_field form.comp_cluster class+="form-control" %}
-                        </div>
-
-                        <div class="form-group col-md-6">
-                            <label>Өрсөлдөгч хэзээ нээсэн огноо </label>
-                            {% render_field form.comp_open_dt class+="form-control" %}
-                        </div>
-
-                        <div class="form-group col-md-6">
-                            <label>Өрсөлдөгч хэвийн ажиллаж байгаа эсэх <span class="text-purple">*</span></label>
-                            {% render_field form.comp_status class+="form-control" %}
-                        </div>
-
-                        <div class="form-group col-md-6">
-                            <label>Өрсөлдөгч хаасан бол хэзээ хаасан огноо </label>
-                            {% render_field form.comp_close_dt class+="form-control" %}
-                        </div>
-
-                        <div class="form-group col-md-6">
-                            <label>Өрсөлдөгчийн цагийн хуваарийн төрөл <span class="text-purple">*</span></label>
-                            {% render_field form.comp_schedule_tp class+="form-control" %}
-                        </div>
-
-                        <div class="form-group col-md-6">
-                            <label>Өрсөлдөгчийн цагийн хуваарь <span class="text-purple">*</span></label>
-                            {% render_field form.comp_schedule_time class+="form-control" %}
-                        </div>
-
-                        <div class="form-group col-md-6">
-                            <label>Өрсөлдөгчийн талбай </label>
-                            {% render_field form.comp_size class+="form-control" %}
-                        </div>
-
-                        <div class="form-group col-md-6">
-                            <label>Өрсөлдөгчийн лангууны тоо </label>
-                            {% render_field form.comp_shelf_qty class+="form-control" %}
-                        </div>
-
-                        <div class="form-group col-md-6">
-                            <label>Өрсөлдөгч архи зардаг эсэх <span class="text-purple">*</span></label>
-                            {% render_field form.comp_alcohol class+="form-control" %}
-                        </div>
-
-                        <div class="form-group col-md-6">
-                            <label>Өрсөлдөгч тамхи зардаг эсэх <span class="text-purple">*</span></label>
-                            {% render_field form.comp_tabacco class+="form-control" %}
-                        </div>
-
-                        <div class="form-group col-md-6">
-                            <label>Өрсөлдөгч хүргэлттэй эсэх <span class="text-purple">*</span></label>
-                            {% render_field form.comp_delivery class+="form-control" %}
-                        </div>
-
-                        <div class="form-group col-md-6">
-                            <label>Өрсөлдөгчийн давуу тал </label>
-                            {% render_field form.comp_pros class+="form-control" %}
-                        </div>
-
-                        <div class="form-group col-md-6">
-                            <label>Өрсөлдөгчийн Уртраг </label>
-                            {% render_field form.comp_long class+="form-control" %}
-                        </div>
-
-                        <div class="form-group col-md-6">
-                            <label>Өрсөлдөгчийн Өргөрөг </label>
-                            {% render_field form.comp_latt class+="form-control" %}
+                        <div id="comp-details" class="col-12">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Өрсөлдөгчийн байршилын бүс <span class="text-purple">*</span></label>
+                                    {% render_field form.comp_cluster class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Өрсөлдөгч хэзээ нээсэн огноо </label>
+                                    {% render_field form.comp_open_dt class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Өрсөлдөгч хэвийн ажиллаж байгаа эсэх <span
+                                            class="text-purple">*</span></label>
+                                    {% render_field form.comp_status class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Өрсөлдөгч хаасан бол хэзээ хаасан огноо </label>
+                                    {% render_field form.comp_close_dt class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Өрсөлдөгчийн цагийн хуваарийн төрөл <span
+                                            class="text-purple">*</span></label>
+                                    {% render_field form.comp_schedule_tp class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Өрсөлдөгчийн цагийн хуваарь <span class="text-purple">*</span></label>
+                                    {% render_field form.comp_schedule_time class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Өрсөлдөгчийн талбай </label>
+                                    {% render_field form.comp_size class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Өрсөлдөгчийн лангууны тоо </label>
+                                    {% render_field form.comp_shelf_qty class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Өрсөлдөгч архи зардаг эсэх <span class="text-purple">*</span></label>
+                                    {% render_field form.comp_alcohol class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Өрсөлдөгч тамхи зардаг эсэх <span class="text-purple">*</span></label>
+                                    {% render_field form.comp_tabacco class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Өрсөлдөгч хүргэлттэй эсэх <span class="text-purple">*</span></label>
+                                    {% render_field form.comp_delivery class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Өрсөлдөгчийн давуу тал </label>
+                                    {% render_field form.comp_pros class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Өрсөлдөгчийн Уртраг </label>
+                                    {% render_field form.comp_long class+="form-control" %}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Өрсөлдөгчийн Өргөрөг </label>
+                                    {% render_field form.comp_latt class+="form-control" %}
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="mb-3">
@@ -135,7 +128,6 @@
                             </div>
                         {% endif %}
                     </div>
-
                 </div>
             </div>
         </form>
@@ -148,6 +140,18 @@
                     width: '100%',
                     placeholder: "Select a Store ID",
                 });
+
+                $('#id_comp_type').change(function () {
+                    var compType = $(this).val();
+                    if (compType === 'GS25' || compType === 'CU') {
+                        $('#comp-details').show();
+                        $('#comp-gs25-cu-details').show();
+                    } else {
+                        $('#comp-details').hide();
+                        $('#comp-gs25-cu-details').show();
+                    }
+                }).trigger('change'); // Trigger change event on page load to set the correct state
+
                 $('#id_comp_schedule_tp').change(function () {
                     var scheduleType = $(this).val();
                     var timeInput = $('#id_comp_schedule_time');
@@ -188,22 +192,11 @@
                         evt.preventDefault()
                         $('#type_form').append('<input type="hidden" name="next" value="new">');
                         $('#type_form').submit();
-                    })
-
-                    {#$('#id_comp_open_dt, #id_comp_close_dt').daterangepicker({#}
-                    {#    singleDatePicker: true,#}
-                    {#    applyClass: 'bg-purple btn-sm',#}
-                    {#    cancelClass: 'btn-light btn-sm',#}
-                    {#    locale: {#}
-                    {#        format: 'YYYY/MM/DD'#}
-                    {#    } });#}
+                    });
 
                     renderPPFileds();
                 });
             });
-
-
         </script>
-
-
-    </div>{% endblock %}
+    </div>
+{% endblock %}
