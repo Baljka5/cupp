@@ -12,6 +12,8 @@ from django.conf import settings
 from uuid import uuid4
 from django.utils import timezone
 
+from cupp.point.models import District, City
+
 
 class DimensionTable(m.Model):
     lic_id = m.CharField('License type', blank=False, default='', max_length=50)
@@ -42,6 +44,14 @@ class MainTable(models.Model):
     alc_closetime = models.TimeField('Time to sell out alchohol', null=True, default=timezone.now, blank=True)
     lic_sqrm = models.DecimalField('Licensed area', max_digits=5, decimal_places=1, null=True, blank=True)
     camera_cnt = models.IntegerField('Total number of cameras', default=0, blank=True, null=True)
+
+    alc_type = models.CharField('Type of Alcohol', null=True, blank=True, max_length=10)
+    lic_type = models.CharField('Type of License', null=True, blank=True, max_length=10)
+    link_path = models.URLField('Link to License Document', blank=True, null=True)
+    district = models.ForeignKey(District, on_delete=models.CASCADE, verbose_name='Licensed District', null=True)
+    lic_status = models.BooleanField('License Status', null=True, blank=True)
+    lic_duration = models.IntegerField('Total Duration of License', null=True, blank=True, default=0)
+
     created_date = models.DateTimeField('Created date', auto_now_add=True, null=True)
     modified_date = models.DateTimeField('Modified date', auto_now=True, null=True)
     modified_by = models.ForeignKey(User, verbose_name='Modified by', related_name='str_license_modified',

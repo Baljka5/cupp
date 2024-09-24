@@ -5,7 +5,7 @@ from django.http import JsonResponse
 
 from .forms import StoreDailyLogForm
 from django.views import generic as g
-from .models import StoreDailyLog, ActionCategory, ActionOwner
+from .models import StoreDailyLog, ActionCategory, ActionOwner, User
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from cupp.store_trainer.models import StoreTrainer
@@ -15,6 +15,11 @@ from cupp.point.models import Point
 @login_required
 def event_addnew(request):
     store_id_to_name = {event.store_id: event.store_name for event in StoreTrainer.objects.all()}
+    action_categories = ActionCategory.objects.all()
+
+    if request.user.groups.filter(name='license').exists():
+        action_categories = action_categories.filter(activ_id__in=['A2', 'A4', 'A1'])
+
     if request.method == "POST":
         form = StoreDailyLogForm(request.POST)
         if form.is_valid():
@@ -42,6 +47,7 @@ def event_addnew(request):
                     messages.error(request, f"{field}: {error}")
     else:
         form = StoreDailyLogForm()
+        form.fields['activ_cat'].queryset = action_categories
     return render(request, 'event/event_index.html', {'form': form, 'store_id_to_name': store_id_to_name})
 
 
@@ -75,6 +81,10 @@ def index(request):
     if activ_cat_query:
         query &= Q(activ_cat__activ_cat__icontains=activ_cat_query)
 
+    if request.user.groups.filter(name='license').exists():
+        license_users = User.objects.filter(groups__name='license')
+        query &= Q(created_by__in=license_users)
+
     if sort:
         if order == 'asc':
             sort_field = sort
@@ -90,7 +100,8 @@ def index(request):
     page_obj = paginator.get_page(page_number)
 
     return render(request, "event/show.html",
-                  {'page_obj': page_obj, 'store_no_query': store_no_query, 'activ_cat_query': activ_cat_query})
+                  {'page_obj': page_obj, 'store_no_query': store_no_query, 'activ_cat_query': activ_cat_query,
+                   'sort': sort, 'order': order})
 
 
 # def index(request):

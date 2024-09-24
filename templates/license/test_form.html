@@ -106,6 +106,31 @@
                         <label>Лицензийн код: </label>
                         {% render_field form.lic_no class+="form-control" %}
                     </div>
+                    <div class="form-group col-md-6 liquor-time">
+                        <label>Архины төрөл: <span class="text-purple">*</span></label>
+                        {% render_field form.alc_type class+="form-control" id='id_alc_type' %}
+                    </div>
+                    <div class="form-group col-md-6 liquor-time">
+                        <label>Зөвшөөрлийн төрөл: <span class="text-purple">*</span></label>
+                        {% render_field form.lic_type class+="form-control" id='id_lic_type' %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Зөвшөөрөл байршиж буй холбоос /sharepoint холбоос/: <span
+                                class="text-purple">*</span></label>
+                        {% render_field form.link_path class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6 liquor-time">
+                        <label>Лиценз авсан /Хот, Дүүрэг, Аймаг/: <span class="text-purple">*</span></label>
+                        {% render_field form.district class+="form-control" id='id_district' %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Лицензын төлөв: <span class="text-purple">*</span></label>
+                        {% render_field form.lic_status class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Зөвшөөрлийн нийт хугацаа: <span class="text-purple">*</span></label>
+                        {% render_field form.lic_duration class+="form-control" %}
+                    </div>
 
 
                     <div class="mb-3">
@@ -134,11 +159,11 @@
                     if (licType === '02') {
                         // Show the fields
                         $('.liquor-time').show();
-                        $('#id_alc_opentime, #id_alc_closetime').prop('required', true);
+                        $('#id_alc_opentime, #id_alc_closetime, #id_alc_type, #id_lic_type').prop('required', true);
                     } else {
                         // Hide the fields and clear any selected values if not type '02'
                         $('.liquor-time').hide();
-                        $('#id_alc_opentime, #id_alc_closetime').prop('required', false).val('');
+                        $('#id_alc_opentime, #id_alc_closetime, #id_alc_type, #id_lic_type').prop('required', false).val('');
                     }
                     if (licType === '07') {
                         $('.camera-count').show();

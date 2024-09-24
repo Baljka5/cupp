@@ -14,9 +14,9 @@ class StoreCompetitors(m.Model):
     comp_range_meter = m.FloatField('Өрсөлдөгчийн манай дэлгүүрээс ойролцоогоор хэдэн метерт', blank=True, null=True,
                                     default=0)
     comp_cluster = m.ForeignKey('DimCluster', on_delete=m.CASCADE, blank=False, null=False)
-    comp_open_dt = m.DateField('Өрсөлдөгч хэзээ нээсэн', blank=True, null=True, default='')
+    comp_open_dt = m.DateField('Өрсөлдөгч хэзээ нээсэн', blank=True, null=True, default=None)
     comp_status = m.BooleanField('Өрсөлдөгч хэвийн ажиллаж байгаа', blank=True, null=True)
-    comp_close_dt = m.DateField('Өрсөлдөгч хаасан бол хэзээ хаасан', blank=True, null=True, default='')
+    comp_close_dt = m.DateField('Өрсөлдөгч хаасан бол хэзээ хаасан', blank=True, null=True, default=None)
     comp_schedule_tp = m.CharField('Өрсөлдөгчийн цагийн хуваарийн төрөл', blank=True, null=True, max_length=10)
     comp_schedule_time = m.CharField("Өрсөлдөгчийн цагийн хуваарь", null=True, blank=True, max_length=11)
     comp_size = m.FloatField("Өрсөлдөгчийн талбай", blank=True, null=True, default=0)

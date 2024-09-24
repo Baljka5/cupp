@@ -88,12 +88,12 @@
         {% endif %}
     </div>
 
-{#    <div class="d-md-none">#}
-{#        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-mobile"#}
-{#                aria-expanded="true">#}
-{#            <i class="icon-menu"></i>#}
-{#        </button>#}
-{#    </div>#}
+    {#    <div class="d-md-none">#}
+    {#        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-mobile"#}
+    {#                aria-expanded="true">#}
+    {#            <i class="icon-menu"></i>#}
+    {#        </button>#}
+    {#    </div>#}
 
     <div class="collapse navbar-collapse">
         {% if user.is_authenticated %}
@@ -135,16 +135,15 @@
                     </li>
                 {% endif %}
                 {% is_in_event_group as user_in_event_group %}
-                {% if user_in_event_group %}
+                {% is_in_license_group as user_in_license_group %}
+                {% if user_in_event_group or user_in_license_group %}
                     <li>
                         <a href="{% url 'event_index' %}" class="navbar-nav-link">
                             <i class="icon-calendar mr-1"></i>
                             <span>Daily Log</span>
                         </a>
                     </li>
-                {% endif %}
-                {% is_in_license_group as user_in_license_group %}
-                {% if user_in_license_group %}
+
                     <li class="nav-item">
                         <a href="{% url 'index' %}" class="navbar-nav-link">
                             <i class="icon-add mr-1"></i>
