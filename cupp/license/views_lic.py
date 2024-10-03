@@ -4,6 +4,7 @@ from django.http import JsonResponse
 
 from .forms import MainTableForm
 from .models import MainTable, DimensionTable
+from cupp.point.models import District
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views import generic as g
@@ -70,7 +71,8 @@ def index(request):
 def edit(request, id):
     model = MainTable.objects.get(id=id)
     types = DimensionTable.objects.all()
-    return render(request, 'license/edit.html', {'model': model, 'types': types})
+    districts = District.objects.all()
+    return render(request, 'license/edit.html', {'model': model, 'types': types, 'districts': districts})
 
 
 def update(request, id):
@@ -88,6 +90,7 @@ def destroy(request, id):
     model.delete()
     return redirect("/register-license")
 
+
 class LicenseView(g.TemplateView):
     template_name = 'base.html'
 
@@ -97,4 +100,3 @@ class LicenseView(g.TemplateView):
         # Add in the is_event_member variable
         context['is_event_member'] = self.request.user.groups.filter(name='license').exists()
         return context
-

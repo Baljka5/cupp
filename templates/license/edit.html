@@ -70,8 +70,8 @@
                     <label>Архи зарж эхлэх цаг: </label>
                     <input type="time" id="id_alc_opentime" name="alc_opentime" class="form-control"
                            value="{{ model.alc_opentime|time:'H:i' }}">
-{#                    <input type="time" id="id_alc_opentime" name="alc_opentime" class="form-control"#}
-{#                           value="{{ model.alc_opentime }}">#}
+                    {#                    <input type="time" id="id_alc_opentime" name="alc_opentime" class="form-control"#}
+                    {#                           value="{{ model.alc_opentime }}">#}
                 </div>
                 <div class="form-group col-md-6 liquor-time">
                     <label>Архи зарж дуусах цаг:</label>
@@ -104,6 +104,52 @@
                     <label>Лицензийн код:</label>
                     <input type="text" class="form-control" name="lic_no" id="id_lic_no"
                            maxlength="255" value="{{ model.lic_no }}"/>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Архины төрөл:</label>
+                    <select name="alc_type" id="id_alc_type" class="form-control">
+                        <option value="">--------</option>
+                        <option value="high" {% if model.alc_type == "high" %}selected{% endif %}>High</option>
+                        <option value="low" {% if model.alc_type == "low" %}selected{% endif %}>Low</option>
+                        <option value="both" {% if model.alc_type == "both" %}selected{% endif %}>Both</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Зөвшөөрлийн төрөл:</label>
+                    <select name="lic_type" id="id_lic_type" class="form-control">
+                        <option value="">--------</option>
+                        <option value="24H" {% if model.lic_type == "24H" %}selected{% endif %}>24H</option>
+                        <option value="17H" {% if model.lic_type == "17H" %}selected{% endif %}>17H</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Зөвшөөрөл байршиж буй холбоос /sharepoint холбоос/:</label>
+                    <input type="url" class="form-control" name="link_path" id="id_link_path"
+                           value="{{ model.link_path }}">
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Лиценз авсан /Хот, Дүүрэг, Аймаг/:</label>
+                    <select name="district" id="id_district" class="form-control">
+                        {% for district in districts %}
+                            <option value="{{ district.id }}"
+                                    {% if model.district and model.district.id == district.id %}selected{% endif %}>
+                                {{ district.district_name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Лицензын төлөв:</label>
+                    <select name="lic_status" id="id_lic_status" class="form-control">
+                        <option value="">--------</option>
+                        <option value="True" {% if model.lic_status %}selected{% endif %}>Active</option>
+                        <option value="False" {% if not model.lic_status %}selected{% endif %}>Inactive</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Зөвшөөрлийн нийт хугацаа:</label>
+                    <input type="number" class="form-control" name="lic_duration" id="id_lic_duration"
+                           value="{{ model.lic_duration }}">
                 </div>
                 <div class="form-group col-md-6">
                     <a href="{% url 'index' %}" class="btn btn-link text-purple-300">

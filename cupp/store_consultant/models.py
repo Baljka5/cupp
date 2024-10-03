@@ -78,6 +78,8 @@ class StoreConsultant(m.Model):
     garbage_transport = m.IntegerField('Хогоо сардаа хэд ачуулдаг вэ?', blank=True, null=True, default=0)
     water_tank = m.BooleanField('Зөөврийн устай эсэх', blank=True, null=True)
 
+    use_yn = m.BooleanField('Use yn', blank=True, null=True, default=0)
+
     created_date = m.DateTimeField('Created date', auto_now_add=True, null=True)
     modified_date = m.DateTimeField('Modified date', auto_now=True, null=True)
     created_by = m.ForeignKey(User, verbose_name='Created by', related_name='store_consultant_created',
