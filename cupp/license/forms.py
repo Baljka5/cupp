@@ -13,6 +13,7 @@ class MainTableForm(f.ModelForm):
                              widget=f.Select(attrs={'class': 'form-control'}))
     lic_type = f.ChoiceField(choices=[('', '---------'), ('24H', '24H'), ('17H', '17H')],
                              widget=f.Select(attrs={'class': 'form-control'}))
+    # link_path = f.URLField(widget=f.URLInput(attrs={'class': 'form-control'}))
     link_path = f.URLField(required=False, widget=f.URLInput(attrs={'class': 'form-control'}))
     lic_duration = f.IntegerField(widget=f.NumberInput(attrs={'class': 'form-control'}))
 
@@ -35,7 +36,11 @@ class MainTableForm(f.ModelForm):
 
 class DisputeForm(f.ModelForm):
     date = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
-    close_date = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
+    close_date = f.DateField(
+        input_formats=settings.DATE_INPUT_FORMATS,
+        required=False,
+        widget=f.DateInput(attrs={'class': 'form-control'}, format='%Y-%m-%d')
+    )
     disp_desc = f.CharField(widget=f.Textarea(attrs={'class': 'form-control'}))
     dmg_amt = f.FloatField(widget=f.NumberInput(attrs={'class': 'form-control'}))
     supp_link = f.URLField(widget=f.URLInput(attrs={'class': 'form-control'}))
@@ -44,17 +49,17 @@ class DisputeForm(f.ModelForm):
                  ('ЗӨРЧИЛ', 'ЗӨРЧИЛ'), ('БУСАД', 'БУСАД')],
         widget=f.Select(attrs={'class': 'form-control'})
     )
+    STATUS_CHOICE = [
+        ('', '---------'),
+        (True, 'Хаагдсан'),
+        (False, 'Нээлттэй'),
+    ]
+
+    disp_status = f.ChoiceField(choices=STATUS_CHOICE, widget=f.Select(attrs={'class': 'form-control'}),
+                                required=True)
 
     store_no = f.CharField(widget=f.TextInput(attrs={'class': 'form-control'}), required=True)
     store_name = f.CharField(widget=f.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}), required=True)
-
-    disp_owner = f.ModelChoiceField(
-        queryset=ActionOwner.objects.all(),
-        label="Хариуцсан алба нэгж",
-        empty_label="-------",
-        to_field_name='own_dep',
-        widget=f.Select(attrs={'class': 'form-control'})
-    )
 
     class Meta:
         model = DisputeTable

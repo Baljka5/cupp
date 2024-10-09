@@ -191,7 +191,8 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label>Хэрэг шийдэгдсэн өдөр:</label>
-                            {% render_field dispute_form.close_date class+="form-control" id="id_close_date" %}
+                            <input type="url" class="form-control" name="link_path" id="id_link_path"
+                                   value="{{ dispute_form.link_path.value|default_if_none:'' }}">
                         </div>
                         <div class="form-group col-md-6">
                             <label>Холбогдох баримт бичгийн холбоос:</label>

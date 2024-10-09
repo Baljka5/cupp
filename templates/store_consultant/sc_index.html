@@ -229,19 +229,19 @@
                                     </select>
                                 </div>
 
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-6">
                                     <label>Архины зөвшөөрөл: </label>
                                     <input type="text" class="form-control" name="alc_reason" id="id_alc_reason"
                                            readonly
                                            value="{{ model.alc_reason }}"/>
                                 </div>
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-6">
                                     <label>Тамхины зөвшөөрөл: </label>
                                     <input type="text" class="form-control" name="ciga_reason"
                                            id="id_ciga_reason" readonly
                                            value="{{ model.ciga_reason }}"/>
                                 </div>
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-6">
                                     <label>24 цаг ажиллахгүй байгаа шалтгаан: </label>
                                     <input type="text" class="form-control" name="reason_not_24"
                                            id="id_reason_not_24" readonly
@@ -313,6 +313,10 @@
                                            readonly
                                            value="{{ model.lunch_case_L8 }}"/>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
                                 <div class="form-group col-md-3">
                                     <label>Дэлгүүр агуулахтай эсэх: <span class="text-purple">*</span></label>
                                     <select name="war_yn" id="id_war_yn" class="form-control" disabled>
@@ -666,6 +670,7 @@
                         </div>
 
                     </div>
+                    <br>
                     <div class="card-footer bg-transparent border-top-0 pt-0">
                         <div align="right">
                             <a href="{% url 'store-index' %}" class="btn btn-link text-purple-300">

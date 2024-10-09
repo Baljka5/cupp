@@ -72,9 +72,6 @@ def addnew(request):
     })
 
 
-
-
-
 # def index(request):
 #     models = MainTable.objects.all()
 #     return render(request, "license/show.html", {'models': models})
@@ -105,26 +102,66 @@ def index(request):
     })
 
 
+@login_required
 def edit(request, id):
-    model = MainTable.objects.get(id=id)
-    dispute_table = DisputeTable.objects.get(id=id)
+    model = get_object_or_404(MainTable, id=id)
+    try:
+        dispute_table = DisputeTable.objects.get(id=id)
+    except DisputeTable.DoesNotExist:
+        dispute_table = None  # Handle this scenario appropriately
+
     types = DimensionTable.objects.all()
     districts = District.objects.all()
-    owners = ActionOwner.objects.all()
+    owners = ActionOwner.objects.all()  # Ensure this retrieves the correct data
     store_id_to_name = {dispute.store_id: dispute.store_name for dispute in StoreTrainer.objects.all()}
-    return render(request, 'license/edit.html',
-                  {'model': model, 'types': types, 'districts': districts, 'dispute_table': dispute_table,
-                   'store_id_to_name': store_id_to_name, 'owners': owners})
+
+    context = {
+        'model': model,
+        'types': types,
+        'districts': districts,
+        'dispute_table': dispute_table,
+        'store_id_to_name': store_id_to_name,
+        'owners': owners  # Pass this to the template for use in the form
+    }
+    return render(request, 'license/edit.html', context)
 
 
+
+@login_required
 def update(request, id):
-    model = MainTable.objects.get(id=id)
-    types = DimensionTable.objects.all()
-    form = MainTableForm(request.POST, instance=model)
-    if form.is_valid():
-        form.save()
-        return redirect("/register-license")
-    return render(request, 'license/edit.html', {'model': model, 'types': types})
+    model = get_object_or_404(MainTable, id=id)
+    dispute_model = get_object_or_404(DisputeTable, id=id)
+
+    form = MainTableForm(request.POST or None, instance=model)
+    dispute_form = DisputeForm(request.POST or None, instance=dispute_model)
+
+    if request.method == 'POST':
+        # Check if the License update button was clicked
+        if 'license_update' in request.POST:
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'License update successful.')
+                return redirect("/register-license")
+            else:
+                messages.error(request, 'There were errors in the license form. Please correct them.')
+
+        # Check if the Dispute update button was clicked
+        elif 'dispute_update' in request.POST:
+            if dispute_form.is_valid():
+                dispute_form.save()
+                messages.success(request, 'Dispute update successful.')
+                return redirect("/register-license")
+            else:
+                # Log and display errors in the dispute form
+                print(dispute_form.errors)  # This will log form errors in the console
+                messages.error(request, 'There were errors in the dispute form. Please correct them.')
+
+    return render(request, 'license/edit.html', {
+        'form': form,
+        'dispute_form': dispute_form,
+        'model': model,
+        'dispute_model': dispute_model
+    })
 
 
 def destroy(request, id, table):
