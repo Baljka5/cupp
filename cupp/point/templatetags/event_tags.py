@@ -67,10 +67,17 @@ def is_in_sc_direct_group(context):
     request = context['request']
     return request.user.groups.filter(name='SC Director').exists() or request.user.is_superuser
 
+
 @register.simple_tag(takes_context=True)
 def is_in_st_manager_group(context):
     request = context['request']
     return request.user.groups.filter(name='ST Manager').exists() or request.user.is_superuser
+
+
+@register.simple_tag(takes_context=True)
+def is_in_legal_team_group(context):
+    request = context['request']
+    return request.user.groups.filter(name='legal_team').exists() or request.user.is_superuser
 
 
 @login_required

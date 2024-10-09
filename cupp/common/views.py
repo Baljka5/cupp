@@ -24,6 +24,8 @@ class Map(LoginRequiredMixin, g.TemplateView):
             return ['store_trainer/show.html']
         elif self.request.user.groups.filter(name='license').exists():
             return ['license/show.html']
+        elif self.request.user.groups.filter(name='legal_team').exists():
+            return ['license/show.html']
         elif self.request.user.groups.filter(name='Store planner').exists():
             return ['common/map.html']
         elif self.request.user.groups.filter(name='Store Consultant').exists():

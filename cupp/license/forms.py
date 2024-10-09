@@ -1,7 +1,8 @@
 from django import forms as f
 from django.conf import settings
-from .models import MainTable
+from .models import MainTable, DisputeTable
 from cupp.point.models import District, City
+from cupp.event.models import ActionOwner
 
 
 class MainTableForm(f.ModelForm):
@@ -30,3 +31,32 @@ class MainTableForm(f.ModelForm):
                    'lic_prov_name': f.TextInput(attrs={'class': 'form-control'}),
                    'lic_no': f.TextInput(attrs={'class': 'form-control'}),
                    }
+
+
+class DisputeForm(f.ModelForm):
+    date = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
+    close_date = f.DateField(input_formats=settings.DATE_INPUT_FORMATS)
+    disp_desc = f.CharField(widget=f.Textarea(attrs={'class': 'form-control'}))
+    dmg_amt = f.FloatField(widget=f.NumberInput(attrs={'class': 'form-control'}))
+    supp_link = f.URLField(widget=f.URLInput(attrs={'class': 'form-control'}))
+    disp_cat = f.ChoiceField(
+        choices=[('', '---------'), ('ТАНХАЙ', 'ТАНХАЙ'), ('ДЭЭРЭМ', 'ДЭЭРЭМ'), ('ХУЛГАЙ', 'ХУЛГАЙ'),
+                 ('ЗӨРЧИЛ', 'ЗӨРЧИЛ'), ('БУСАД', 'БУСАД')],
+        widget=f.Select(attrs={'class': 'form-control'})
+    )
+
+    store_no = f.CharField(widget=f.TextInput(attrs={'class': 'form-control'}), required=True)
+    store_name = f.CharField(widget=f.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}), required=True)
+
+    disp_owner = f.ModelChoiceField(
+        queryset=ActionOwner.objects.all(),
+        label="Хариуцсан алба нэгж",
+        empty_label="-------",
+        to_field_name='own_dep',
+        widget=f.Select(attrs={'class': 'form-control'})
+    )
+
+    class Meta:
+        model = DisputeTable
+        fields = ['date', 'store_no', 'store_name', 'disp_desc', 'disp_cat', 'dmg_amt', 'dmg_uom',
+                  'disp_status', 'disp_progress', 'disp_result', 'supp_link', 'disp_owner']

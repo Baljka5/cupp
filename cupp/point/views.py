@@ -262,6 +262,8 @@ def custom_login_redirect(request):
         return redirect('/log-index/')
     elif request.user.groups.filter(name='license').exists():
         return redirect('/register-license/')
+    elif request.user.groups.filter(name='legal_team').exists():
+        return redirect('/register-license/')
     elif request.user.groups.filter(name='Store planner').exists():
         return redirect('/map/')
     elif request.user.groups.filter(name='Manager').exists():
