@@ -67,7 +67,9 @@ INSTALLED_APPS = [
     'cupp.store_consultant',
     'cupp.store_planning',
     'cupp.rent',
-    'cupp.competitors'
+    'cupp.competitors',
+    'cupp.veritech_api',
+    'cupp.dispute'
 
 ]
 

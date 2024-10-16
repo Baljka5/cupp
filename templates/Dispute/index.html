@@ -6,7 +6,7 @@
 {% block content %}
     <div class="content">
         <form method="post" autocomplete="off" enctype="multipart/form-data" id="type_form" class="post-form"
-              action="/addnew">
+              action="/leg-add/">
             {% csrf_token %}
 
             <div class="row">
@@ -30,81 +30,62 @@
                     </div>
 
                     <div class="form-group col-md-6">
-                        <label>Store code: <span class="text-purple">*</span></label>
-                        {% render_field form.store_id class+="form-control" %}
+                        <label>Бодит үйл явдал болсон огноо:</label>
+                        {% render_field form.date class+="form-control" %}
                     </div>
-
                     <div class="form-group col-md-6">
-                        <label>Лицензийн төрөл: <span class="text-purple">*</span></label>
-                        <select id="id_lic_id" class="form-control" name="lic_id">
-                            <!-- Placeholder option -->
-                            <option value="" disabled selected>------</option>
-                            {% for lic_id, lic_id_nm in lic_id_to_name.items %}
-                                <option value="{{ lic_id }}" data-name="{{ lic_id_nm }}">{{ lic_id }}</option>
+                        <label>Дэлгүүрийн дугаар: <span class="text-purple">*</span></label>
+                        <select id="id_store_no" class="form-control" name="store_no">
+                            <option value="" disabled selected>Select Store ID</option>
+                            {% for store_id, store_name in store_id_to_name.items %}
+                                <option value="{{ store_id }}" data-name="{{ store_name }}">{{ store_id }}</option>
                             {% endfor %}
                         </select>
                     </div>
-
-                    {#                    <div class="form-group col-md-6">#}
-                    {#                        <label>Лицензийн төрөл: <span class="text-purple">*</span></label>#}
-                    {#                        <select id="id_lic_id" class="form-control" name="lic_id">#}
-                    {#                            {% for lic_id, lic_id_nm in lic_id_to_name.items %}#}
-                    {#                                <option value="{{ lic_id }}" data-name="{{ lic_id_nm }}">{{ lic_id }}</option>#}
-                    {#                            {% endfor %}#}
-                    {#                        </select>#}
-                    {#                    </div>#}
-
                     <div class="form-group col-md-6">
-                        <label>Лицензийн төрлийн нэр: <span class="text-purple">*</span></label>
-                        <input id="id_lic_id_nm" class="form-control" name="lic_id_nm" readonly type="text">
+                        <label>Дэлгүүрийн нэр: <span class="text-purple">*</span></label>
+                        <input id="id_store_name" class="form-control" name="store_name" readonly type="text">
                     </div>
                     <div class="form-group col-md-6">
-                        <label>Лицензтэй эсэх: <span class="text-purple">*</span></label>
-                        {% render_field form.lic_yn class+="form-control" %}
+                        <label>Болсон хэргийн талаар дэлгэрэнгүй мэдээлэл:</label>
+                        {% render_field form.disp_desc class+="form-control" %}
                     </div>
                     <div class="form-group col-md-6">
-                        <label>Лиценз авсан огноо: <span class="text-purple">*</span></label>
-                        {% render_field form.st_dt class+="form-control" %}
+                        <label>Хэргийн төрөл:</label>
+                        {% render_field form.disp_cat class+="form-control" %}
                     </div>
                     <div class="form-group col-md-6">
-                        <label>Лиценз дуусах огноо: <span class="text-purple">*</span></label>
-                        {% render_field form.ed_dt class+="form-control" %}
+                        <label>Хохирлын хэмжээ/ мөнгөн дүн:</label>
+                        {% render_field form.dmg_amt class+="form-control" %}
                     </div>
                     <div class="form-group col-md-6">
-                        <label>Лиценз авсан ажилтан: <span class="text-purple">*</span></label>
-                        {% render_field form.lic_owner class+="form-control" %}
-                    </div>
-                    <div class="form-group col-md-6 liquor-time" style="display: none;">
-                        <label>Архи зарж эхлэх цаг: <span class="text-purple">*</span></label>
-                        <input type="time" id="id_alc_opentime" name="alc_opentime" class="form-control"
-                               value="{{ form.alc_opentime.value|default_if_none:"" }}">
-                    </div>
-                    <div class="form-group col-md-6 liquor-time" style="display: none;">
-                        <label>Архи зарж дуусах цаг: <span class="text-purple">*</span></label>
-                        <input type="time" id="id_alc_closetime" name="alc_closetime" class="form-control"
-                               value="{{ form.alc_closetime.value|default_if_none:"" }}">
-                    </div>
-                    <div class="form-group col-md-6 camera-count" style="display: none;">
-                        <label>Камерын тоо: <span class="text-purple">*</span></label>
-                        <input type="number" id="id_camera_cnt" name="camera_cnt" class="form-control"
-                               value="{{ form.camera_cnt.value|default_if_none:"" }}">
-                    </div>
-                    <div class="form-group col-md-6 field-size" style="display: none;">
-                        <label>Талбайн хэмжээ: <span class="text-purple">*</span></label>
-                        <input type="number" id="id_lic_sqrm" name="lic_sqrm" class="form-control"
-                               value="{{ form.lic_sqrm.value|default_if_none:"" }}">
+                        <label>Хохирлын хэмжигдэхүүн:</label>
+                        {% render_field form.dmg_uom class+="form-control" %}
                     </div>
                     <div class="form-group col-md-6">
-                        <label>Лиценз олгосон газрын нэр ID: </label>
-                        {% render_field form.lic_prov_ID class+="form-control" %}
+                        <label>Хариуцсан алба нэгж:</label>
+                        {% render_field form.disp_owner class+="form-control" id='id_disp_owner' %}
                     </div>
                     <div class="form-group col-md-6">
-                        <label>Лиценз олгосон газар: </label>
-                        {% render_field form.lic_prov_name class+="form-control" %}
+                        <label>Хэргийн төлөв:</label>
+                        {% render_field form.disp_status class+="form-control" %}
                     </div>
                     <div class="form-group col-md-6">
-                        <label>Лицензийн код: </label>
-                        {% render_field form.lic_no class+="form-control" %}
+                        <label>Хэргийн явц:</label>
+                        {% render_field form.disp_progress class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Хэрэг шийдэгдсэн эсэх:</label>
+                        {% render_field form.disp_result class+="form-control" %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Хэрэг шийдэгдсэн өдөр:</label>
+                        <input type="url" class="form-control" name="link_path" id="id_link_path"
+                               value="{{ form.link_path.value|default_if_none:'' }}">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Холбогдох баримт бичгийн холбоос:</label>
+                        {% render_field form.supp_link class+="form-control" %}
                     </div>
 
 
@@ -178,19 +159,25 @@
                     }
                 });
 
-                {#$('#id_alc_opentime, #id_alc_closetime').timepicker({#}
-                {#    timeFormat: 'H:i',#}
-                {#    interval: 30,#}
-                {#    scrollDefault: 'now',#}
-                {#    dynamic: false,#}
-                {#    dropdown: true,#}
-                {#    scrollbar: true,#}
-                {#    change: function (time) {#}
-                {#        var element = $(this), text;#}
-                {#        var timepicker = element.timepicker();#}
-                {#        text = timepicker.format(time);#}
-                {#        element.siblings('.helper-text').text(text);#}
-                {#    }});#}
+                $('#id_date, #id_close_date').daterangepicker({
+                    singleDatePicker: true,
+                    applyClass: 'bg-purple btn-sm',
+                    cancelClass: 'btn-light btn-sm',
+                    locale: {
+                        format: 'YYYY/MM/DD'
+                    }
+                });
+                $('#id_store_no').select2({
+                    width: '100%',
+                    placeholder: "Select a Store ID",
+                });
+
+                // Update store_name when store_no is selected
+                $('#id_store_no').change(function () {
+                    var selectedName = $(this).find('option:selected').data('name');
+                    $('#id_store_name').val(selectedName);
+                    $('#id_store_name').prop('readonly', true);
+                });
             });
         </script>
 

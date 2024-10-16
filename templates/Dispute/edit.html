@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block header %}
+{% endblock %}
+{% block content %}
+    <div class="col-md-12">
+        <form method="POST" class="post-form" action="{% url 'leg-update' model.id %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="container">
+                <div class="col-12">
+                    <h3>Update Details</h3>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Дугаар: </label>
+                    <input type="text" class="form-control" name="id" id="id_id" required readonly
+                           value="{{ model.id }}"/>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Бодит үйл явдал болсон огноо:</label>
+                    <input type="date" class="form-control" name="date" id="id_date"
+                           value="{{ model.date|date:"Y-m-d" }}"/>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Дэлгүүрийн дугаар: <span class="text-purple">*</span></label>
+                    <select id="id_store_no" class="form-control" name="store_no">
+                        {% for store_id, store_name in store_id_to_name.items %}
+                            <option value="{{ store_id }}" data-name="{{ store_name }}"
+                                    {% if model.store_no == store_id %}selected{% endif %}>
+                                {{ store_id }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Дэлгүүрийн нэр: <span class="text-purple">*</span></label>
+                    <input id="id_store_name" value="{{ model.store_name }}" class="form-control"
+                           name="store_name"
+                           readonly type="text">
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Болсон хэргийн талаар дэлгэрэнгүй мэдээлэл: </label>
+                    <input type="text" class="form-control" name="disp_desc" id="id_disp_desc" required
+                           value="{{ model.disp_desc }}"/>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Хэргийн төрөл: <span class="text-purple">*</span></label>
+                    <select name="disp_cat" id="id_disp_cat" class="form-control" required>
+                        <option value="">{{ form.disp_cat.value|default_if_none:"Choose an option" }}</option>
+                        <option value="ТАНХАЙ"
+                                {% if model.disp_cat == "ТАНХАЙ" %}selected{% endif %}>
+                            ТАНХАЙ
+                        </option>
+                        <option value="ДЭЭРЭМ"
+                                {% if model.disp_cat == "ДЭЭРЭМ" %}selected{% endif %}>
+                            ДЭЭРЭМ
+                        </option>
+                        <option value="ХУЛГАЙ"
+                                {% if model.disp_cat == "ХУЛГАЙ" %}selected{% endif %}>
+                            ХУЛГАЙ
+                        </option>
+                        <option value="ЗӨРЧИЛ"
+                                {% if model.disp_cat == "ЗӨРЧИЛ" %}selected{% endif %}>
+                            ЗӨРЧИЛ
+                        </option>
+                        <option value="БУСАД" {% if model.disp_cat == "БУСАД" %}selected{% endif %}>
+                            БУСАД
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Хохирлын хэмжээ/ мөнгөн дүн: </label>
+                    <input type="number" class="form-control" name="dmg_amt" id="id_dmg_amt" required
+                           value="{{ model.dmg_amt }}"/>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Хохирлын хэмжигдэхүүн: </label>
+                    <input type="text" class="form-control" name="dmg_uom" id="id_dmg_uom" required
+                           value="{{ model.dmg_uom }}"/>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Хариуцагч: </label>
+                    <select name="disp_owner" id="id_disp_owner" class="form-control">
+                        {% for owner in owners %}
+                            <option value="{{ owner.own_id }}"
+                                    {% if dispute_table and dispute_table.disp_owner.id == owner.id %}selected{% endif %}>
+                                {{ owner.own_pos }} - {{ owner.own_dep }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label>Хэргийн төлөв: <span class="text-purple">*</span></label>
+                    <select name="disp_status" id="id_disp_status" class="form-control" required>
+                        <option value="">{{ disp_status }}</option>
+                        <option value="False" {% if model.disp_status %}selected{% endif %}>Нээлттэй
+                        </option>
+                        <option value="True" {% if model.disp_status == False %}selected{% endif %}>
+                            Хаагдсан
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Хэргийн явц: </label>
+                    <input type="text" class="form-control" name="disp_progress" id="id_disp_progress"
+                           required
+                           value="{{ model.disp_progress }}"/>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Хэрэг шийдэгдсэн эсэх: <span class="text-purple">*</span></label>
+                    <select name="disp_result" id="id_disp_result" class="form-control" required>
+                        <option value="">{{ model.disp_result }}</option>
+                        <option value="True" {% if model.disp_result %}selected{% endif %}>Тийм
+                        </option>
+                        <option value="False"
+                                {% if model.disp_result == False %}selected{% endif %}>
+                            Үгүй
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Хэрэг шийдэгдсэн өдөр:</label>
+                    <input type="url" class="form-control" name="link_path" id="id_link_path"
+                           value="{{ form.link_path.value|default_if_none:'' }}">
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Холбогдох баримт бичгийн холбоос:</label>
+                    <input type="url" class="form-control" name="supp_link" id="id_supp_link"
+                           value="{{ model.supp_link }}">
+                </div>
+                <div class="form-group col-md-6">
+                    <a href="{% url 'index' %}" class="btn btn-link text-purple-300">
+                        Cancel
+                    </a>
+                </div>
+                <div class="form-group col-md-6">
+                    <button type="submit" class="btn btn-success btn-lg">Update</button>
+                </div>
+            </div>
+        </form>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.js"></script>
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.css"/>
+        <script>
+            $(document).ready(function () {
+                $('#id_store_no').select2({
+                    width: '100%',
+                    placeholder: "Select a Store ID",
+                });
+
+                $('#id_store_no').change(function () {
+                    var selectedName = $(this).find('option:selected').attr('data-name');
+                    $('#id_store_name').val(selectedName);
+                    $('#id_store_name').prop('readonly', true);
+                });
+
+
+                $('#id_date').daterangepicker({
+                    singleDatePicker: true,
+                    applyClass: 'bg-purple btn-sm',
+                    cancelClass: 'btn-light btn-sm',
+                    locale: {
+                        format: 'YYYY/MM/DD'
+                    }
+                });
+            });
+        </script>
+    </div>{% endblock content %}

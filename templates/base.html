@@ -138,7 +138,8 @@
                 {% is_in_license_group as user_in_license_group %}
                 {% is_in_legal_team_group as user_in_legal_team_group %}
 
-                {% if user_in_event_group or user_in_license_group %}
+
+                {% if user_in_event_group %}
                     <li>
                         <a href="{% url 'event_index' %}" class="navbar-nav-link">
                             <i class="icon-calendar mr-1"></i>
@@ -148,6 +149,21 @@
                 {% endif %}
 
                 {% if user_in_legal_team_group %}
+                    <!-- Show both License and Dispute for legal team group -->
+                    <li class="nav-item">
+                        <a href="{% url 'index' %}" class="navbar-nav-link">
+                            <i class="icon-add mr-1"></i>
+                            <span>License</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'leg-index' %}" class="navbar-nav-link">
+                            <i class="icon-add mr-1"></i>
+                            <span>Dispute</span>
+                        </a>
+                    </li>
+                {% elif user_in_license_group %}
+                    <!-- Show only License for license group -->
                     <li class="nav-item">
                         <a href="{% url 'index' %}" class="navbar-nav-link">
                             <i class="icon-add mr-1"></i>

@@ -31,10 +31,14 @@ from cupp.store_consultant import views as sc_views
 from cupp.store_trainer import views as st_views
 from cupp.competitors import views as comp_views
 from cupp.master_api.views import StoreMasterAPI
+from cupp.veritech_api.views import save_employee_data
+from cupp.dispute import views as leg_views
 
 # from cupp.ajax_table_list import ajax_table_list
 
 urlpatterns = [
+
+    path('save/', save_employee_data, name='save_employee_data'),
 
     path('api/storemaster/', StoreMasterAPI.as_view(), name='storemaster-api'),
 
@@ -48,6 +52,12 @@ urlpatterns = [
     path('groups/', point_views.display_groups, name='display-groups'),
     path('', point_views.index, name='event_index'),
     # path('register-license/', license_views.MainTableCreateView, name='register_license'),
+
+    path('leg-index/', leg_views.index, name='leg-index'),
+    path('leg-add/', leg_views.leg_add, name='leg-add'),
+    path('leg-edit/<int:id>', leg_views.edit, name='leg-edit'),
+    path('leg-update/<int:id>', leg_views.update, name='leg-update'),
+    path('leg-delete/<int:id>', leg_views.destroy, name='leg-delete'),
 
     path('sc-index/', sc_views.scIndex, name='sc-index'),
     path('store-index/', sc_views.index, name='store-index'),
@@ -91,7 +101,8 @@ urlpatterns = [
     path('addnew', license_views.addnew, name='addnew'),
     path('lic-edit/<int:id>', license_views.edit, name='lic-edit'),
     path('lic-update/<int:id>', license_views.update, name='lic-update'),
-    path('lic-delete/<int:id>/<str:table>/', license_views.destroy, name='lic-delete'),
+    # path('lic-delete/<int:id>/<str:table>/', license_views.destroy, name='lic-delete'),
+    path('lic-delete/<int:id>', license_views.destroy, name='lic-delete'),
 
     path('map/', common_views.Map.as_view(), name='map'),
     path('my-settings/', common_views.MySettings.as_view(), name='my_settings'),
