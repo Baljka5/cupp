@@ -71,9 +71,25 @@
                                 <td>{{ model.dmg_amt }}</td>
                                 <td>{{ model.dmg_uom }}</td>
                                 <td>{{ model.disp_owner }}</td>
-                                <td>{{ model.disp_status }}</td>
+                                <td>
+                                    {% if model.disp_status is True %}
+                                        Хаагдсан
+                                    {% elif model.disp_status is False %}
+                                        Нээлттэй
+                                    {% else %}
+                                        None
+                                    {% endif %}
+                                </td>
                                 <td>{{ model.disp_progress }}</td>
-                                <td>{{ model.disp_result }}</td>
+                            <td>
+                                    {% if model.disp_result is True %}
+                                        Yes
+                                    {% elif model.disp_result is False %}
+                                        No
+                                    {% else %}
+                                        None
+                                    {% endif %}
+                                </td>
                                 <td>{{ model.close_date }}</td>
                                 <td><a href="{{ model.supp_link }}">Document</a></td>
                                 <td><a href="/leg-edit/{{ model.id }}" class="btn btn-primary">Edit</a>

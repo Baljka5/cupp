@@ -1,139 +1,202 @@
-import json
 import requests
-from django.http import JsonResponse
-from .models import Employee, EmployeeAddress, EmployeeBank, EmployeeWorkExperience, EmployeeFamily
+from django.utils.dateparse import parse_date
+from django.shortcuts import render
+from .models import General, Address, Bank, Experience, Education, Attitude, Family, Skills
 from django.views.decorators.csrf import csrf_exempt
 
 
 @csrf_exempt
-def save_employee_data(request):
-    if request.method == 'POST':
-        # Assuming data is sent as a JSON body
-        data = json.loads(request.body.decode('utf-8'))
+def fetch_and_save_employee_data(request):
+    url = "http://10.10.90.22:8080/erp-services/RestWS/runJson"
+    headers = {'Content-Type': 'application/json'}
 
-        for key, employee_data in data.items():
-            # Create or get the employee object
-            employee, created = Employee.objects.update_or_create(
-                employee_id=employee_data['employeeid'],
-                defaults={
-                    'gender': employee_data.get('gender'),
-                    'employee_code': employee_data.get('employeecode'),
-                    'origin_name': employee_data.get('originname', ''),
-                    'urag': employee_data.get('urag', ''),
-                    'first_name': employee_data['firstname'],
-                    'last_name': employee_data['lastname'],
-                    'state_reg_number': employee_data['stateregnumber'],
-                    'date_of_birth': employee_data['dateofbirth'],
-                    'employee_phone': employee_data['employeephone'],
-                    'post_address': employee_data.get('postaddress', ''),
-                    'education_level': employee_data.get('educationlevel', ''),
-                    'marital_status': employee_data.get('maritalstatus', ''),
-                    'no_of_family_members': employee_data.get('nooffamilymember', None),
-                    'no_of_children': employee_data.get('noofchildren', None),
-                    'department_name': employee_data['departmentname'],
-                    'position_name': employee_data['positionname'],
-                    'insured_type_name': employee_data['insuredtypename'],
-                }
-            )
-
-            # Saving employee addresses
-            if 'empaddress' in employee_data:
-                for _, address_data in employee_data['empaddress'].items():
-                    EmployeeAddress.objects.update_or_create(
-                        employee=employee,
-                        address_type_name=address_data['addresstypename'],
-                        defaults={
-                            'city_name': address_data['cityname'],
-                            'district_name': address_data['districtname'],
-                            'street_name': address_data['streetname'],
-                            'address': address_data['address'],
-                        }
-                    )
-
-            # Saving employee bank details
-            if 'empbank' in employee_data:
-                for _, bank_data in employee_data['empbank'].items():
-                    EmployeeBank.objects.update_or_create(
-                        employee=employee,
-                        bank_name=bank_data['bankname'],
-                        defaults={'bank_account_number': bank_data['bankaccountnumber']}
-                    )
-
-            # Saving work experience
-            if 'empworkexp' in employee_data:
-                for _, workexp_data in employee_data['empworkexp'].items():
-                    EmployeeWorkExperience.objects.update_or_create(
-                        employee=employee,
-                        organization_name=workexp_data['organizationname'],
-                        defaults={
-                            'department_name': workexp_data['departmentname'],
-                            'position_name': workexp_data['positionname'],
-                            'start_date': workexp_data['startdate'],
-                            'end_date': workexp_data.get('enddate', None),
-                        }
-                    )
-
-            # Saving family members
-            if 'empfamily' in employee_data:
-                for _, family_data in employee_data['empfamily'].items():
-                    EmployeeFamily.objects.update_or_create(
-                        employee=employee,
-                        relationship_name=family_data['relationshipname'],
-                        defaults={
-                            'first_name': family_data['firstname'],
-                            'last_name': family_data['lastname'],
-                            'birth_date': family_data['birthdate'],
-                            'mobile': family_data['mobile'],
-                            'work_name': family_data.get('workname', '')
-                        }
-                    )
-
-        # After saving the employee data, make the external POST request
-        url = "http://10.10.90.22:8080/erp-services/RestWS/runJson"
-        request_body = {
-            "request": {
-                "username": "cu_hr",
-                "password": "123",
-                "command": "cuHrEmpInfoDv_004V2",
-                "parameters": {
-                    "criteria": {
-                        "id": {
-                            "0": {
-                                "operator": "=",
-                                "operand": "1"
-                            }
+    payload = {
+        "request": {
+            "username": "cu_hr",
+            "password": "123",
+            "command": "cuHrEmpInfoDv_004V2",
+            "parameters": {
+                "criteria": {
+                    "id": {
+                        "0": {
+                            "operator": "=",
+                            "operand": "1"
                         }
                     }
                 }
             }
         }
+    }
 
-        try:
-            response = requests.post(url, json=request_body)
+    response = requests.post(url, json=payload, headers=headers)
 
-            # Check if the response status is OK (200) and contains content
-            if response.status_code == 200:
-                # Check if the response contains JSON data
-                try:
-                    response_data = response.json()
-                    return JsonResponse({
-                        'message': 'Data saved successfully and external API call succeeded.',
-                        'api_response': response_data
-                    })
-                except json.JSONDecodeError:
-                    return JsonResponse({
-                        'message': 'Data saved successfully, but external API returned invalid JSON.',
-                        'api_response': response.text  # Return raw response content for debugging
-                    }, status=500)
-            else:
-                return JsonResponse({
-                    'message': 'Data saved successfully, but external API call failed with status code: ' + str(
-                        response.status_code),
-                    'api_response': response.text  # Include the raw response for debugging
-                }, status=500)
+    if response.status_code == 200:
+        data = response.json()['response']['result']
+        # Save data for the first 10 employees (or fewer if not available)
+        employee_data = data.get('empinfo', {})
+        save_multiple_employees(employee_data)
 
-        except requests.exceptions.RequestException as e:
-            return JsonResponse({
-                'message': 'Data saved successfully, but external API call encountered an error.',
-                'error': str(e)
-            }, status=500)
+    return render(request, 'fetch_data.html', {})
+
+
+def save_multiple_employees(employee_data):
+    """
+    Save data for the first 10 employees (or fewer if not available).
+    """
+    for idx, employee in enumerate(employee_data.values()):
+        if idx >= 10:
+            break
+        save_data_to_db(employee)
+
+
+def save_data_to_db(data):
+    # Save General Data
+    general_info = General(
+        employeeid=data.get('employeeid', None),
+        gender=data.get('gender', None),
+        employeecode=data.get('employeecode', None),
+        originname=data.get('originname', None),
+        urag=data.get('urag', None),
+        firstname=data.get('firstname', None),
+        lastname=data.get('lastname', None),
+        stateregnumber=data.get('stateregnumber', None),
+        dateofbirth=parse_date_if_valid(data.get('dateofbirth', None)),
+        employeephone=data.get('employeephone', None),
+        postaddress=data.get('postaddress', None),
+        educationlevel=data.get('educationlevel', None),
+        maritalstatus=data.get('maritalstatus', None),
+        nooffamilymember=data.get('nooffamilymember', None),
+        noofchildren=data.get('noofchildren', None),
+        departmentname=data.get('departmentname', None),
+        positionname=data.get('positionname', None),
+        insuredtypename=data.get('insuredtypename', None)
+    )
+    general_info.save()
+
+    # Save Address Data
+    for i in range(int(data.get('empaddress_size', 0))):  # Use .get() to handle missing keys
+        address = data['empaddress'].get(str(i), {})
+        address_record = Address(
+            employeeid=address.get('employeeid', None),
+            addresstypename=address.get('addresstypename', None),
+            cityname=address.get('cityname', None),
+            districtname=address.get('districtname', None),
+            streetname=address.get('streetname', None),
+            address=address.get('address', None)
+        )
+        address_record.save()
+
+    # Save Bank Data
+    for i in range(int(data.get('empbank_size', 0))):
+        bank = data['empbank'].get(str(i), {})
+        bank_record = Bank(
+            employeeid=bank.get('employeeid', None),
+            bankname=bank.get('bankname', None),
+            bankaccountnumber=bank.get('bankaccountnumber', None)
+        )
+        bank_record.save()
+
+    # Save Experience Data
+    for i in range(int(data.get('empworkexp_size', 0))):
+        experience = data['empworkexp'].get(str(i), {})
+        experience_record = Experience(
+            employeeid=experience.get('employeeid', None),
+            organizationname=experience.get('organizationname', None),
+            departmentname=experience.get('departmentname', None),
+            positionname=experience.get('positionname', None),
+            startdate=parse_date_if_valid(experience.get('startdate', None)),
+            enddate=parse_date_if_valid(experience.get('enddate', None))
+        )
+        experience_record.save()
+
+    # Save Education Data
+    for i in range(int(data.get('empeducation_size', 0))):
+        education = data['empeducation'].get(str(i), {})
+        education_record = Education(
+            employeeid=education.get('employeeid', None),
+            edutype=education.get('edutype', None),
+            edulevel=education.get('edulevel', None),
+            startyearid=education.get('startyearid', None),
+            endyearid=education.get('endyearid', None),
+            countryname=education.get('countryname', None),
+            cityname=education.get('cityname', None),
+            schoolname=education.get('schoolname', None)
+        )
+        education_record.save()
+
+    # Save Attitude Data (Punishment and Reward)
+    for i in range(int(data.get('emppunishment_size', 0))):
+        punishment = data['emppunishment'].get(str(i), {})
+        attitude_record = Attitude(
+            employeeid=punishment.get('employeeid', None),
+            punishment=punishment.get('punishment', None),
+            punishmentdate=parse_date_if_valid(punishment.get('punishmentdate', None)),
+            punishmenttypeid=punishment.get('punishmenttypeid', None),
+            rectorshipnumber=punishment.get('rectorshipnumber', None)
+        )
+        attitude_record.save()
+
+    for i in range(int(data.get('empreward_size', 0))):
+        reward = data['empreward'].get(str(i), {})
+        attitude_record = Attitude(
+            employeeid=reward.get('employeeid', None),
+            rewardtypename=reward.get('rewardtypename', None),
+            rewardname=reward.get('rewardname', None),
+            rewarddate=parse_date_if_valid(reward.get('rewarddate', None)),
+            organizationname=reward.get('organizationname', None)
+        )
+        attitude_record.save()
+
+    # Save Family Data
+    for i in range(int(data.get('empfamily_size', 0))):
+        family = data['empfamily'].get(str(i), {})
+        family_record = Family(
+            employeeid=family.get('employeeid', None),
+            relationshipname=family.get('relationshipname', None),
+            firstname=family.get('firstname', None),
+            lastname=family.get('lastname', None),
+            birthdate=parse_date_if_valid(family.get('birthdate', None)),
+            mobile=family.get('mobile', None),
+            workname=family.get('workname', None)
+        )
+        family_record.save()
+
+    # Save Skills Data (Language, Talent, Skills, Hrmexam)
+    for i in range(int(data.get('emplanguage_size', 0))):
+        language = data['emplanguage'].get(str(i), {})
+        skills_record = Skills(
+            employeeid=language.get('employeeid', None),
+            skillname=language.get('skillname', None)
+        )
+        skills_record.save()
+
+    for i in range(int(data.get('emptalent_size', 0))):
+        talent = data['emptalent'].get(str(i), {})
+        skills_record = Skills(
+            employeeid=talent.get('employeeid', None),
+            skillname=talent.get('skillname', None)
+        )
+        skills_record.save()
+
+    for i in range(int(data.get('empskill_size', 0))):
+        skill = data['empskill'].get(str(i), {})
+        skills_record = Skills(
+            employeeid=skill.get('employeeid', None),
+            skillname=skill.get('skillname', None)
+        )
+        skills_record.save()
+
+    for i in range(int(data.get('hrmexam_size', 0))):
+        exam = data['hrmexam'].get(str(i), {})
+        skills_record = Skills(
+            employeeid=exam.get('employeeid', None),
+            examname=exam.get('examname', None)
+        )
+        skills_record.save()
+
+
+# Helper function to safely parse dates
+def parse_date_if_valid(date_string):
+    if date_string:
+        return parse_date(date_string)
+    return None

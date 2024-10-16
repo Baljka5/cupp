@@ -26,8 +26,12 @@ class DisputeForm(f.ModelForm):
         (False, 'Нээлттэй'),
     ]
 
-    disp_status = f.ChoiceField(choices=STATUS_CHOICE, widget=f.Select(attrs={'class': 'form-control'}),
-                                required=True)
+    disp_status = f.ChoiceField(
+        choices=STATUS_CHOICE,
+        widget=f.Select(attrs={'class': 'form-control'}),
+        initial=False,  # 'False' corresponds to 'Нээлттэй'
+        required=True
+    )
 
     store_no = f.CharField(widget=f.TextInput(attrs={'class': 'form-control'}), required=True)
     store_name = f.CharField(widget=f.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}), required=True)

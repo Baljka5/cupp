@@ -1,56 +1,93 @@
 from django.db import models
 
 
-class Employee(models.Model):
-    employee_id = models.CharField(max_length=50)
-    gender = models.CharField(max_length=50)
-    employee_code = models.CharField(max_length=50)
-    origin_name = models.CharField(max_length=100, blank=True)
-    urag = models.CharField(max_length=100, blank=True)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    state_reg_number = models.CharField(max_length=20)
-    date_of_birth = models.DateField()
-    employee_phone = models.CharField(max_length=20)
-    post_address = models.CharField(max_length=255, blank=True)
-    education_level = models.CharField(max_length=50, blank=True)
-    marital_status = models.CharField(max_length=50, blank=True)
-    no_of_family_members = models.IntegerField(null=True, blank=True)
-    no_of_children = models.IntegerField(null=True, blank=True)
-    department_name = models.CharField(max_length=255)
-    position_name = models.CharField(max_length=255)
-    insured_type_name = models.CharField(max_length=255)
+# General table
+class General(models.Model):
+    employeeid = models.CharField(max_length=20, null=True, blank=True)
+    gender = models.CharField(max_length=10, null=True, blank=True)
+    employeecode = models.CharField(max_length=10, null=True, blank=True)
+    originname = models.CharField(max_length=50, null=True, blank=True)
+    urag = models.CharField(max_length=50, null=True, blank=True)
+    firstname = models.CharField(max_length=50, null=True, blank=True)
+    lastname = models.CharField(max_length=50, null=True, blank=True)
+    stateregnumber = models.CharField(max_length=50, null=True, blank=True)
+    dateofbirth = models.DateField(null=True, blank=True)
+    employeephone = models.CharField(max_length=20, null=True, blank=True)
+    postaddress = models.EmailField(null=True, blank=True)
+    educationlevel = models.CharField(max_length=50, null=True, blank=True)
+    maritalstatus = models.CharField(max_length=50, null=True, blank=True)
+    nooffamilymember = models.IntegerField(null=True, blank=True)
+    noofchildren = models.IntegerField(null=True, blank=True)
+    departmentname = models.CharField(max_length=50, null=True, blank=True)
+    positionname = models.CharField(max_length=100, null=True, blank=True)
+    insuredtypename = models.CharField(max_length=100, null=True, blank=True)
 
 
-class EmployeeAddress(models.Model):
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='addresses')
-    address_type_name = models.CharField(max_length=255)
-    city_name = models.CharField(max_length=255)
-    district_name = models.CharField(max_length=255)
-    street_name = models.CharField(max_length=255)
-    address = models.CharField(max_length=255)
+# Address table
+class Address(models.Model):
+    employeeid = models.CharField(max_length=20, null=True, blank=True)
+    addresstypename = models.CharField(max_length=100, null=True, blank=True)
+    cityname = models.CharField(max_length=50, null=True, blank=True)
+    districtname = models.CharField(max_length=50, null=True, blank=True)
+    streetname = models.CharField(max_length=100, null=True, blank=True)
+    address = models.CharField(max_length=255, null=True, blank=True)
 
 
-class EmployeeBank(models.Model):
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='banks')
-    bank_name = models.CharField(max_length=255)
-    bank_account_number = models.CharField(max_length=50)
+# Bank table
+class Bank(models.Model):
+    employeeid = models.CharField(max_length=20, null=True, blank=True)
+    bankname = models.CharField(max_length=100, null=True, blank=True)
+    bankaccountnumber = models.CharField(max_length=50, null=True, blank=True)
 
 
-class EmployeeWorkExperience(models.Model):
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='work_experiences')
-    organization_name = models.CharField(max_length=255)
-    department_name = models.CharField(max_length=255)
-    position_name = models.CharField(max_length=255)
-    start_date = models.DateField()
-    end_date = models.DateField(null=True, blank=True)
+# Experience table
+class Experience(models.Model):
+    employeeid = models.CharField(max_length=20, null=True, blank=True)
+    organizationname = models.CharField(max_length=100, null=True, blank=True)
+    departmentname = models.CharField(max_length=100, null=True, blank=True)
+    positionname = models.CharField(max_length=100, null=True, blank=True)
+    startdate = models.DateField(null=True, blank=True)
+    enddate = models.DateField(null=True, blank=True)
 
 
-class EmployeeFamily(models.Model):
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='family_members')
-    relationship_name = models.CharField(max_length=100)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    birth_date = models.DateField()
-    mobile = models.CharField(max_length=20)
-    work_name = models.CharField(max_length=255, blank=True)
+# Education table
+class Education(models.Model):
+    employeeid = models.CharField(max_length=20, null=True, blank=True)
+    edutype = models.CharField(max_length=100, null=True, blank=True)
+    edulevel = models.CharField(max_length=100, null=True, blank=True)
+    startyearid = models.CharField(max_length=4, null=True, blank=True)
+    endyearid = models.CharField(max_length=4, null=True, blank=True)
+    countryname = models.CharField(max_length=50, null=True, blank=True)
+    cityname = models.CharField(max_length=50, null=True, blank=True)
+    schoolname = models.CharField(max_length=100, null=True, blank=True)
+
+
+# Attitude table for Punishment/Reward
+class Attitude(models.Model):
+    employeeid = models.CharField(max_length=20, null=True, blank=True)
+    punishment = models.CharField(max_length=100, null=True, blank=True)
+    punishmentdate = models.DateField(null=True, blank=True)
+    punishmenttypeid = models.CharField(max_length=100, null=True, blank=True)
+    rewardtypename = models.CharField(max_length=100, null=True, blank=True)
+    rewardname = models.CharField(max_length=100, null=True, blank=True)
+    rewarddate = models.DateField(null=True, blank=True)
+    organizationname = models.CharField(max_length=100, null=True, blank=True)
+    rectorshipnumber = models.CharField(max_length=100, null=True, blank=True)
+
+
+# Family table
+class Family(models.Model):
+    employeeid = models.CharField(max_length=20, null=True, blank=True)
+    relationshipname = models.CharField(max_length=50, null=True, blank=True)
+    firstname = models.CharField(max_length=50, null=True, blank=True)
+    lastname = models.CharField(max_length=50, null=True, blank=True)
+    birthdate = models.DateField(null=True, blank=True)
+    mobile = models.CharField(max_length=20, null=True, blank=True)
+    workname = models.CharField(max_length=100, null=True, blank=True)
+
+
+# Skills table for language, talent, skills, hrmexam
+class Skills(models.Model):
+    employeeid = models.CharField(max_length=20, null=True, blank=True)
+    skillname = models.CharField(max_length=100, null=True, blank=True)
+    examname = models.CharField(max_length=100, null=True, blank=True)
