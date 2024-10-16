@@ -47,15 +47,15 @@ def leg_add(request):
 
 def index(request):
     # Retrieve filter values from GET request
-    store_id_query = request.GET.get('store_id', '')
-    lic_id_nm_query = request.GET.get('lic_id_nm', '')
+    store_id_query = request.GET.get('store_no', '')
+    lic_id_nm_query = request.GET.get('disp_cat', '')
 
     # Build the query based on presence of filter values
     query = Q()
     if store_id_query:
-        query &= Q(store_id__icontains=store_id_query)
+        query &= Q(store_no__icontains=store_id_query)
     if lic_id_nm_query:
-        query &= Q(lic_id__lic_id_nm__icontains=lic_id_nm_query)
+        query &= Q(disp_cat__icontains=lic_id_nm_query)
 
     models = DisputeTable.objects.filter(query).distinct().order_by('id')
 
