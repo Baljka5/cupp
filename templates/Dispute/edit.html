@@ -41,8 +41,8 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label>Болсон хэргийн талаар дэлгэрэнгүй мэдээлэл: </label>
-                    <input type="text" class="form-control" name="disp_desc" id="id_disp_desc" required
-                           value="{{ model.disp_desc }}"/>
+                    <textarea class="form-control" name="disp_desc" id="id_disp_desc" required
+                              rows="5">{{ model.disp_desc }}</textarea>
                 </div>
                 <div class="form-group col-md-6">
                     <label>Хэргийн төрөл: <span class="text-purple">*</span></label>
@@ -120,10 +120,15 @@
                         </option>
                     </select>
                 </div>
+                {#            <div class="form-group col-md-6">#}
+                {#                    <label>Бодит үйл явдал болсон огноо:</label>#}
+                {#                    <input type="date" class="form-control" name="date" id="id_date"#}
+                {#                           value="{{ model.date|date:"Y-m-d" }}"/>#}
+                {#                </div>#}
                 <div class="form-group col-md-6">
                     <label>Хэрэг шийдэгдсэн өдөр:</label>
-                    <input type="url" class="form-control" name="link_path" id="id_link_path"
-                           value="{{ form.link_path.value|default_if_none:'' }}">
+                    <input type="date" class="form-control" name="close_date" id="id_close_date"
+                           value="{{ model.close_date|default_if_none:''|date:'Y-m-d' }}"/>
                 </div>
                 <div class="form-group col-md-6">
                     <label>Холбогдох баримт бичгийн холбоос:</label>
@@ -159,7 +164,7 @@
                 });
 
 
-                $('#id_date').daterangepicker({
+                $('#id_date #id_close_date').daterangepicker({
                     singleDatePicker: true,
                     applyClass: 'bg-purple btn-sm',
                     cancelClass: 'btn-light btn-sm',

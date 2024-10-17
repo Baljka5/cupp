@@ -80,9 +80,9 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label>Хэрэг шийдэгдсэн өдөр:</label>
-                        <input type="url" class="form-control" name="link_path" id="id_link_path"
-                               value="{{ form.link_path.value|default_if_none:'' }}">
+                        {% render_field form.close_date class+="form-control" %}
                     </div>
+
                     <div class="form-group col-md-6">
                         <label>Холбогдох баримт бичгийн холбоос:</label>
                         {% render_field form.supp_link class+="form-control" %}
@@ -159,7 +159,7 @@
                     }
                 });
 
-                $('#id_date, #id_close_date').daterangepicker({
+                $('#id_date').daterangepicker({
                     singleDatePicker: true,
                     applyClass: 'bg-purple btn-sm',
                     cancelClass: 'btn-light btn-sm',

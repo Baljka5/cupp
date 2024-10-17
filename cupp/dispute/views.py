@@ -14,21 +14,26 @@ from django.views import generic as g
 
 def leg_add(request):
     store_id_to_name = {event.store_id: event.store_name for event in StoreTrainer.objects.all()}
+
     if request.method == "POST":
         form = DisputeForm(request.POST)
         if form.is_valid():
             try:
-                form.instance.created_by = request.user if not form.instance.pk else form.instance.created_by
+                # Set created_by and modified_by
+                form.instance.created_by = request.user
                 form.instance.modified_by = request.user
+
+                # Set close_date to None if it's not provided
+                if not form.cleaned_data.get('close_date'):
+                    form.instance.close_date = None
+
                 form.save()
                 messages.success(request, 'Form submission successful.')
-                return redirect('/register-license')
+                return redirect('/leg-index')
             except Exception as e:
-                # If save fails, add an error message and print the exception
                 messages.error(request, 'Form could not be saved. Please try again.')
                 print(f"Error saving form: {e}")
         else:
-            # If form is not valid, show errors
             for field, errors in form.errors.items():
                 for error in errors:
                     messages.error(request, f"Error in {field}: {error}")
@@ -84,9 +89,20 @@ def update(request, id):
     types = DimensionTable.objects.all()
     owners = ActionOwner.objects.all()
     form = DisputeForm(request.POST, instance=model)
+
     if form.is_valid():
+        # Only set close_date to None if the field is explicitly cleared by the user (i.e., empty string)
+        if form.cleaned_data.get('close_date') == '':
+            form.instance.close_date = None
+
         form.save()
+        messages.success(request, 'Record updated successfully.')
         return redirect("/leg-index")
+    else:
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(request, f"Error in {field}: {error}")
+
     return render(request, 'Dispute/edit.html', {'model': model, 'types': types, 'owners': owners})
 
 
