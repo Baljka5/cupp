@@ -3,6 +3,7 @@ from django.utils.dateparse import parse_date
 from django.shortcuts import render
 from .models import General, Address, Bank, Experience, Education, Attitude, Family, Skills
 from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
 
 
 @csrf_exempt
@@ -32,21 +33,35 @@ def fetch_and_save_employee_data(request):
 
     if response.status_code == 200:
         data = response.json()['response']['result']
-        # Save data for the first 10 employees (or fewer if not available)
+        # Save data for the first 60 employees (or fewer if not available)
         employee_data = data.get('empinfo', {})
         save_multiple_employees(employee_data)
-
-    return render(request, 'fetch_data.html', {})
+        return HttpResponse("Data saved successfully.", status=200)
+    else:
+        return HttpResponse("Failed to fetch data from external service.", status=500)
 
 
 def save_multiple_employees(employee_data):
     """
-    Save data for the first 10 employees (or fewer if not available).
+    Save data for the first 60 employees (or fewer if not available), ensuring no duplicates.
     """
     for idx, employee in enumerate(employee_data.values()):
-        if idx >= 10:
+        if idx >= 1000:
             break
-        save_data_to_db(employee)
+        # Check if employee with the same employeeid already exists to avoid duplication
+        if not General.objects.filter(employeeid=employee.get('employeeid')).exists():
+            save_data_to_db(employee)
+
+
+def safe_int(value):
+    """
+    Helper function to safely convert a value to int.
+    Returns 0 if the value is None or an empty string.
+    """
+    try:
+        return int(value)
+    except (ValueError, TypeError):
+        return 0
 
 
 def save_data_to_db(data):
@@ -65,8 +80,8 @@ def save_data_to_db(data):
         postaddress=data.get('postaddress', None),
         educationlevel=data.get('educationlevel', None),
         maritalstatus=data.get('maritalstatus', None),
-        nooffamilymember=data.get('nooffamilymember', None),
-        noofchildren=data.get('noofchildren', None),
+        nooffamilymember=safe_int(data.get('nooffamilymember', 0)),
+        noofchildren=safe_int(data.get('noofchildren', 0)),
         departmentname=data.get('departmentname', None),
         positionname=data.get('positionname', None),
         insuredtypename=data.get('insuredtypename', None)
@@ -74,7 +89,7 @@ def save_data_to_db(data):
     general_info.save()
 
     # Save Address Data
-    for i in range(int(data.get('empaddress_size', 0))):  # Use .get() to handle missing keys
+    for i in range(safe_int(data.get('empaddress_size', 0))):  # Use safe_int to handle missing/empty keys
         address = data['empaddress'].get(str(i), {})
         address_record = Address(
             employeeid=address.get('employeeid', None),
@@ -87,7 +102,7 @@ def save_data_to_db(data):
         address_record.save()
 
     # Save Bank Data
-    for i in range(int(data.get('empbank_size', 0))):
+    for i in range(safe_int(data.get('empbank_size', 0))):
         bank = data['empbank'].get(str(i), {})
         bank_record = Bank(
             employeeid=bank.get('employeeid', None),
@@ -97,7 +112,7 @@ def save_data_to_db(data):
         bank_record.save()
 
     # Save Experience Data
-    for i in range(int(data.get('empworkexp_size', 0))):
+    for i in range(safe_int(data.get('empworkexp_size', 0))):
         experience = data['empworkexp'].get(str(i), {})
         experience_record = Experience(
             employeeid=experience.get('employeeid', None),
@@ -110,7 +125,7 @@ def save_data_to_db(data):
         experience_record.save()
 
     # Save Education Data
-    for i in range(int(data.get('empeducation_size', 0))):
+    for i in range(safe_int(data.get('empeducation_size', 0))):
         education = data['empeducation'].get(str(i), {})
         education_record = Education(
             employeeid=education.get('employeeid', None),
@@ -125,7 +140,7 @@ def save_data_to_db(data):
         education_record.save()
 
     # Save Attitude Data (Punishment and Reward)
-    for i in range(int(data.get('emppunishment_size', 0))):
+    for i in range(safe_int(data.get('emppunishment_size', 0))):
         punishment = data['emppunishment'].get(str(i), {})
         attitude_record = Attitude(
             employeeid=punishment.get('employeeid', None),
@@ -136,7 +151,7 @@ def save_data_to_db(data):
         )
         attitude_record.save()
 
-    for i in range(int(data.get('empreward_size', 0))):
+    for i in range(safe_int(data.get('empreward_size', 0))):
         reward = data['empreward'].get(str(i), {})
         attitude_record = Attitude(
             employeeid=reward.get('employeeid', None),
@@ -148,7 +163,7 @@ def save_data_to_db(data):
         attitude_record.save()
 
     # Save Family Data
-    for i in range(int(data.get('empfamily_size', 0))):
+    for i in range(safe_int(data.get('empfamily_size', 0))):
         family = data['empfamily'].get(str(i), {})
         family_record = Family(
             employeeid=family.get('employeeid', None),
@@ -162,7 +177,7 @@ def save_data_to_db(data):
         family_record.save()
 
     # Save Skills Data (Language, Talent, Skills, Hrmexam)
-    for i in range(int(data.get('emplanguage_size', 0))):
+    for i in range(safe_int(data.get('emplanguage_size', 0))):
         language = data['emplanguage'].get(str(i), {})
         skills_record = Skills(
             employeeid=language.get('employeeid', None),
@@ -170,7 +185,7 @@ def save_data_to_db(data):
         )
         skills_record.save()
 
-    for i in range(int(data.get('emptalent_size', 0))):
+    for i in range(safe_int(data.get('emptalent_size', 0))):
         talent = data['emptalent'].get(str(i), {})
         skills_record = Skills(
             employeeid=talent.get('employeeid', None),
@@ -178,7 +193,7 @@ def save_data_to_db(data):
         )
         skills_record.save()
 
-    for i in range(int(data.get('empskill_size', 0))):
+    for i in range(safe_int(data.get('empskill_size', 0))):
         skill = data['empskill'].get(str(i), {})
         skills_record = Skills(
             employeeid=skill.get('employeeid', None),
@@ -186,7 +201,7 @@ def save_data_to_db(data):
         )
         skills_record.save()
 
-    for i in range(int(data.get('hrmexam_size', 0))):
+    for i in range(safe_int(data.get('hrmexam_size', 0))):
         exam = data['hrmexam'].get(str(i), {})
         skills_record = Skills(
             employeeid=exam.get('employeeid', None),
