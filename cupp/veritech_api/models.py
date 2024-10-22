@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 # General table
@@ -21,6 +22,8 @@ class General(models.Model):
     departmentname = models.CharField(max_length=50, null=True, blank=True)
     positionname = models.CharField(max_length=100, null=True, blank=True)
     insuredtypename = models.CharField(max_length=100, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)  # Automatically set when created
+    updated_at = models.DateTimeField(auto_now=True)  # Automatically update on every save
 
 
 # Address table
@@ -31,6 +34,8 @@ class Address(models.Model):
     districtname = models.CharField(max_length=50, null=True, blank=True)
     streetname = models.CharField(max_length=100, null=True, blank=True)
     address = models.CharField(max_length=255, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 # Bank table
@@ -38,6 +43,8 @@ class Bank(models.Model):
     employeeid = models.CharField(max_length=20, null=True, blank=True)
     bankname = models.CharField(max_length=100, null=True, blank=True)
     bankaccountnumber = models.CharField(max_length=50, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 # Experience table
@@ -48,6 +55,8 @@ class Experience(models.Model):
     positionname = models.CharField(max_length=100, null=True, blank=True)
     startdate = models.DateField(null=True, blank=True)
     enddate = models.DateField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 # Education table
@@ -60,6 +69,8 @@ class Education(models.Model):
     countryname = models.CharField(max_length=50, null=True, blank=True)
     cityname = models.CharField(max_length=50, null=True, blank=True)
     schoolname = models.CharField(max_length=100, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 # Attitude table for Punishment/Reward
@@ -73,6 +84,8 @@ class Attitude(models.Model):
     rewarddate = models.DateField(null=True, blank=True)
     organizationname = models.CharField(max_length=100, null=True, blank=True)
     rectorshipnumber = models.CharField(max_length=100, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 # Family table
@@ -84,6 +97,8 @@ class Family(models.Model):
     birthdate = models.DateField(null=True, blank=True)
     mobile = models.CharField(max_length=20, null=True, blank=True)
     workname = models.CharField(max_length=100, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 # Skills table for language, talent, skills, hrmexam
@@ -91,3 +106,5 @@ class Skills(models.Model):
     employeeid = models.CharField(max_length=20, null=True, blank=True)
     skillname = models.CharField(max_length=100, null=True, blank=True)
     examname = models.CharField(max_length=100, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
