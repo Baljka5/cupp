@@ -46,7 +46,7 @@ def save_multiple_employees(employee_data):
     Save data for the first 60 employees (or fewer if not available), ensuring no duplicates.
     """
     for idx, employee in enumerate(employee_data.values()):
-        if idx >= 1000:
+        if idx >= 5000:
             break
         # Check if employee with the same employeeid already exists to avoid duplication
         if not General.objects.filter(employeeid=employee.get('employeeid')).exists():
