@@ -14,46 +14,58 @@ DB_SETTINGS = {
 }
 
 
-# Helper function to flatten JSON
-def flatten_json(nested_json, parent_key='', sep='_'):
-    items = []
-    for key, value in nested_json.items():
-        new_key = f"{parent_key}{sep}{key}" if parent_key else key
-        if isinstance(value, dict):
-            items.extend(flatten_json(value, new_key, sep=sep).items())
-        elif isinstance(value, list):
-            for i, item in enumerate(value):
-                if isinstance(item, dict):
-                    # If the list item is a dict, flatten it
-                    items.extend(flatten_json(item, f"{new_key}_{i}", sep=sep).items())
-                else:
-                    # Otherwise, treat it as a simple value
-                    items.append((f"{new_key}_{i}", item))
-        else:
-            items.append((new_key, value))
-    return dict(items)
+# Helper function to extract question names, scores, and other fields
+def extract_questions_data(nested_json):
+    questions_data = []
+    if isinstance(nested_json, dict):
+        for key, value in nested_json.items():
+            if key == "questions" and isinstance(value, list):
+                for item in value:
+                    if isinstance(item, dict) and 'name' in item and 'question' in item:
+                        questions_data.append({
+                            'Category': item.get('category', ''),  # Extract "category" field
+                            'Name': item.get('name', ''),  # Extract "name" field
+                            'Question': item['question'],  # Extract "question" field
+                            'Score': parse_score(item.get('score', 0))  # Ensure score is properly cast
+                        })
+            elif isinstance(value, dict):
+                questions_data.extend(extract_questions_data(value))  # Recursively check nested dictionaries
+            elif isinstance(value, list):
+                for item in value:
+                    if isinstance(item, dict):
+                        questions_data.extend(extract_questions_data(item))  # Recursively check list items
+    return questions_data
+
+
+# Helper function to convert score to an integer, defaulting to 0
+def parse_score(score):
+    try:
+        return int(score)  # Try casting to int
+    except (ValueError, TypeError):
+        return 0  # Return 0 if it's not a valid number
 
 
 def fetch_powerbi_data(request):
     export_type = request.GET.get('export', None)
 
+    # Updated query based on the one you provided
     query = """
     SELECT
       jsonb_build_object(
-        'safety_summary',
-        "safety_summary"."Document" || jsonb_build_object('id', "safety_summary"."Id") || jsonb_build_object(
-          'CreationTime', "safety_summary"."CreationTime"
+        'inspection_summary',
+        "inspection_summary"."Document" || jsonb_build_object('id', "inspection_summary"."Id") || jsonb_build_object(
+          'CreationTime', "inspection_summary"."CreationTime"
         ) || jsonb_build_object(
-          'CreatorUserId', "safety_summary"."CreatorUserId"
+          'CreatorUserId', "inspection_summary"."CreatorUserId"
         ) || jsonb_build_object(
-          'LastModifierUserId', "safety_summary"."LastModifierUserId"
+          'LastModifierUserId', "inspection_summary"."LastModifierUserId"
         ) || jsonb_build_object(
-          'LastModificationTime', "safety_summary"."LastModificationTime"
+          'LastModificationTime', "inspection_summary"."LastModificationTime"
         ),
-        'safety_inspect_plan',
-        "safety_inspect_plan"."Document" || jsonb_build_object(
-          'id', "safety_inspect_plan"."Id",
-          'creationTime', "safety_inspect_plan"."CreationTime"
+        'inspect_plan',
+        "inspect_plan"."Document" || jsonb_build_object(
+          'id', "inspect_plan"."Id", 'creationTime',
+          "inspect_plan"."CreationTime"
         ),
         'branch_info',
         "branch_info"."Document" || jsonb_build_object(
@@ -71,42 +83,45 @@ def fetch_powerbi_data(request):
         )
       ) AS "Document"
     FROM
-      "DynamicEntity" AS "safety_summary"
-      INNER JOIN "DynamicEntity" AS "safety_inspect_plan" ON (
-        "safety_summary"."Document" ->> 'safety_inspect_plan_id'
-      ):: bigint = "safety_inspect_plan"."Id"
-      AND "safety_inspect_plan"."DynamicEntityDefinitionId" = 57
-      AND "safety_summary"."DynamicEntityDefinitionId" = 61
-      AND "safety_inspect_plan"."IsDeleted" = false
+      "DynamicEntity" AS "inspection_summary"
+      INNER JOIN "DynamicEntity" AS "inspect_plan" ON (
+        "inspection_summary"."Document" ->> 'inspect_plan_id'
+      ):: bigint = "inspect_plan"."Id"
+      AND "inspect_plan"."DynamicEntityDefinitionId" = 8
+      AND "inspection_summary"."DynamicEntityDefinitionId" = 35
+      AND "inspect_plan"."IsDeleted" = false
       INNER JOIN "DynamicEntity" AS "branch_info" ON (
-        "safety_summary"."Document" ->> 'branch_id'
+        "inspection_summary"."Document" ->> 'branch_id'
       ):: bigint = "branch_info"."Id"
       AND "branch_info"."DynamicEntityDefinitionId" = 23
-      AND "safety_summary"."DynamicEntityDefinitionId" = 61
+      AND "inspection_summary"."DynamicEntityDefinitionId" = 35
       AND "branch_info"."IsDeleted" = false
       INNER JOIN "BpmUsers" AS "user" ON (
-        "safety_summary"."CreatorUserId"
+        "inspection_summary"."CreatorUserId"
       ):: bigint = ("user"."Id"):: bigint
-      AND "safety_summary"."DynamicEntityDefinitionId" = 61
+      AND "inspection_summary"."DynamicEntityDefinitionId" = 35
       AND "user"."IsDeleted" = false
       AND "user"."TenantId" = 1
     WHERE
       (
         (
-          "safety_summary"."TenantId" = 1
-          OR "safety_summary"."IsCommon" = true
+          "inspection_summary"."TenantId" = 1
+          OR "inspection_summary"."IsCommon" = true
         )
       )
-      AND "safety_summary"."IsDeleted" = false
-      AND "safety_summary"."DynamicEntityDefinitionId" = 61
+      AND "inspection_summary"."IsDeleted" = false
+      AND "inspection_summary"."DynamicEntityDefinitionId" = 35
       AND (
         (
-          "safety_inspect_plan"."CreationTime" BETWEEN '2024-10-10T16:00:00.000Z'
+          "inspect_plan"."CreationTime" BETWEEN '2024-10-15T16:00:00.000Z'
           AND '2024-10-18T15:59:59.999Z'
+          AND (
+            "inspect_plan"."Document" ->> 'itemCategory_id'
+          ):: numeric = 1  -- 83550-office, 1-delguur,788-niiluulegch,2005-aguulah
         )
       )
     ORDER BY
-      "safety_summary"."CreationTime" DESC
+      "inspection_summary"."CreationTime" DESC
     """
 
     connections.databases['cu_ep'] = {
@@ -123,33 +138,64 @@ def fetch_powerbi_data(request):
             cursor.execute(query)
             rows = cursor.fetchall()
 
-        # Flatten the response data
-        flattened_data = []
+        # Extract question data for each document and calculate total scores
+        data_for_excel = {}
+        unique_questions = set()  # Track unique questions
+        branch_columns = set()  # Track unique branch columns
+
         for row in rows:
             document = row[0]
-            flattened_data.append(flatten_json(document))
+            questions_data = extract_questions_data(document)
+            branch_no = document.get('branch_info', {}).get('branchNo', '')  # Extract branchNo
+            branch_columns.add(branch_no)  # Add unique branch numbers to be used as columns
+
+            for question in questions_data:
+                unique_key = question['Question']
+
+                # Ensure there are no duplicate questions
+                if unique_key not in unique_questions:
+                    unique_questions.add(unique_key)
+                    # Initialize the row with the question details
+                    data_for_excel[unique_key] = {
+                        'Name': question['Name'],  # Add the Name column
+                        'Category': question['Category'],  # Add the Category column
+                        'Question': question['Question'],
+                    }
+                # Add the score under the respective branchNo
+                data_for_excel[unique_key][branch_no] = question['Score']
+
+        # Prepare the data for export
+        export_data = []
+        for question, details in data_for_excel.items():
+            # Ensure all branch columns are present
+            for branch in branch_columns:
+                if branch not in details:
+                    details[branch] = 0  # Default score is 0 if not present
+            export_data.append(details)
 
         # Handle export requests for CSV or Excel
+        branch_columns_list = list(branch_columns)
+        headers = ['Name', 'Category', 'Question'] + branch_columns_list  # Dynamic headers based on branch numbers
+
         if export_type == 'csv':
             response = HttpResponse(content_type='text/csv')
             response['Content-Disposition'] = 'attachment; filename="exported_data.csv"'
 
-            writer = csv.writer(response)
-            writer.writerow(flattened_data[0].keys())  # Write CSV headers
-            for row in flattened_data:
-                writer.writerow(row.values())  # Write CSV data
+            writer = csv.DictWriter(response, fieldnames=headers)
+            writer.writeheader()
+            writer.writerows(export_data)  # Write the data to CSV
 
             return response
 
         elif export_type == 'excel':
-            df = pd.DataFrame(flattened_data)
+            df = pd.DataFrame(export_data)
             response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
             response['Content-Disposition'] = 'attachment; filename="exported_data.xlsx"'
             df.to_excel(response, index=False)
             return response
 
         # Default response: JSON format
-        return JsonResponse(flattened_data, safe=False)
+        return JsonResponse(export_data, safe=False)
 
     except OperationalError:
         return JsonResponse({'error': 'Database connection failed'}, status=500)

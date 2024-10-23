@@ -86,7 +86,7 @@ def scIndex(request):
 
 
 def get_team_data(request, team_id):
-    # Assuming `team_id` is passed correctly and you have a model `Consultants` with a related field `allocation`
+    # Assuming team_id is passed correctly and you have a model Consultants with a related field allocation
     scs = Consultants.objects.filter(allocation__area_id=team_id).values('id', 'sc_name')
     team_scs = list(scs)
     # Assuming you need to pass store allocations or other details, add them here
@@ -139,7 +139,9 @@ def save_allocations(request):
     try:
         data = json.loads(request.body)
         allocations = data.get('allocations', [])
-        store_allocations = data.get('storeAllocations', [])
+
+        # Debugging: Log the incoming allocations data
+        print("Received allocations:", allocations)
 
         with transaction.atomic():
             for allocation in allocations:
@@ -147,22 +149,24 @@ def save_allocations(request):
                 area_id = allocation.get('areaId') if allocation.get('areaId') != 'not-allocated' else None
                 tags = allocation.get('tags', [])
 
-                obj, created = Allocation.objects.update_or_create(
-                    consultant_id=consultant_id,
-                    defaults={'area_id': area_id, 'tags': tags}
-                )
-                obj.save()
-
-            for store_allocation in store_allocations:
-                consultant_id = store_allocation.get('consultantId')
-                store_ids = store_allocation.get('storeIds', [])
+                # Fetch the consultant and create/update their allocation
                 consultant = Consultants.objects.get(id=consultant_id)
 
-                consultant.stores.set(store_ids)
-                consultant.save()
+                obj, created = Allocation.objects.update_or_create(
+                    consultant=consultant,
+                    defaults={'area_id': area_id}
+                )
 
-            return JsonResponse({'status': 'success'})
+                if tags:
+                    tag_objects = [Tag.objects.get_or_create(name=tag)[0] for tag in tags]
+                    obj.tags.set(tag_objects)
+
+                obj.save()
+
+        return JsonResponse({'status': 'success'})
     except Exception as e:
+        # Log the full error details for easier debugging
+        print(f"Error during save_allocations: {str(e)}")
         return JsonResponse({'status': 'failed', 'message': str(e)}, status=500)
 
 

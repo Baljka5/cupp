@@ -59,18 +59,27 @@
                     <h2>SC Allocation (Not Allocated)</h2>
                 </div>
             </div>
-            <div class="not-allocated-body" id="not-allocated" ondrop="drop(event)" ondragover="allowDrop(event)"
-                 data-area-id="not-allocated">
-
-                <div class="not-allocated">
-                    {% for consultant in consultants %}
-                        <div class="sc" id="sc{{ consultant.id }}" draggable="true" ondragstart="drag(event)"
-                             data-consultant-id="{{ consultant.id }}">
-                            {{ consultant.sc_name }}
-                        </div>
-                    {% endfor %}
-                </div>
+            <div class="not-allocated-body" id="not-allocated" ondrop="drop(event)" ondragover="allowDrop(event)" data-area-id="not-allocated">
+    <div class="not-allocated">
+        {% for consultant in consultants %}
+            <div class="sc" id="sc{{ consultant.id }}" draggable="true" ondragstart="drag(event)" data-consultant-id="{{ consultant.id }}">
+                {{ consultant.sc_name }}
             </div>
+        {% endfor %}
+    </div>
+</div>
+{#            <div class="not-allocated-body" id="not-allocated" ondrop="drop(event)" ondragover="allowDrop(event)"#}
+{#                 data-area-id="not-allocated">#}
+{##}
+{#                <div class="not-allocated">#}
+{#                    {% for consultant in consultants %}#}
+{#                        <div class="sc" id="sc{{ consultant.id }}" draggable="true" ondragstart="drag(event)"#}
+{#                             data-consultant-id="{{ consultant.id }}">#}
+{#                            {{ consultant.sc_name }}#}
+{#                        </div>#}
+{#                    {% endfor %}#}
+{#                </div>#}
+{#            </div>#}
             <div class="save-close-container">
                 <button id="saveCloseBtn" onclick="saveAllocations()">SAVE & CLOSE</button>
             </div>
@@ -460,39 +469,37 @@
             localStorage.setItem('allocations', JSON.stringify(allocations));
         }
 
-        function saveAllocations() {
-            const allocations = [];
-            document.querySelectorAll('.team-body').forEach(team => {
-                const areaId = team.getAttribute('data-area-id');
-                const teamNo = team.getAttribute('data-team-no');  // Make sure this attribute is set in your HTML
-                team.querySelectorAll('.sc').forEach(consultant => {
-                    allocations.push({
-                        consultantId: consultant.getAttribute('data-consultant-id'),
-                        areaId: areaId,
-                        teamNo: teamNo,
-                        storeCons: consultant.textContent.trim()  // Assuming the consultant's name is displayed
-                    });
-                });
+function saveAllocations() {
+    const allocations = [];
+    document.querySelectorAll('.team-body, .not-allocated-body').forEach(area => {
+        const areaId = area.getAttribute('data-area-id') || 'not-allocated';
+        area.querySelectorAll('.sc').forEach(consultant => {
+            allocations.push({
+                consultantId: consultant.getAttribute('data-consultant-id'),
+                areaId: areaId
             });
+        });
+    });
 
-            fetch('/save-allocations/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken'),
-                },
-                body: JSON.stringify({allocations})
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-                alert('Allocations saved successfully!');
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Failed to save the allocations. Please try again.');
-            });
-        }
+    fetch('/save-allocations/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: JSON.stringify({ allocations })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        alert('Allocations saved successfully!');
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to save the allocations. Please try again.');
+    });
+}
+
 
 function saveConsultantStores() {
     const storeAllocations = [];
