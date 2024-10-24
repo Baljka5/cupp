@@ -339,55 +339,63 @@
             selectedTeam.classList.add('highlighted');
         }
 
-        function showTeamDetails(teamId, teamNo, event) {
-            event.stopPropagation();
+function showTeamDetails(teamId, teamNo, event) {
+    event.stopPropagation();
 
-            fetch(`/get-scs-by-team/${teamId}/`)
-                .then(response => response.json())
-                .then(data => {
-                    const popup = document.getElementById('popup');
-                    const popupText = document.getElementById('popup-text');
-                    let content = `<h2>Details for Team ${teamNo}</h2>`;
+    fetch(`/get-scs-by-team/${teamId}/`)
+        .then(response => response.json())
+        .then(data => {
+            const popup = document.getElementById('popup');
+            const popupText = document.getElementById('popup-text');
+            let content = `<h2>Details for Team ${teamNo}</h2>`;
 
-                    if (data.scs && data.scs.length > 0) {
-                        data.scs.forEach(sc => {
-                            content += `
-                                <div class="sc-container">
-                                    <div class="detail-store">${sc.name}</div>
-                                    <div class="detail-body">
-                                        <select id="id_store_id_${sc.id}" class="form-control store-select" name="store_id[]" multiple="multiple">
-                                            <option value="" disabled>------</option>
-                                            {% for store_consultant in store_consultants %}
-                                                <option value="{{ store_consultant.store_id }}">{{ store_consultant.store_id }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>`;
-                        });
-                    } else {
-                        content += `<p>No consultants assigned</p>`;
-                    }
-
-                    content += `<button id="saveBtn" onclick="saveConsultantStores(${teamId})">Save</button>`;
-                    popupText.innerHTML = content;
-                    popup.style.display = 'block';
-
-                    data.scs.forEach(sc => {
-                        $(`#id_store_id_${sc.id}`).select2({
-                            width: '100%',
-                            placeholder: "Select Store IDs",
-                            allowClear: true,
-                            tags: true
-                        }).on('change', function() {
-                            hideSelectedOptions();
-                        });
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching SC details:', error);
-                    alert('Failed to load SC details. Please try again.');
+            if (data.scs && data.scs.length > 0) {
+                data.scs.forEach(sc => {
+                    content += `
+                        <div class="sc-container">
+                            <div class="detail-store">${sc.name}</div>
+                            <div class="detail-body">
+                                <div class="sc" data-consultant-id="${sc.id}">
+                                    Consultant: ${sc.name}
+                                </div>
+                                <select id="id_store_id_${sc.id}" class="form-control store-select" name="store_id[]" multiple="multiple">
+                                    <option value="" disabled>------</option>
+                                    {% for store_consultant in store_consultants %}
+                                        <option value="{{ store_consultant.store_id }}">{{ store_consultant.store_id }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>`;
                 });
-        }
+            } else {
+                content += `<p>No consultants assigned</p>`;
+            }
+
+            content += `<button id="saveBtn" onclick="saveConsultantStores()">Save</button>`;
+            popupText.innerHTML = content;
+            popup.style.display = 'block';
+
+            data.scs.forEach(sc => {
+                setTimeout(() => {
+                    $(`#id_store_id_${sc.id}`).select2({
+                        width: '100%',
+                        placeholder: "Select Store IDs",
+                        allowClear: true,
+                        tags: true
+                    });
+
+                    // Pre-select the previously saved store IDs
+                    const savedStoreIds = sc.store_ids;  // Store IDs returned from the server
+                    $(`#id_store_id_${sc.id}`).val(savedStoreIds).trigger('change');  // Pre-select the values
+                }, 100);  // Delay to ensure the element is available
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching SC details:', error);
+            alert('Failed to load SC details. Please try again.');
+        });
+}
+
 
         function closePopup() {
             document.getElementById('popup').style.display = 'none';
@@ -502,21 +510,43 @@ function saveAllocations() {
 
 
 function saveConsultantStores() {
+    console.log('Save button clicked!');
+
     const storeAllocations = [];
     document.querySelectorAll('.sc-container').forEach(container => {
-        const scId = container.querySelector('.sc').dataset.consultantId;
+
+
+        const scElement = container.querySelector('.sc');
         const storeSelect = container.querySelector('.store-select');
-        const tagSelect = container.querySelector('.tag-input');
 
-        const storeIds = Array.from(storeSelect.selectedOptions).map(opt => opt.value);
-        const tags = Array.from(tagSelect.selectedOptions).map(opt => opt.value);
+        console.log('Found scElement:', scElement);
+        console.log('Found storeSelect:', storeSelect);
 
-        storeAllocations.push({
-            consultantId: scId,
-            storeIds: storeIds,
-            tags: tags
-        });
+        if (!scElement) {
+            console.error('Missing .sc element in container:', container);
+        } else if (!storeSelect) {
+            console.error('Missing .store-select element in container:', container);
+        } else {
+            const scId = scElement.dataset.consultantId;
+            const storeIds = Array.from(storeSelect.selectedOptions).map(opt => opt.value);
+
+            console.log(`Consultant ID: ${scId}`);
+            console.log(`Store IDs: ${storeIds}`);
+
+            storeAllocations.push({
+                consultantId: scId,
+                storeIds: storeIds
+            });
+        }
     });
+
+    if (storeAllocations.length === 0) {
+        console.error('No valid store allocations to save.');
+        alert('No valid store allocations to save.');
+        return;
+    }
+
+    console.log('Store allocations to save:', storeAllocations);
 
     fetch('/save-consultant-stores/', {
         method: 'POST',
@@ -524,21 +554,23 @@ function saveConsultantStores() {
             'Content-Type': 'application/json',
             'X-CSRFToken': getCookie('csrftoken'),
         },
-        body: JSON.stringify({storeAllocations})
+        body: JSON.stringify({ storeAllocations })
     })
     .then(response => response.json())
     .then(data => {
-        if (data.status === 'success') {
+        console.log('Server response:', data);
+        if (data.results.every(res => res.status === 'success')) {
             alert('Store allocations saved successfully!');
         } else {
             alert('Failed to save store allocations.');
         }
     })
     .catch(error => {
-        console.error('Error:', error);
+        console.error('Error during fetch:', error);
         alert('Failed to save the store allocations. Please try again.');
     });
 }
+
 
         function gatherStoreAllocations() {
             const storeAllocations = [];
@@ -566,19 +598,19 @@ function saveConsultantStores() {
         }
 
         function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
             }
-            return cookieValue;
         }
+    }
+    return cookieValue;
+}
 
         function hideSelectedOptions() {
             const selectedOptions = [];

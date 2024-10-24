@@ -175,34 +175,28 @@ def save_allocations(request):
 def save_consultant_stores(request):
     try:
         data = json.loads(request.body)
-        store_allocations = data.get('storeAllocations', [])
-        print(store_allocations)
+        print('Received store allocations:', data)  # Add this for debugging
 
+        store_allocations = data.get('storeAllocations', [])
         results = []
+
         with transaction.atomic():
             for store_allocation in store_allocations:
                 consultant_id = store_allocation.get('consultantId')
                 store_ids = store_allocation.get('storeIds', [])
-                tags = store_allocation.get('tags', [])
 
-                try:
-                    consultant = StoreConsultant.objects.get(id=consultant_id)
+                print(f'Processing consultant {consultant_id} with stores: {store_ids}')
 
-                    # Update store assignments
-                    consultant.stores.set(store_ids)
+                consultant = Consultants.objects.get(id=consultant_id)
+                tag_objects = [Tag.objects.get_or_create(name=store_id)[0] for store_id in store_ids]
+                consultant.tags.set(tag_objects)
 
-                    # Update tags
-                    tag_objects = [Tag.objects.get_or_create(name=tag)[0] for tag in tags]
-                    consultant.tags.set(tag_objects)
-
-                    consultant.save()
-                    results.append({'status': 'success', 'consultant_id': consultant_id})
-                except StoreConsultant.DoesNotExist:
-                    results.append({'status': 'failed', 'message': f'Consultant {consultant_id} does not exist'})
-                    continue
+                consultant.save()
+                results.append({'status': 'success', 'consultant_id': consultant_id})
 
         return JsonResponse({'results': results})
     except Exception as e:
+        print(f"Error saving consultant stores: {str(e)}")
         return JsonResponse({'status': 'failed', 'message': str(e)}, status=500)
 
 
@@ -244,7 +238,17 @@ class SCDirectorView(g.TemplateView):
 
 def get_scs_by_team(request, team_id):
     scs = Consultants.objects.filter(allocation__area_id=team_id)
-    sc_data = [{"id": sc.id, "name": sc.sc_name} for sc in scs]
+    sc_data = []
+
+    for sc in scs:
+        # Get the store IDs (tags) for the consultant
+        store_ids = sc.tags.values_list('name', flat=True)
+        sc_data.append({
+            "id": sc.id,
+            "name": sc.sc_name,
+            "store_ids": list(store_ids)  # Convert QuerySet to list
+        })
+
     return JsonResponse({'scs': sc_data})
 
 

@@ -3,6 +3,8 @@ import uuid
 
 from django.db import models as m
 from django.contrib.auth.models import User
+
+
 # from django.db.models import JSONField
 
 
@@ -172,6 +174,7 @@ class Consultants(m.Model):
 
 class Tag(m.Model):
     name = m.CharField(max_length=50)
+    consultants = m.ManyToManyField(Consultants, related_name="tags")
 
     def __str__(self):
         return self.name

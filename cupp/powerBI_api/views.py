@@ -4,6 +4,7 @@ from django.http import HttpResponse, JsonResponse
 from django.db import connections
 from django.db.utils import OperationalError
 
+# Database configuration
 DB_SETTINGS = {
     'ENGINE': 'django.db.backends.postgresql',
     'NAME': 'cu_ep',
@@ -14,7 +15,7 @@ DB_SETTINGS = {
 }
 
 
-# Helper function to extract question names, scores, and other fields
+# Helper function to extract question names, scores, and other fields from nested JSON
 def extract_questions_data(nested_json):
     questions_data = []
     if isinstance(nested_json, dict):
@@ -26,7 +27,7 @@ def extract_questions_data(nested_json):
                             'Category': item.get('category', ''),  # Extract "category" field
                             'Name': item.get('name', ''),  # Extract "name" field
                             'Question': item['question'],  # Extract "question" field
-                            'Score': parse_score(item.get('score', 0))  # Ensure score is properly cast
+                            'maxScore': parse_score(item.get('maxScore', 0))  # Ensure score is properly cast
                         })
             elif isinstance(value, dict):
                 questions_data.extend(extract_questions_data(value))  # Recursively check nested dictionaries
@@ -45,10 +46,11 @@ def parse_score(score):
         return 0  # Return 0 if it's not a valid number
 
 
+# Main view to fetch and export data for Power BI
 def fetch_powerbi_data(request):
     export_type = request.GET.get('export', None)
 
-    # Updated query based on the one you provided
+    # SQL query to fetch data
     query = """
     SELECT
       jsonb_build_object(
@@ -117,21 +119,15 @@ def fetch_powerbi_data(request):
           AND '2024-10-18T15:59:59.999Z'
           AND (
             "inspect_plan"."Document" ->> 'itemCategory_id'
-          ):: numeric = 1  -- 83550-office, 1-delguur,788-niiluulegch,2005-aguulah
+          ):: numeric = 1
         )
       )
     ORDER BY
       "inspection_summary"."CreationTime" DESC
     """
 
-    connections.databases['cu_ep'] = {
-        'ENGINE': DB_SETTINGS['ENGINE'],
-        'NAME': DB_SETTINGS['NAME'],
-        'USER': DB_SETTINGS['USER'],
-        'PASSWORD': DB_SETTINGS['PASSWORD'],
-        'HOST': DB_SETTINGS['HOST'],
-        'PORT': DB_SETTINGS['PORT'],
-    }
+    # Setting up the database connection
+    connections.databases['cu_ep'] = DB_SETTINGS
 
     try:
         with connections['cu_ep'].cursor() as cursor:
@@ -139,7 +135,7 @@ def fetch_powerbi_data(request):
             rows = cursor.fetchall()
 
         # Extract question data for each document and calculate total scores
-        data_for_excel = {}
+        data_for_export = {}
         unique_questions = set()  # Track unique questions
         branch_columns = set()  # Track unique branch columns
 
@@ -156,35 +152,33 @@ def fetch_powerbi_data(request):
                 if unique_key not in unique_questions:
                     unique_questions.add(unique_key)
                     # Initialize the row with the question details
-                    data_for_excel[unique_key] = {
+                    data_for_export[unique_key] = {
                         'Name': question['Name'],  # Add the Name column
                         'Category': question['Category'],  # Add the Category column
                         'Question': question['Question'],
                     }
                 # Add the score under the respective branchNo
-                data_for_excel[unique_key][branch_no] = question['Score']
+                data_for_export[unique_key][branch_no] = question['maxScore']
 
         # Prepare the data for export
         export_data = []
-        for question, details in data_for_excel.items():
+        for question, details in data_for_export.items():
             # Ensure all branch columns are present
             for branch in branch_columns:
                 if branch not in details:
                     details[branch] = 0  # Default score is 0 if not present
             export_data.append(details)
 
-        # Handle export requests for CSV or Excel
+        # Handle export requests for CSV, Excel, or JSON
         branch_columns_list = list(branch_columns)
         headers = ['Name', 'Category', 'Question'] + branch_columns_list  # Dynamic headers based on branch numbers
 
         if export_type == 'csv':
             response = HttpResponse(content_type='text/csv')
             response['Content-Disposition'] = 'attachment; filename="exported_data.csv"'
-
             writer = csv.DictWriter(response, fieldnames=headers)
             writer.writeheader()
-            writer.writerows(export_data)  # Write the data to CSV
-
+            writer.writerows(export_data)
             return response
 
         elif export_type == 'excel':
@@ -194,8 +188,9 @@ def fetch_powerbi_data(request):
             df.to_excel(response, index=False)
             return response
 
-        # Default response: JSON format
-        return JsonResponse(export_data, safe=False)
+        else:
+            # Default to returning JSON
+            return JsonResponse(export_data, safe=False)
 
     except OperationalError:
         return JsonResponse({'error': 'Database connection failed'}, status=500)
