@@ -180,6 +180,25 @@ class Tag(m.Model):
         return self.name
 
 
+class SC_Store_Allocation(m.Model):
+    consultant = m.ForeignKey(Consultants, on_delete=m.CASCADE, related_name='store_allocations')
+    store = m.ForeignKey(StoreConsultant, on_delete=m.CASCADE, related_name='sc_allocations')
+    store_name = m.CharField(max_length=100)
+    sc_name = m.CharField(max_length=100, null=True, blank=True)  # Add this field to store the consultant's name
+    store_no = m.CharField(max_length=5, null=True, blank=True)
+    created_date = m.DateTimeField(auto_now_add=True)
+    modified_date = m.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'sc_store_allocation'
+        verbose_name = 'SC Store Allocation'
+        verbose_name_plural = 'SC Store Allocations'
+
+    def __str__(self):
+        return f"{self.consultant.sc_name} - {self.store.store_id} ({self.store_name})"
+
+
+
 class Allocation(m.Model):
     consultant = m.ForeignKey(Consultants, on_delete=m.CASCADE, null=True, blank=True)
     area = m.ForeignKey(Area, on_delete=m.SET_NULL, null=True, blank=True)

@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from cupp.store_consultant.models import Area, Consultants, Allocation, StoreConsultant, Tag
+from cupp.store_consultant.models import Area, Consultants, Allocation, StoreConsultant, Tag, SC_Store_Allocation
 from cupp.store_trainer.models import StoreTrainer
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect
@@ -175,27 +175,55 @@ def save_allocations(request):
 def save_consultant_stores(request):
     try:
         data = json.loads(request.body)
-        print('Received store allocations:', data)  # Add this for debugging
+        print('Received store allocations:', data)  # For debugging
 
         store_allocations = data.get('storeAllocations', [])
         results = []
 
         with transaction.atomic():
             for store_allocation in store_allocations:
-                consultant_id = store_allocation.get('consultantId')
-                store_ids = store_allocation.get('storeIds', [])
+                consultant_id = store_allocation.get('consultantId')  # Fetch consultantId
+                store_nos = store_allocation.get('storeIds', [])  # Fetch store IDs (store_no)
 
-                print(f'Processing consultant {consultant_id} with stores: {store_ids}')
-
+                # Fetch the consultant object based on consultantId
                 consultant = Consultants.objects.get(id=consultant_id)
-                tag_objects = [Tag.objects.get_or_create(name=store_id)[0] for store_id in store_ids]
-                consultant.tags.set(tag_objects)
+                sc_name = consultant.sc_name  # Get the sc_name for storing in the allocation
 
-                consultant.save()
-                results.append({'status': 'success', 'consultant_id': consultant_id})
+                # Clear previous allocations for this consultant
+                SC_Store_Allocation.objects.filter(consultant=consultant).delete()
+
+                # Create new allocations for the selected stores
+                for store_no in store_nos:
+                    # Fetch the store based on store_id
+                    store = StoreConsultant.objects.get(store_id=store_no)
+
+                    # Create a new SC_Store_Allocation object, store the consultant's sc_name and store_id
+                    SC_Store_Allocation.objects.create(
+                        consultant=consultant,
+                        store=store,
+                        store_name=store.store_name,  # Store the name of the store
+                        sc_name=sc_name,  # Store the sc_name of the consultant
+                        store_no=store.store_id  # Store the store_id in store_no
+                    )
+
+                results.append({
+                    'status': 'success',
+                    'consultant_id': consultant_id,  # Include the consultant's ID in the response
+                    'sc_name': sc_name,  # Include the consultant's name in the response
+                    'store_ids': store_nos  # Include the store IDs
+                })
 
         return JsonResponse({'results': results})
+    except StoreConsultant.DoesNotExist:
+        print(f"Store with store_id {store_no} does not exist")
+        return JsonResponse({'status': 'failed', 'message': f'Store with store_id {store_no} does not exist'},
+                            status=400)
+    except Consultants.DoesNotExist:
+        print(f"Consultant with id {consultant_id} does not exist")
+        return JsonResponse({'status': 'failed', 'message': f'Consultant with id {consultant_id} does not exist'},
+                            status=400)
     except Exception as e:
+        # Log the full error details for easier debugging
         print(f"Error saving consultant stores: {str(e)}")
         return JsonResponse({'status': 'failed', 'message': str(e)}, status=500)
 
@@ -241,12 +269,16 @@ def get_scs_by_team(request, team_id):
     sc_data = []
 
     for sc in scs:
-        # Get the store IDs (tags) for the consultant
-        store_ids = sc.tags.values_list('name', flat=True)
+        # Get the store IDs and names allocated to the consultant
+        store_allocations = SC_Store_Allocation.objects.filter(consultant=sc)
+        store_ids = list(store_allocations.values_list('store__store_id', flat=True))  # Get store IDs
+        store_names = list(store_allocations.values_list('store_name', flat=True))  # Get store names
+
         sc_data.append({
             "id": sc.id,
             "name": sc.sc_name,
-            "store_ids": list(store_ids)  # Convert QuerySet to list
+            "store_ids": store_ids,  # Send store IDs to frontend
+            "store_names": store_names  # Send store names to frontend
         })
 
     return JsonResponse({'scs': sc_data})
