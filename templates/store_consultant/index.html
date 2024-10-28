@@ -398,6 +398,9 @@ function showTeamDetails(teamId, teamNo, event) {
                                 </span>
                             </div>
                             <div class="detail-body">
+                             <div class="sc" data-consultant-id="${sc.id}">
+                                    ${sc.name}
+                                </div>
                                 <select id="id_store_id_${sc.id}" class="form-control store-select" name="store_id[]" multiple="multiple">
                                     <option value="" disabled>------</option>
                                     {% for store_consultant in store_consultants %}
