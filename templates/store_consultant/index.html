@@ -391,16 +391,16 @@ function showTeamDetails(teamId, teamNo, event) {
                     const storeCount = sc.store_ids ? sc.store_ids.length : 0; // Count of allocated stores
                     content += `
                         <div class="sc-container">
-                            <div class="detail-store">
+                            <div class="detail-store sc" data-consultant-id="${sc.id}">
                                 ${sc.name}
                                 <span class="store-count" style="background-color: #4CAF50; color: white; border-radius: 4px; padding: 5px; margin-left: 10px;">
                                     ${storeCount}
                                 </span>
                             </div>
                             <div class="detail-body">
-                             <div class="sc" data-consultant-id="${sc.id}">
-                                    ${sc.name}
-                                </div>
+                             {#<div class="sc" data-consultant-id="${sc.id}">#}
+                             {#       ${sc.name}#}
+                             {#   </div>#}
                                 <select id="id_store_id_${sc.id}" class="form-control store-select" name="store_id[]" multiple="multiple">
                                     <option value="" disabled>------</option>
                                     {% for store_consultant in store_consultants %}
