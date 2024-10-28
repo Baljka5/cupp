@@ -25,6 +25,7 @@ def extract_questions_data(nested_json):
                 for item in value:
                     if isinstance(item, dict) and 'name' in item and 'question' in item:
                         questions_data.append({
+                            'mainCategory': item.get('mainCategory', ''),
                             'Category': item.get('category', ''),  # Extract "category" field
                             'Name': item.get('name', ''),  # Extract "name" field
                             'Question': item['question'],  # Extract "question" field
@@ -172,6 +173,7 @@ def fetch_powerbi_data(request):
                     unique_questions.add(unique_key)
                     data_for_export[unique_key] = {
                         'Name': question['Name'],
+                        'mainCategory': question['mainCategory'],
                         'Category': question['Category'],
                         'Question': question['Question'],
                     }
@@ -185,7 +187,7 @@ def fetch_powerbi_data(request):
             export_data.append(details)
 
         branch_columns_list = list(branch_columns)
-        headers = ['Name', 'Category', 'Question'] + branch_columns_list
+        headers = ['mainCategory', 'Name', 'Category', 'Question'] + branch_columns_list
 
         if export_type == 'csv':
             response = HttpResponse(content_type='text/csv')
