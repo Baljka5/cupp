@@ -12,6 +12,7 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect
 from cupp.store_consultant.forms import StoreConsultantForm
 from django.views import generic as g
+import datetime
 
 
 def index(request):
@@ -78,11 +79,44 @@ def update(request, id):
 
 
 def scIndex(request):
+    current_year = datetime.datetime.now().year
+    next_three_years = [current_year + i for i in range(3)]
+    months = [
+        {'value': 'jan', 'name': 'January'},
+        {'value': 'feb', 'name': 'February'},
+        {'value': 'mar', 'name': 'March'},
+        {'value': 'apr', 'name': 'April'},
+        {'value': 'may', 'name': 'May'},
+        {'value': 'jun', 'name': 'June'},
+        {'value': 'jul', 'name': 'July'},
+        {'value': 'aug', 'name': 'August'},
+        {'value': 'sep', 'name': 'September'},
+        {'value': 'oct', 'name': 'October'},
+        {'value': 'nov', 'name': 'November'},
+        {'value': 'dec', 'name': 'December'},
+    ]
+
+    # Fetch the last saved allocation's year and month
+    last_allocation = Allocation.objects.order_by('-created_date').first()
+    last_year = last_allocation.year if last_allocation else current_year
+    last_month = last_allocation.month if last_allocation else 'jan'
+
+    # Fetch areas, consultants, and store consultants
     areas = Area.objects.all()
     consultants = Consultants.objects.all()
     store_consultants = StoreConsultant.objects.all()
-    return render(request, 'store_consultant/index.html',
-                  {'areas': areas, 'consultants': consultants, 'store_consultants': store_consultants})
+
+    context = {
+        'areas': areas,
+        'consultants': consultants,
+        'store_consultants': store_consultants,
+        'next_three_years': next_three_years,
+        'months': months,
+        'last_year': last_year,  # Pass the last saved year to the template
+        'last_month': last_month,  # Pass the last saved month to the template
+    }
+
+    return render(request, 'store_consultant/index.html', context)
 
 
 def get_team_data(request, team_id):
@@ -137,8 +171,11 @@ def update_consultant_store(request):
 @require_POST
 def save_allocations(request):
     try:
+        # Parse the incoming data from the request body
         data = json.loads(request.body)
         allocations = data.get('allocations', [])
+        year = data.get('year')
+        month = data.get('month')
 
         # Debugging: Log the incoming allocations data
         print("Received allocations:", allocations)
@@ -146,24 +183,31 @@ def save_allocations(request):
         with transaction.atomic():
             for allocation in allocations:
                 consultant_id = allocation.get('consultantId')
-                area_id = allocation.get('areaId') if allocation.get('areaId') != 'not-allocated' else None
-                tags = allocation.get('tags', [])
+                area_id = allocation.get('areaId')
 
-                # Fetch the consultant and create/update their allocation
+                # Fetch the consultant object
                 consultant = Consultants.objects.get(id=consultant_id)
 
+                # Fetch the area, set to None if 'not-allocated'
+                area = Area.objects.get(id=area_id) if area_id != 'not-allocated' else None
+
+                # Create or update the Allocation object
                 obj, created = Allocation.objects.update_or_create(
                     consultant=consultant,
-                    defaults={'area_id': area_id}
+                    defaults={'area': area, 'year': year, 'month': month}
                 )
 
-                if tags:
-                    tag_objects = [Tag.objects.get_or_create(name=tag)[0] for tag in tags]
-                    obj.tags.set(tag_objects)
-
+                # Save the Allocation object
                 obj.save()
 
         return JsonResponse({'status': 'success'})
+
+    except Consultants.DoesNotExist:
+        return JsonResponse({'status': 'failed', 'message': 'Consultant does not exist'}, status=400)
+
+    except Area.DoesNotExist:
+        return JsonResponse({'status': 'failed', 'message': 'Area does not exist'}, status=400)
+
     except Exception as e:
         # Log the full error details for easier debugging
         print(f"Error during save_allocations: {str(e)}")
@@ -268,6 +312,9 @@ def get_scs_by_team(request, team_id):
     scs = Consultants.objects.filter(allocation__area_id=team_id)
     sc_data = []
 
+    # Get a list of already allocated stores (across all consultants)
+    allocated_stores = SC_Store_Allocation.objects.values_list('store__store_id', flat=True).distinct()
+
     for sc in scs:
         # Get the store IDs and names allocated to the consultant
         store_allocations = SC_Store_Allocation.objects.filter(consultant=sc)
@@ -281,7 +328,7 @@ def get_scs_by_team(request, team_id):
             "store_names": store_names  # Send store names to frontend
         })
 
-    return JsonResponse({'scs': sc_data})
+    return JsonResponse({'scs': sc_data, 'allocated_stores': list(allocated_stores)})
 
 
 def assign_stores(request):

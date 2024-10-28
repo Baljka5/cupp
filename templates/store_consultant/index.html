@@ -9,22 +9,22 @@
     <div class="content">
         <div class="dropdown-section">
             <div class="dropdown-container">
-                <label for="year-select">YEAR</label>
-                <select id="year-select" name="year">
-                    <option value="2023">2024</option>
-                    <option value="2024">2025</option>
-                    <!-- Additional years as needed -->
-                </select>
-            </div>
-            <div class="dropdown-container">
-                <label for="month-select">MONTH</label>
-                <select id="month-select" name="month">
-                    <option value="jan">JAN</option>
-                    <option value="feb">FEB</option>
-                    <option value="mar">MAR</option>
-                    <!-- Additional months as needed -->
-                </select>
-            </div>
+    <label for="year-select">YEAR</label>
+    <select id="year-select" name="year">
+        {% for year in next_three_years %}
+            <option value="{{ year }}" {% if year == last_year %}selected{% endif %}>{{ year }}</option>
+        {% endfor %}
+    </select>
+</div>
+<div class="dropdown-container">
+    <label for="month-select">MONTH</label>
+    <select id="month-select" name="month">
+        {% for month in months %}
+            <option value="{{ month.value }}" {% if month.value == last_month %}selected{% endif %}>{{ month.name }}</option>
+        {% endfor %}
+    </select>
+</div>
+
         </div>
 
         <div class="teams-container">
@@ -129,6 +129,7 @@
             display: flex;
             flex-direction: column;
             margin: 0 20px;
+
         }
 
         .team-row {
@@ -139,7 +140,7 @@
 
         .team {
             transition: margin-top 0.3s ease;
-            background-color: #813f00;
+
             padding: 10px;
             margin: 10px;
             flex: 1;
@@ -147,6 +148,7 @@
             display: flex;
             flex-direction: column;
             box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
         }
 
         .team-header-container {
@@ -154,21 +156,24 @@
             background-color: #666;
             color: white;
             margin-bottom: 10px;
+            border-radius: 20px;
         }
 
         .team-body-container {
-            background-color: #F4E2D0;
+            {#background-color: #F4E2D0;#}
             padding: 10px;
             width: 100%;
             box-sizing: border-box;
+            border-radius: 6px;
         }
 
         .team-header, .team-body {
             width: 100%;
+            border-radius: 4px;
         }
 
         .team-header {
-            background-color: #ee0505;
+            background-color:#673ab7 ;
             color: white;
             font-weight: bold;
             padding: 10px 0;
@@ -178,21 +183,25 @@
         }
 
         .team-body {
-            background-color: #ff8000;
+            background-color: #cddeef;
             padding: 10px;
-            margin-top: 10px;
+
         }
 
         .sc {
-            background-color: #ffcc99;
+            background-color: #EBEDF3;
             padding: 5px;
             margin: 5px 5px;
+            border-radius: 4px;
         }
 
         .not-allocated-body {
-            background-color: #D1D0CF;
+            {#background-color: #D1D0CF;#}
             padding: 10px;
             margin: 5px;
+            border-radius: 10px;
+            {#transition: margin-top 0.3s ease;#}
+            box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.1);
         }
 
         .not-allocated {
@@ -213,6 +222,7 @@
             color: white;
             border: none;
             cursor: pointer;
+            border-radius: 10px;
         }
 
         .dropdown-section {
@@ -238,10 +248,10 @@
         .dropdown-container label {
             display: block;
             text-align: center;
-            background-color: #666;
+            background-color: #673ab7;
             color: white;
             padding: 5px;
-            border-radius: 4px;
+
             margin-bottom: 5px;
         }
 
@@ -252,6 +262,11 @@
             margin-top: 20px;
             background-color: #f4e2d0;
         }
+
+        select option:disabled {
+    color: #ccc;
+}
+
 
         .team-details.visible {
             display: flex;
@@ -273,14 +288,17 @@
         .detail-store {
             flex: 1;
             padding: 10px;
-            background-color: #ffcc99;
+            background-color: #EBEDF3;
             margin-right: 10px;
+            border-radius: 8px;
         }
 
         .detail-body {
             flex: 2;
             padding: 10px;
-            background-color: #f4e2d0;
+            background-color: #cddeef;
+
+            border-radius: 8px;
         }
 
         .store-not-allocated {
@@ -325,6 +343,21 @@
                 max-height: 90%;
             }
         }
+        .sc-count {
+        display: inline-block;
+        background-color: #4CAF50; /* Green background */
+        color: white;
+        padding: 5px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+        margin-left: 10px;
+        text-align: center;
+        min-width: 40px;
+        min-height: 24px;
+        line-height: 24px;
+    }
+
     </style>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet"/>
@@ -339,6 +372,7 @@
             selectedTeam.classList.add('highlighted');
         }
 
+
 function showTeamDetails(teamId, teamNo, event) {
     event.stopPropagation();
 
@@ -349,19 +383,28 @@ function showTeamDetails(teamId, teamNo, event) {
             const popupText = document.getElementById('popup-text');
             let content = `<h2>Details for Team ${teamNo}</h2>`;
 
+            // Track already allocated stores
+            const allocatedStores = data.allocated_stores || [];
+
             if (data.scs && data.scs.length > 0) {
                 data.scs.forEach(sc => {
+                    const storeCount = sc.store_ids ? sc.store_ids.length : 0; // Count of allocated stores
                     content += `
                         <div class="sc-container">
-                            <div class="detail-store">${sc.name}</div>
+                            <div class="detail-store">
+                                ${sc.name}
+                                <span class="store-count" style="background-color: #4CAF50; color: white; border-radius: 4px; padding: 5px; margin-left: 10px;">
+                                    ${storeCount}
+                                </span>
+                            </div>
                             <div class="detail-body">
-                                <div class="sc" data-consultant-id="${sc.id}">
-                                    Consultant: ${sc.name}
-                                </div>
                                 <select id="id_store_id_${sc.id}" class="form-control store-select" name="store_id[]" multiple="multiple">
                                     <option value="" disabled>------</option>
                                     {% for store_consultant in store_consultants %}
-                                        <option value="{{ store_consultant.store_id }}">{{ store_consultant.store_id }}</option>
+                                        <option value="{{ store_consultant.store_id }}"
+                                            ${allocatedStores.includes('{{ store_consultant.store_id }}') ? 'disabled' : ''}>
+                                            {{ store_consultant.store_id }}
+                                        </option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -375,6 +418,7 @@ function showTeamDetails(teamId, teamNo, event) {
             popupText.innerHTML = content;
             popup.style.display = 'block';
 
+            // Initialize Select2 with allocated stores disabled
             data.scs.forEach(sc => {
                 setTimeout(() => {
                     $(`#id_store_id_${sc.id}`).select2({
@@ -478,7 +522,10 @@ function showTeamDetails(teamId, teamNo, event) {
         }
 
 function saveAllocations() {
+    const year = document.getElementById('year-select').value;
+    const month = document.getElementById('month-select').value;
     const allocations = [];
+
     document.querySelectorAll('.team-body, .not-allocated-body').forEach(area => {
         const areaId = area.getAttribute('data-area-id') || 'not-allocated';
         area.querySelectorAll('.sc').forEach(consultant => {
@@ -495,18 +542,23 @@ function saveAllocations() {
             'Content-Type': 'application/json',
             'X-CSRFToken': getCookie('csrftoken'),
         },
-        body: JSON.stringify({ allocations })
+        body: JSON.stringify({ allocations, year, month })
     })
     .then(response => response.json())
     .then(data => {
         console.log('Success:', data);
         alert('Allocations saved successfully!');
+
+        // Optionally update the dropdowns to show the last saved year and month
+        document.getElementById('year-select').value = year;
+        document.getElementById('month-select').value = month;
     })
     .catch(error => {
         console.error('Error:', error);
         alert('Failed to save the allocations. Please try again.');
     });
 }
+
 
 
 function saveConsultantStores() {
@@ -587,15 +639,38 @@ function saveConsultantStores() {
             return storeAllocations;
         }
 
+        function saveYearMonthAllocation() {
+    const year = document.getElementById('year-select').value;
+    const month = document.getElementById('month-select').value;
+
+    fetch('/save-allocation/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: JSON.stringify({ year, month })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Allocation saved successfully!');
+        } else {
+            alert('Failed to save allocation.');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
 
 
 
         function updateScCounts() {
-            document.querySelectorAll('.team').forEach(team => {
-                const count = team.querySelectorAll('.sc').length;
-                team.querySelector('.sc-count').textContent = ` (${count} SC${count !== 1 ? 's' : ''})`;
-            });
-        }
+    document.querySelectorAll('.team').forEach(team => {
+        const count = team.querySelectorAll('.sc').length;
+        team.querySelector('.sc-count').textContent = count;
+    });
+}
 
         function getCookie(name) {
     let cookieValue = null;
