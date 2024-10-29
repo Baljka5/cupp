@@ -241,6 +241,11 @@ def display_groups(request):
     return render(request, 'point/test.html', {'users': users})
 
 
+def bi_embed(request):
+    users = User.objects.prefetch_related('groups').all()
+    return render(request, 'point/test1.html', {'users': users})
+
+
 # def get_type_name(request):
 #     type_code = request.GET.get('type_code', '')
 #     try:

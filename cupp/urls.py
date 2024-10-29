@@ -52,6 +52,7 @@ urlpatterns = [
     path('custom-login-redirect/', custom_login_redirect, name='custom_login_redirect'),
 
     path('groups/', point_views.display_groups, name='display-groups'),
+    path('bi-embed/', point_views.bi_embed, name='bi-embed'),
     path('', point_views.index, name='event_index'),
     # path('register-license/', license_views.MainTableCreateView, name='register_license'),
 
