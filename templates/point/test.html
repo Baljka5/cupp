@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Users and Groups</title>
+    <title>BI Embed Test</title>
 </head>
 <body>
-    <h1>Users and Their Groups</h1>
-    <ul>
-        {% for user in users %}
-            <li>{{ user.username }} - Groups: {{ user.groups.all|join:", " }}</li>
-        {% endfor %}
-    </ul>
+    <h1>BI Embed Test</h1>
+    <iframe title="CU SALES REPORT 2024" width="1140" height="541.25" src="https://app.powerbi.com/reportEmbed?reportId=19dc2807-72e9-449b-b387-f87b1b289d46&autoAuth=true&ctid=bde68a4a-a9ba-4b1a-97f5-46f3b9f8f8cc"
+frameborder="0" allowFullScreen="true"></iframe>
+
+{#    <ul>#}
+{#        {% for user in users %}#}
+{#            <li>{{ user.username }} - Groups: {{ user.groups.all|join:", " }}</li>#}
+{#        {% endfor %}#}
+{#    </ul>#}
 </body>
 </html>
