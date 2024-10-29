@@ -2,12 +2,31 @@
 <html>
 <head>
     <title>BI Embed Test</title>
+    <style>
+        /* Make iframe responsive */
+        .responsive-iframe-container {
+            position: relative;
+            overflow: hidden;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+        }
+
+        .responsive-iframe-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+    </style>
 </head>
 <body>
 <h1>BI Embed Test</h1>
-<iframe title="CU SALES REPORT 2024" width="1140" height="541.25"
-        src="https://app.powerbi.com/view?r=eyJrIjoiMDYwYWYzMWItNWJlZi00NTg2LWE0OWItNTlmODA5MzY2MzA1IiwidCI6ImJkZTY4YTRhLWE5YmEtNGIxYS05N2Y1LTQ2ZjNiOWY4ZjhjYyIsImMiOjEwfQ%3D%3D%22"
-        frameborder="0" allowFullScreen="true"></iframe>
+<div class="responsive-iframe-container">
+    <iframe title="CU SALES REPORT 2024"
+            src="https://app.powerbi.com/view?r=eyJrIjoiMDYwYWYzMWItNWJlZi00NTg2LWE0OWItNTlmODA5MzY2MzA1IiwidCI6ImJkZTY4YTRhLWE5YmEtNGIxYS05N2Y1LTQ2ZjNiOWY4ZjhjYyIsImMiOjEwfQ%3D%3D&pageName=ReportSection"
+            allowFullScreen="true"></iframe>
+</div>
 
 {#    <ul>#}
 {#        {% for user in users %}#}
