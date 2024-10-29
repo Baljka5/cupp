@@ -33,14 +33,14 @@ from cupp.competitors import views as comp_views
 from cupp.master_api.views import StoreMasterAPI
 from cupp.veritech_api.views import fetch_and_save_employee_data
 from cupp.dispute import views as leg_views
-from cupp.powerBI_api.views import fetch_powerbi_data
+# from cupp.powerBI_api.views import fetch_powerbi_data
 
 # from cupp.ajax_table_list import ajax_table_list
 
 urlpatterns = [
 
     path('save/', fetch_and_save_employee_data, name='save_employee_data'),
-    path('power/', fetch_powerbi_data, name='save_powerbi_data'),
+    # path('power/', fetch_powerbi_data, name='save_powerbi_data'),
 
     path('api/storemaster/', StoreMasterAPI.as_view(), name='storemaster-api'),
 
