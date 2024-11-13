@@ -68,7 +68,8 @@ class StoreConsultant(m.Model):
     tobbacco_yn = m.BooleanField('Утаат тамхины зөвшөөрөлтэй эсэх', blank=True, null=True)
     vape_sell = m.BooleanField('Электрон тамхи зарж буй эсэх', blank=True, null=True)
     out_city_flow = m.BooleanField('Хотоос гарах урсгал эсэх', blank=True, null=True)
-    in_out_flow = m.BooleanField('Хотоос гарах урсгалын салбар бол аль талд нь байрлалтай вэ?', blank=True, null=True)
+    in_out_flow = m.CharField('Хотоос гарах урсгалын салбар бол аль талд нь байрлалтай вэ?', blank=True, null=True,
+                              max_length=50)
     car_park_slot = m.IntegerField('Машины зогсоолтой бол хичнээн машин багтах боломжтой вэ?', blank=True, null=True,
                                    default=0)
     near_bus_station = m.BooleanField('Автобусны буудалтай ойр байршдаг уу?', blank=True, null=True)
@@ -196,7 +197,6 @@ class SC_Store_Allocation(m.Model):
 
     def __str__(self):
         return f"{self.consultant.sc_name} - {self.store.store_id} ({self.store_name})"
-
 
 
 class Allocation(m.Model):

@@ -28,8 +28,9 @@ class StoreConsultantForm(f.ModelForm):
     ]
     OUT_CITY_FLOW = [
         ('', '--------'),
-        (True, 'Орох'),
-        (False, 'Гарах'),
+        ('Орох', 'Орох'),
+        ('Гарах', 'Гарах'),
+        ('Хот дотор', 'Хот дотор'),
     ]
     RENT_TYPE = [
         ('', '--------'),

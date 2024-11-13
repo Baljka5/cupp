@@ -5,7 +5,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.db import transaction
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from cupp.store_consultant.models import Area, Consultants, Allocation, StoreConsultant, Tag, SC_Store_Allocation
 from cupp.store_trainer.models import StoreTrainer
 from django.views.decorators.http import require_POST
@@ -76,6 +76,23 @@ def update(request, id):
         form.save()
         return redirect("/store-index")
     return render(request, 'store_consultant/edit.html', {'model': model})
+
+
+# def update(request, id):
+#     model = get_object_or_404(StoreConsultant, id=id)
+#
+#     if request.method == 'POST':
+#         print(request.POST)
+#         form = StoreConsultantForm(request.POST, instance=model)
+#         if form.is_valid():
+#             form.save()  # Save updated data to the database
+#             return redirect("/store-index")
+#         else:
+#             print(form.errors)  # Log form errors for debugging
+#     else:
+#         form = StoreConsultantForm(instance=model)
+#
+#     return render(request, 'store_consultant/edit.html', {'form': form, 'model': model})
 
 
 def scIndex(request):

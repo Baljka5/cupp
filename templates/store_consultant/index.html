@@ -229,10 +229,11 @@
             display: flex;
             justify-content: start;
             margin-bottom: 20px;
+            {#margin: 0 20px;#}
         }
 
         .dropdown-container {
-            margin-right: 20px;
+            margin: 0 20px;
         }
 
         .dropdown-container select {
@@ -358,6 +359,13 @@
         line-height: 24px;
     }
 
+    .select2-selection__choice {
+        background-color: #673ab7 !important;
+        color: white !important;
+        border-color: #673ab7 !important;
+    }
+
+
     </style>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet"/>
@@ -404,7 +412,9 @@ function showTeamDetails(teamId, teamNo, event) {
                                 <select id="id_store_id_${sc.id}" class="form-control store-select" name="store_id[]" multiple="multiple">
                                     <option value="" disabled>------</option>
                                     {% for store_consultant in store_consultants %}
-                                        <option value="{{ store_consultant.store_id }}"
+                                        <option style=" background-color: #673ab7 !important;
+                                        color: white !important;
+                                        value="{{ store_consultant.store_id }}"
                                             ${allocatedStores.includes('{{ store_consultant.store_id }}') ? 'disabled' : ''}>
                                             {{ store_consultant.store_id }}
                                         </option>
@@ -417,7 +427,12 @@ function showTeamDetails(teamId, teamNo, event) {
                 content += `<p>No consultants assigned</p>`;
             }
 
-            content += `<button id="saveBtn" onclick="saveConsultantStores()">Save</button>`;
+            content += `<button id="saveBtn" style="background-color: #4CAF50; color: white; border-radius: 4px; padding: 5px; margin-left: 10px; padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;" onclick="saveConsultantStores()">Save</button>`;
             popupText.innerHTML = content;
             popup.style.display = 'block';
 

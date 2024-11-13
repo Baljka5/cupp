@@ -116,21 +116,6 @@
                         <input type="text" class="form-control" name="up_frz_ice" id="id_up_frz_ice"
                                value="{{ model.up_frz_ice }}"/>
                     </div>
-                    {#                    <div class="form-group col-md-6">#}
-                    {#                        <label>Өрөлт орсон огноо: </label>#}
-                    {#                        <input type="date" class="form-control" name="displayed_date" id="id_displayed_date"#}
-                    {#                               value="{{ model.displayed_date|date:"Y-m-d" }}"/>#}
-                    {#                    </div>#}
-                    {#                    <div class="form-group col-md-6">#}
-                    {#                        <label>Өрөлт орсон огноо: </label>#}
-                    {#                        <input type="date" class="form-control" name="displayed_date" id="id_displayed_date"#}
-                    {#                               value="{{ model.displayed_date }}"/>#}
-                    {#                    </div>#}
-                    {#                    <div class="form-group col-md-6">#}
-                    {#                        <label>Storabox: </label>#}
-                    {#                        <input type="text" class="form-control" name="ser_storabox" id="id_ser_storabox"#}
-                    {#                               value="{{ model.ser_storabox }}"/>#}
-                    {#                    </div>#}
                     <div class="form-group col-md-6">
                         <label>Storabox: <span class="text-purple">*</span></label>
                         <select name="ser_storabox" id="id_ser_storabox" class="form-control" required>
@@ -147,11 +132,6 @@
                             <option value="False" {% if model.ser_Umoney == False %}selected{% endif %}>Үгүй</option>
                         </select>
                     </div>
-                    {#                    <div class="form-group col-md-6">#}
-                    {#                        <label>Дэлгүүр нээгдсэн цаг: </label>#}
-                    {#                        <input type="time" class="form-control" name="open_time" id="id_open_time"#}
-                    {#                               value="{{ model.open_time }}"/>#}
-                    {#                    </div>#}
                     <div class="form-group col-md-6">
                         <label>Зөөврийн цэнэглэгч түрээс: <span class="text-purple">*</span></label>
                         <select name="ser_pow_bank" id="id_ser_pow_bank" class="form-control" required>
@@ -177,7 +157,7 @@
                         </select>
                     </div>
                     <div class="form-group col-md-6">
-                        <label>Хэвлэлйин үйлчилгээ: <span class="text-purple">*</span></label>
+                        <label>Хэвлэлийн үйлчилгээ: <span class="text-purple">*</span></label>
                         <select name="ser_print" id="id_ser_print" class="form-control" required>
                             <option value="">{{ ser_print }}</option>
                             <option value="True" {% if model.ser_print %}selected{% endif %}>Тийм</option>
@@ -319,8 +299,8 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label>Дэлгүүр хэдэн орж гарах гарц/үүд-тэй вэ?: </label>
-                        <input type="number" class="form-control" name="entrance_qty" id="id_entrance_qty"
-                               value="{{ model.entrance_qty }}"/>
+                        <input type="number" class="form-control" name="entrace_qty" id="id_entrace_qty"
+                               value="{{ model.entrace_qty }}"/>
                     </div>
                     <div class="form-group col-md-6">
                         <label>CU BAR-тай эсэх: <span class="text-purple">*</span></label>
@@ -357,10 +337,10 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label>Орцруу холбогддог эсэх: <span class="text-purple">*</span></label>
-                        <select name="entrance_connection" id="id_entrance_connection" class="form-control" required>
-                            <option value="">{{ entrance_connection }}</option>
-                            <option value="True" {% if model.entrance_connection %}selected{% endif %}>Тийм</option>
-                            <option value="False" {% if model.entrance_connection == False %}selected{% endif %}>Үгүй
+                        <select name="entrace_connection" id="id_entrace_connection" class="form-control" required>
+                            <option value="">{{ entrace_connection }}</option>
+                            <option value="True" {% if model.entrace_connection %}selected{% endif %}>Тийм</option>
+                            <option value="False" {% if model.entrace_connection == False %}selected{% endif %}>Үгүй
                             </option>
                         </select>
                     </div>
@@ -374,7 +354,7 @@
                         </select>
                     </div>
                     <div class="form-group col-md-6">
-                        <label>Архины зөвшөөрөлтэй бол сул, эсүүл чанга аль нь вэ?: <span
+                        <label>Архины зөвшөөрөлтэй бол сул, эсвэл чанга аль нь вэ?: <span
                                 class="text-purple">*</span></label>
                         <select name="alc_type" id="id_alc_type" class="form-control" required>
                             <option value="">{{ alc_type }}</option>
@@ -385,10 +365,10 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label>Утаат тамхины зөвшөөрөлтэй эсэх: <span class="text-purple">*</span></label>
-                        <select name="tobacco_yn" id="id_tobacco_yn" class="form-control" required>
-                            <option value="">{{ tobacco_yn }}</option>
-                            <option value="True" {% if model.tobacco_yn %}selected{% endif %}>Тийм</option>
-                            <option value="False" {% if model.tobacco_yn == False %}selected{% endif %}>Үгүй
+                        <select name="tobbacco_yn" id="id_tobbacco_yn" class="form-control" required>
+                            <option value="">{{ tobbacco_yn }}</option>
+                            <option value="True" {% if model.tobbacco_yn %}selected{% endif %}>Тийм</option>
+                            <option value="False" {% if model.tobbacco_yn == False %}selected{% endif %}>Үгүй
                             </option>
                         </select>
                     </div>
@@ -415,8 +395,11 @@
                                 class="text-purple">*</span></label>
                         <select name="in_out_flow" id="id_in_out_flow" class="form-control" required>
                             <option value="">{{ in_out_flow }}</option>
-                            <option value="True" {% if model.in_out_flow %}selected{% endif %}>Орох</option>
-                            <option value="False" {% if model.in_out_flow == False %}selected{% endif %}>Гарах
+                            <option value="Орох" {% if model.in_out_flow == "Орох" %}selected{% endif %}>Орох</option>
+                            <option value="Гарах" {% if model.in_out_flow == "Гарах" %}selected{% endif %}>Гарах
+                            </option>
+                            <option value="Хот дотор" {% if model.in_out_flow == "Хот дотор" %}selected{% endif %}>Хот
+                                дотор
                             </option>
                         </select>
                     </div>
@@ -445,16 +428,16 @@
                                 class="text-purple">*</span></label>
                         <select name="sub_rent1" id="id_sub_rent1" class="form-control" required>
                             <option value="">{{ sub_rent1 }}</option>
-                            <option value="ATM" {% if model.sub_rent1 %}selected{% endif %}>ATM</option>
-                            <option value="Эмийн сан" {% if model.sub_rent1 == False %}selected{% endif %}>Эмийн сан
+                            <option value="ATM" {% if model.sub_rent1 == "ATM" %}selected{% endif %}>ATM</option>
+                            <option value="Эмийн сан" {% if model.sub_rent1 == "Эмийн сан" %}selected{% endif %}>Эмийн сан
                             </option>
-                            <option value="Stora Box" {% if model.sub_rent1 %}selected{% endif %}>Stora Box</option>
-                            <option value="Хөлдүү зайрмаг" {% if model.sub_rent1 %}selected{% endif %}>Хөлдүү зайрмаг
+                            <option value="Stora Box" {% if model.sub_rent1 == "Stora Box" %}selected{% endif %}>Stora Box</option>
+                            <option value="Хөлдүү зайрмаг" {% if model.sub_rent1 == "Хөлдүү зайрмаг" %}selected{% endif %}>Хөлдүү зайрмаг
                             </option>
-                            <option value="Нүдний шилний газар" {% if model.sub_rent1 %}selected{% endif %}>Нүдний
+                            <option value="Нүдний шилний газар" {% if model.sub_rent1 == "Нүдний шилний газар" %}selected{% endif %}>Нүдний
                                 шилний газар
                             </option>
-                            <option value="Others" {% if model.sub_rent1 %}selected{% endif %}>Orthers</option>
+                            <option value="Others" {% if model.sub_rent1 == "Others" %}selected{% endif %}>Others</option>
                         </select>
                     </div>
                     <div class="form-group col-md-6">
@@ -462,16 +445,16 @@
                                 class="text-purple">*</span></label>
                         <select name="sub_rent2" id="id_sub_rent2" class="form-control" required>
                             <option value="">{{ sub_rent2 }}</option>
-                            <option value="ATM" {% if model.sub_rent2 %}selected{% endif %}>ATM</option>
-                            <option value="Эмийн сан" {% if model.sub_rent2 == False %}selected{% endif %}>Эмийн сан
+                            <option value="ATM" {% if model.sub_rent2 == "ATM" %}selected{% endif %}>ATM</option>
+                            <option value="Эмийн сан" {% if model.sub_rent2 == "Эмийн сан" %}selected{% endif %}>Эмийн сан
                             </option>
-                            <option value="Stora Box" {% if model.sub_rent2 %}selected{% endif %}>Stora Box</option>
-                            <option value="Хөлдүү зайрмаг" {% if model.sub_rent2 %}selected{% endif %}>Хөлдүү зайрмаг
+                            <option value="Stora Box" {% if model.sub_rent2 == "Stora Box" %}selected{% endif %}>Stora Box</option>
+                            <option value="Хөлдүү зайрмаг" {% if model.sub_rent2 == "Хөлдүү зайрмаг" %}selected{% endif %}>Хөлдүү зайрмаг
                             </option>
-                            <option value="Нүдний шилний газар" {% if model.sub_rent2 %}selected{% endif %}>Нүдний
+                            <option value="Нүдний шилний газар" {% if model.sub_rent2 == "Нүдний шилний газар" %}selected{% endif %}>Нүдний
                                 шилний газар
                             </option>
-                            <option value="Others" {% if model.sub_rent2 %}selected{% endif %}>Orthers</option>
+                            <option value="Others" {% if model.sub_rent2 == "Others" %}selected{% endif %}>Others</option>
                         </select>
                     </div>
                     <div class="form-group col-md-6">
@@ -502,7 +485,7 @@
                     <div class="form-group col-md-6">
                         <label>Зөөврийн устай эсэх: <span
                                 class="text-purple">*</span></label>
-                        <select name="garbage_area" id="id_garbage_area" class="form-control" required>
+                        <select name="water_tank" id="id_water_tank" class="form-control" required>
                             <option value="">{{ water_tank }}</option>
                             <option value="True" {% if model.water_tank %}selected{% endif %}>Тийм</option>
                             <option value="False" {% if model.water_tank == False %}selected{% endif %}>Үгүй
@@ -543,7 +526,6 @@
                         wdayHoursInput.value = '07:00:00';
                         wendHoursInput.value = '00:00:00';
                     } else {
-                        // Allow manual entry for 'SPECIFIC'
                         wdayHoursInput.value = '';
                         wendHoursInput.value = '';
                     }
