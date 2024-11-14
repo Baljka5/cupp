@@ -10,7 +10,7 @@
             {{ form.as_p }}
             <div class="row">
                 <div class="col-12">
-                    <h3>Update Details</h3>
+                    <h3>General</h3>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-6">
@@ -39,6 +39,15 @@
                         <label>Дэлгүүрийн зөвлөх: </label>
                         <input type="text" class="form-control" name="sc_name" id="id_sc_name" disabled
                                value="{{ model.sc_name }}"/>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label>Үнийн бодлого: </label>
+                        <input type="text" class="form-control" name="prc_grade" id="id_prc_grade"
+                               value="{{ model.prc_grade }}"/>
+                    </div>
+                    <div class="col-12">
+                        <h3>HR</h3>
                     </div>
                     <div class="form-group col-md-6">
                         <label>Менежерийн тоо: </label>
@@ -81,40 +90,22 @@
                                value="{{ model.wend_hours }}" placeholder="HH:MM:SS" required>
                     </div>
                     <div class="form-group col-md-6">
+                        <label>Дэлгүүрийн менежерийн нэр: </label>
+                        <input type="text" class="form-control" name="sm_name" id="id_sm_name"
+                               value="{{ model.sm_name }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Дэлгүүрийн менежерийн утасны дугаар: </label>
+                        <input type="number" class="form-control" name="sm_phone" id="id_sm_phone"
+                               value="{{ model.sm_phone }}"/>
+                    </div>
+                    <div class="col-12">
+                        <h3>Service</h3>
+                    </div>
+                    <div class="form-group col-md-6">
                         <label>АТМ машин тоо: </label>
                         <input type="text" class="form-control" name="atm" id="id_atm"
                                value="{{ model.atm }}"/>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Хэвтээ хөлдөөгчны тоо /Орос эсвэл Mонгол/: </label>
-                        <input type="text" class="form-control" name="chest_frz_ru" id="cash_chest_frz_ru"
-                               value="{{ model.chest_frz_ru }}"/>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Хэвтээ хөлдөөгчны тоо /Солонгос/: </label>
-                        <input type="text" class="form-control" name="chest_frz_kr" id="id_chest_frz_kr"
-                               value="{{ model.chest_frz_kr }}"/>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Босоо хөлдөөгчны тоо /Солонгос/: </label>
-                        <input type="text" class="form-control" name="up_frz_kr" id="id_up_frz_kr"
-                               value="{{ model.up_frz_kr }}"/>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Baskin robbins ягаан хөлдөөгч: </label>
-                        <input type="text" class="form-control" name="ba_rob_frz" id="id_ba_rob_frz"
-                               value="{{ model.ba_rob_frz }}"/>
-                    </div>
-
-                    <div class="form-group col-md-6">
-                        <label>Босоо хөлдөөгч Сүү: </label>
-                        <input type="text" class="form-control" name="ba_rob_frz" id="id_ba_rob_frz"
-                               value="{{ model.up_frz_suu }}"/>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Босоо хөлдөөгч Icemark: </label>
-                        <input type="text" class="form-control" name="up_frz_ice" id="id_up_frz_ice"
-                               value="{{ model.up_frz_ice }}"/>
                     </div>
                     <div class="form-group col-md-6">
                         <label>Storabox: <span class="text-purple">*</span></label>
@@ -172,6 +163,54 @@
                             <option value="False" {% if model.ser_ticket == False %}selected{% endif %}>Үгүй</option>
                         </select>
                     </div>
+                    <div class="col-12">
+                        <h3>Assets</h3>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Хэвтээ хөлдөөгчны тоо /Орос эсвэл Mонгол/: </label>
+                        <input type="text" class="form-control" name="chest_frz_ru" id="cash_chest_frz_ru"
+                               value="{{ model.chest_frz_ru }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Хэвтээ хөлдөөгчны тоо /Солонгос/: </label>
+                        <input type="text" class="form-control" name="chest_frz_kr" id="id_chest_frz_kr"
+                               value="{{ model.chest_frz_kr }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Босоо хөлдөөгчны тоо /Солонгос/: </label>
+                        <input type="text" class="form-control" name="up_frz_kr" id="id_up_frz_kr"
+                               value="{{ model.up_frz_kr }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Baskin robbins ягаан хөлдөөгч: </label>
+                        <input type="text" class="form-control" name="ba_rob_frz" id="id_ba_rob_frz"
+                               value="{{ model.ba_rob_frz }}"/>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label>Босоо хөлдөөгч Сүү: </label>
+                        <input type="text" class="form-control" name="up_frz_suu" id="id_up_frz_suu"
+                               value="{{ model.up_frz_suu }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Босоо хөлдөөгч Icemark: </label>
+                        <input type="text" class="form-control" name="up_frz_ice" id="id_up_frz_ice"
+                               value="{{ model.up_frz_ice }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Ус ундааны босоо хөргүүрийн хаалганы тоо: </label>
+                        <input type="text" class="form-control" name="walkin_chiller" id="id_walkin_chiller"
+                               value="{{ model.walkin_chiller }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Хоолны хөргүүрийн тоо: </label>
+                        <input type="text" class="form-control" name="lunch_case_L8" id="id_lunch_case_L8"
+                               value="{{ model.lunch_case_L8 }}"/>
+                    </div>
+                    <div class="col-12">
+                        <h3>License</h3>
+                    </div>
+
                     <div class="form-group col-md-6">
                         <label>Архины зөвшөөрөл: </label>
                         <input type="text" class="form-control" name="alc_reason" id="id_alc_reason"
@@ -188,44 +227,154 @@
                                value="{{ model.reason_not_24 }}"/>
                     </div>
                     <div class="form-group col-md-6">
-                        <label>Дэлгүүр хаагдсан огноо: </label>
-                        <input type="date" class="form-control" name="close_date" id="id_close_date"
-                               value="{{ model.close_date|date:"Y-m-d" }}"/>
+                        <label>Архины зөвшөөрөлтэй эсэх: <span class="text-purple">*</span></label>
+                        <select name="alc_lic_yn" id="id_alc_lic_yn" class="form-control" required>
+                            <option value="">{{ alc_lic_yn }}</option>
+                            <option value="True" {% if model.alc_lic_yn %}selected{% endif %}>Тийм</option>
+                            <option value="False" {% if model.alc_lic_yn == False %}selected{% endif %}>Үгүй
+                            </option>
+                        </select>
                     </div>
                     <div class="form-group col-md-6">
-                        <label>Дэлгүүр хаагдсан шалтгаан: </label>
-                        <input type="text" class="form-control" name="close_reason" id="id_close_reason"
-                               value="{{ model.close_reason }}"/>
+                        <label>Архины зөвшөөрөлтэй бол сул, эсвэл чанга аль нь вэ?: <span
+                                class="text-purple">*</span></label>
+                        <select name="alc_type" id="id_alc_type" class="form-control" required>
+                            <option value="">{{ alc_type }}</option>
+                            <option value="True" {% if model.alc_type %}selected{% endif %}>Чанга</option>
+                            <option value="False" {% if model.alc_type == False %}selected{% endif %}>Сул
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Утаат тамхины зөвшөөрөлтэй эсэх: <span class="text-purple">*</span></label>
+                        <select name="tobbacco_yn" id="id_tobbacco_yn" class="form-control" required>
+                            <option value="">{{ tobbacco_yn }}</option>
+                            <option value="True" {% if model.tobbacco_yn %}selected{% endif %}>Тийм</option>
+                            <option value="False" {% if model.tobbacco_yn == False %}selected{% endif %}>Үгүй
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Электрон тамхи зарж буй эсэх: <span class="text-purple">*</span></label>
+                        <select name="vape_sell" id="id_vape_sell" class="form-control" required>
+                            <option value="">{{ vape_sell }}</option>
+                            <option value="True" {% if model.vape_sell %}selected{% endif %}>Тийм</option>
+                            <option value="False" {% if model.vape_sell == False %}selected{% endif %}>Үгүй
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <h3>Competitor</h3>
                     </div>
                     <div class="form-group col-md-6">
                         <label>Ойрхон GS-н тоо: </label>
                         <input type="text" class="form-control" name="near_gs" id="id_near_gs"
                                value="{{ model.near_gs }}"/>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label>Дэлгүүрийн менежерийн нэр: </label>
-                        <input type="text" class="form-control" name="sm_name" id="id_sm_name"
-                               value="{{ model.sm_name }}"/>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Дэлгүүрийн менежерийн утасны дугаар: </label>
-                        <input type="number" class="form-control" name="sm_phone" id="id_sm_phone"
-                               value="{{ model.sm_phone }}"/>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Үнийн бодлого: </label>
-                        <input type="text" class="form-control" name="prc_grade" id="id_prc_grade"
-                               value="{{ model.prc_grade }}"/>
+                    <div class="col-12">
+                        <h3>Channel</h3>
                     </div>
                     <div class="form-group col-md-6">
                         <label>TV дэлгэцийн тоо: </label>
                         <input type="text" class="form-control" name="tv_screen" id="id_tv_screen"
                                value="{{ model.tv_screen }}"/>
                     </div>
+                    <div class="col-12">
+                        <h3>Environment</h3>
+                    </div>
                     <div class="form-group col-md-6">
-                        <label>Ус буцалгагч тоо: </label>
-                        <input type="text" class="form-control" name="hot_water_disp" id="id_hot_water_disp"
-                               value="{{ model.hot_water_disp }}"/>
+                        <label>Хотоос гарах урсгалын салбар бол аль талд нь байрлалтай вэ?: <span
+                                class="text-purple">*</span></label>
+                        <select name="in_out_flow" id="id_in_out_flow" class="form-control" required>
+                            <option value="">{{ in_out_flow }}</option>
+                            <option value="Орох" {% if model.in_out_flow == "Орох" %}selected{% endif %}>Орох</option>
+                            <option value="Гарах" {% if model.in_out_flow == "Гарах" %}selected{% endif %}>Гарах
+                            </option>
+                            <option value="Хот дотор" {% if model.in_out_flow == "Хот дотор" %}selected{% endif %}>Хот
+                                дотор
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Машины зогсоолтой бол хичнээн машин багтах боломжтой вэ?: </label>
+                        <input type="number" class="form-control" name="car_park_slot" id="id_car_park_slot"
+                               value="{{ model.car_park_slot }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Автобусны буудалтай ойр байршдаг уу?: <span
+                                class="text-purple">*</span></label>
+                        <select name="near_bus_station" id="id_near_bus_station" class="form-control" required>
+                            <option value="">{{ near_bus_station }}</option>
+                            <option value="True" {% if model.near_bus_station %}selected{% endif %}>Тийм</option>
+                            <option value="False" {% if model.near_bus_station == False %}selected{% endif %}>Үгүй
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Урсгалд нөлөөлдөг дунд сургуультай эсэх, зай?: </label>
+                        <input type="number" class="form-control" name="high_school_range" id="id_high_school_range"
+                               value="{{ model.high_school_range }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Хотоос гарах урсгал эсэх?: <span class="text-purple">*</span></label>
+                        <select name="out_city_flow" id="id_out_city_flow" class="form-control" required>
+                            <option value="">{{ out_city_flow }}</option>
+                            <option value="True" {% if model.out_city_flow %}selected{% endif %}>Тийм</option>
+                            <option value="False" {% if model.out_city_flow == False %}selected{% endif %}>Үгүй
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <h3>Rent</h3>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Дамжуулдаг түрээсэлдэг төрөл: <span
+                                class="text-purple">*</span></label>
+                        <select name="sub_rent1" id="id_sub_rent1" class="form-control" required>
+                            <option value="">{{ sub_rent1 }}</option>
+                            <option value="ATM" {% if model.sub_rent1 == "ATM" %}selected{% endif %}>ATM</option>
+                            <option value="Эмийн сан" {% if model.sub_rent1 == "Эмийн сан" %}selected{% endif %}>Эмийн
+                                сан
+                            </option>
+                            <option value="Stora Box" {% if model.sub_rent1 == "Stora Box" %}selected{% endif %}>Stora
+                                Box
+                            </option>
+                            <option value="Хөлдүү зайрмаг"
+                                    {% if model.sub_rent1 == "Хөлдүү зайрмаг" %}selected{% endif %}>Хөлдүү зайрмаг
+                            </option>
+                            <option value="Нүдний шилний газар"
+                                    {% if model.sub_rent1 == "Нүдний шилний газар" %}selected{% endif %}>Нүдний
+                                шилний газар
+                            </option>
+                            <option value="Others" {% if model.sub_rent1 == "Others" %}selected{% endif %}>Others
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Дамжуулдаг түрээсэлдэг төрөл2: <span
+                                class="text-purple">*</span></label>
+                        <select name="sub_rent2" id="id_sub_rent2" class="form-control" required>
+                            <option value="">{{ sub_rent2 }}</option>
+                            <option value="ATM" {% if model.sub_rent2 == "ATM" %}selected{% endif %}>ATM</option>
+                            <option value="Эмийн сан" {% if model.sub_rent2 == "Эмийн сан" %}selected{% endif %}>Эмийн
+                                сан
+                            </option>
+                            <option value="Stora Box" {% if model.sub_rent2 == "Stora Box" %}selected{% endif %}>Stora
+                                Box
+                            </option>
+                            <option value="Хөлдүү зайрмаг"
+                                    {% if model.sub_rent2 == "Хөлдүү зайрмаг" %}selected{% endif %}>Хөлдүү зайрмаг
+                            </option>
+                            <option value="Нүдний шилний газар"
+                                    {% if model.sub_rent2 == "Нүдний шилний газар" %}selected{% endif %}>Нүдний
+                                шилний газар
+                            </option>
+                            <option value="Others" {% if model.sub_rent2 == "Others" %}selected{% endif %}>Others
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <h3>Property</h3>
                     </div>
                     <div class="form-group col-md-6">
                         <label>00-н төрөл (Өөрийн, нийтийн): <span class="text-purple">*</span></label>
@@ -234,16 +383,6 @@
                             <option value="True" {% if model.toilet_tp %}selected{% endif %}>Нийтийн</option>
                             <option value="False" {% if model.toilet_tp == False %}selected{% endif %}>Өөрийн</option>
                         </select>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Ус ундааны босоо хөргүүрийн хаалганы тоо: </label>
-                        <input type="text" class="form-control" name="walkin_chiller" id="id_walkin_chiller"
-                               value="{{ model.walkin_chiller }}"/>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Хоолны хөргүүрийн тоо: </label>
-                        <input type="text" class="form-control" name="lunch_case_L8" id="id_lunch_case_L8"
-                               value="{{ model.lunch_case_L8 }}"/>
                     </div>
                     <div class="form-group col-md-6">
                         <label>Дэлгүүр агуулахтай эсэх: <span class="text-purple">*</span></label>
@@ -298,6 +437,26 @@
                                value="{{ model.shelf_list }}"/>
                     </div>
                     <div class="form-group col-md-6">
+                        <label>CU BAR Тоо /Хаалга/: </label>
+                        <input type="number" class="form-control" name="cu_bar_door" id="id_cu_bar_door"
+                               value="{{ model.cu_bar_door }}"/>
+                    </div>
+                    {#                    <div class="form-group col-md-6">#}
+                    {#                        <label>Дэлгүүр хаагдсан огноо: </label>#}
+                    {#                        <input type="date" class="form-control" name="close_date" id="id_close_date"#}
+                    {#                               value="{{ model.close_date|date:"Y-m-d" }}"/>#}
+                    {#                    </div>#}
+                    <div class="form-group col-md-6">
+                        <label>Автобусны буудлын зай: </label>
+                        <input type="number" class="form-control" name="bus_station_range" id="id_bus_station_range"
+                               value="{{ model.bus_station_range }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Урсгалд нөлөөлдөг их сургуультай эсэх, зай?: </label>
+                        <input type="number" class="form-control" name="university_range" id="id_university_range"
+                               value="{{ model.university_range }}"/>
+                    </div>
+                    <div class="form-group col-md-6">
                         <label>Дэлгүүр хэдэн орж гарах гарц/үүд-тэй вэ?: </label>
                         <input type="number" class="form-control" name="entrace_qty" id="id_entrace_qty"
                                value="{{ model.entrace_qty }}"/>
@@ -310,11 +469,6 @@
                             <option value="False" {% if model.cu_bar == False %}selected{% endif %}>Үгүй
                             </option>
                         </select>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>CU BAR Тоо /Хаалга/: </label>
-                        <input type="number" class="form-control" name="cu_bar_door" id="id_cu_bar_door"
-                               value="{{ model.cu_bar_door }}"/>
                     </div>
                     <div class="form-group col-md-6">
                         <label>Дэлгүүрийн үүд шаттай эсэх: <span class="text-purple">*</span></label>
@@ -344,128 +498,8 @@
                             </option>
                         </select>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label>Архины зөвшөөрөлтэй эсэх: <span class="text-purple">*</span></label>
-                        <select name="alc_lic_yn" id="id_alc_lic_yn" class="form-control" required>
-                            <option value="">{{ alc_lic_yn }}</option>
-                            <option value="True" {% if model.alc_lic_yn %}selected{% endif %}>Тийм</option>
-                            <option value="False" {% if model.alc_lic_yn == False %}selected{% endif %}>Үгүй
-                            </option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Архины зөвшөөрөлтэй бол сул, эсвэл чанга аль нь вэ?: <span
-                                class="text-purple">*</span></label>
-                        <select name="alc_type" id="id_alc_type" class="form-control" required>
-                            <option value="">{{ alc_type }}</option>
-                            <option value="True" {% if model.alc_type %}selected{% endif %}>Чанга</option>
-                            <option value="False" {% if model.alc_type == False %}selected{% endif %}>Сул
-                            </option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Утаат тамхины зөвшөөрөлтэй эсэх: <span class="text-purple">*</span></label>
-                        <select name="tobbacco_yn" id="id_tobbacco_yn" class="form-control" required>
-                            <option value="">{{ tobbacco_yn }}</option>
-                            <option value="True" {% if model.tobbacco_yn %}selected{% endif %}>Тийм</option>
-                            <option value="False" {% if model.tobbacco_yn == False %}selected{% endif %}>Үгүй
-                            </option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Электрон тамхи зарж буй эсэх: <span class="text-purple">*</span></label>
-                        <select name="vape_sell" id="id_vape_sell" class="form-control" required>
-                            <option value="">{{ vape_sell }}</option>
-                            <option value="True" {% if model.vape_sell %}selected{% endif %}>Тийм</option>
-                            <option value="False" {% if model.vape_sell == False %}selected{% endif %}>Үгүй
-                            </option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Хотоос гарах урсгал эсэх?: <span class="text-purple">*</span></label>
-                        <select name="out_city_flow" id="id_out_city_flow" class="form-control" required>
-                            <option value="">{{ out_city_flow }}</option>
-                            <option value="True" {% if model.out_city_flow %}selected{% endif %}>Тийм</option>
-                            <option value="False" {% if model.out_city_flow == False %}selected{% endif %}>Үгүй
-                            </option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Хотоос гарах урсгалын салбар бол аль талд нь байрлалтай вэ?: <span
-                                class="text-purple">*</span></label>
-                        <select name="in_out_flow" id="id_in_out_flow" class="form-control" required>
-                            <option value="">{{ in_out_flow }}</option>
-                            <option value="Орох" {% if model.in_out_flow == "Орох" %}selected{% endif %}>Орох</option>
-                            <option value="Гарах" {% if model.in_out_flow == "Гарах" %}selected{% endif %}>Гарах
-                            </option>
-                            <option value="Хот дотор" {% if model.in_out_flow == "Хот дотор" %}selected{% endif %}>Хот
-                                дотор
-                            </option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Машины зогсоолтой бол хичнээн машин багтах боломжтой вэ?: </label>
-                        <input type="number" class="form-control" name="car_park_slot" id="id_car_park_slot"
-                               value="{{ model.car_park_slot }}"/>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Автобусны буудалтай ойр байршдаг уу?: <span
-                                class="text-purple">*</span></label>
-                        <select name="near_bus_station" id="id_near_bus_station" class="form-control" required>
-                            <option value="">{{ near_bus_station }}</option>
-                            <option value="True" {% if model.near_bus_station %}selected{% endif %}>Тийм</option>
-                            <option value="False" {% if model.near_bus_station == False %}selected{% endif %}>Үгүй
-                            </option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Автобусны буудлын зай: </label>
-                        <input type="number" class="form-control" name="bus_station_range" id="id_bus_station_range"
-                               value="{{ model.bus_station_range }}"/>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Дамжуулдаг түрээсэлдэг төрөл: <span
-                                class="text-purple">*</span></label>
-                        <select name="sub_rent1" id="id_sub_rent1" class="form-control" required>
-                            <option value="">{{ sub_rent1 }}</option>
-                            <option value="ATM" {% if model.sub_rent1 == "ATM" %}selected{% endif %}>ATM</option>
-                            <option value="Эмийн сан" {% if model.sub_rent1 == "Эмийн сан" %}selected{% endif %}>Эмийн сан
-                            </option>
-                            <option value="Stora Box" {% if model.sub_rent1 == "Stora Box" %}selected{% endif %}>Stora Box</option>
-                            <option value="Хөлдүү зайрмаг" {% if model.sub_rent1 == "Хөлдүү зайрмаг" %}selected{% endif %}>Хөлдүү зайрмаг
-                            </option>
-                            <option value="Нүдний шилний газар" {% if model.sub_rent1 == "Нүдний шилний газар" %}selected{% endif %}>Нүдний
-                                шилний газар
-                            </option>
-                            <option value="Others" {% if model.sub_rent1 == "Others" %}selected{% endif %}>Others</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Дамжуулдаг түрээсэлдэг төрөл2: <span
-                                class="text-purple">*</span></label>
-                        <select name="sub_rent2" id="id_sub_rent2" class="form-control" required>
-                            <option value="">{{ sub_rent2 }}</option>
-                            <option value="ATM" {% if model.sub_rent2 == "ATM" %}selected{% endif %}>ATM</option>
-                            <option value="Эмийн сан" {% if model.sub_rent2 == "Эмийн сан" %}selected{% endif %}>Эмийн сан
-                            </option>
-                            <option value="Stora Box" {% if model.sub_rent2 == "Stora Box" %}selected{% endif %}>Stora Box</option>
-                            <option value="Хөлдүү зайрмаг" {% if model.sub_rent2 == "Хөлдүү зайрмаг" %}selected{% endif %}>Хөлдүү зайрмаг
-                            </option>
-                            <option value="Нүдний шилний газар" {% if model.sub_rent2 == "Нүдний шилний газар" %}selected{% endif %}>Нүдний
-                                шилний газар
-                            </option>
-                            <option value="Others" {% if model.sub_rent2 == "Others" %}selected{% endif %}>Others</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Урсгалд нөлөөлдөг их сургуультай эсэх, зай?: </label>
-                        <input type="number" class="form-control" name="university_range" id="id_university_range"
-                               value="{{ model.university_range }}"/>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Урсгалд нөлөөлдөг дунд сургуультай эсэх, зай?: </label>
-                        <input type="number" class="form-control" name="high_school_range" id="id_high_school_range"
-                               value="{{ model.high_school_range }}"/>
+                    <div class="col-12">
+                        <h3>Infrastructure</h3>
                     </div>
                     <div class="form-group col-md-6">
                         <label>Тусдаа хогийн цэгтэй эсэх: <span
@@ -492,6 +526,21 @@
                             </option>
                         </select>
                     </div>
+
+
+                    {#                    <div class="form-group col-md-6">#}
+                    {#                        <label>Дэлгүүр хаагдсан шалтгаан: </label>#}
+                    {#                        <input type="text" class="form-control" name="close_reason" id="id_close_reason"#}
+                    {#                               value="{{ model.close_reason }}"/>#}
+                    {#                    </div>#}
+
+
+                    {#                    <div class="form-group col-md-6">#}
+                    {#                        <label>Ус буцалгагч тоо: </label>#}
+                    {#                        <input type="text" class="form-control" name="hot_water_disp" id="id_hot_water_disp"#}
+                    {#                               value="{{ model.hot_water_disp }}"/>#}
+                    {#                    </div>#}
+
 
                 </div>
 
