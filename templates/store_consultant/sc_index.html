@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load event_tags %}
 {% load widget_tweaks %}
+{% load static %}
 
 {% block header %}
 {% endblock %}
@@ -23,17 +24,60 @@
         .flex-item:last-child {
             margin-right: 0;
         }
+
+        .no-image {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .no-image p {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .store-image {
+            max-width: 2000px;
+            max-height: 2000px;
+            width: 100%;
+            height: auto;
+            margin-right: 10px;
+        }
+
+
+        @media (max-width: 968px) {
+            .store-image {
+                max-width: 80%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .store-image {
+                max-width: 100%;
+            }
+        }
     </style>
     <div class="content">
-        <form method="POST" class="post-form" action="{% url 'sc-edit' model.id %}">
+        <form method="POST" class="post-form" action="{% url 'sc-edit' model.id %} ">
             {% csrf_token %}
             {{ form.as_p }}
             <div class="row">
+
                 <div class="col-md-5">
                     <div>
-                        <img src="../../static/images/brands/adwords.png">
+                        {% if store_image %}
+                            <img src="{% static store_image %}" alt="{{ model.store_id }} Image" class="store-image">
+                        {% else %}
+                            <div class="no-image">
+                                <p>Image not available for Store {{ model.store_id }}</p>
+                                <p>Store Name: {{ model.store_name }}</p>
+                                <p>Store ID: {{ model.store_id }}</p>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
+
+
                 <div class="col-md-7">
                     <div class="card shadow-none border-0 m-0">
                         <h5 class="card-title" style="padding: 10px; font-size: 20px;">

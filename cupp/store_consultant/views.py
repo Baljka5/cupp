@@ -1,10 +1,12 @@
 import json
+import os
+import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.db import transaction
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from cupp.store_consultant.models import Area, Consultants, Allocation, StoreConsultant, Tag, SC_Store_Allocation
 from cupp.store_trainer.models import StoreTrainer
@@ -12,31 +14,29 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect
 from cupp.store_consultant.forms import StoreConsultantForm
 from django.views import generic as g
-import datetime
+from django.conf import settings
+from django.templatetags.static import static
 
 
 def index(request):
     store_id_query = request.GET.get('store_id', '')
-    lic_id_nm_query = request.GET.get('lic_id_nm', '')
 
     query = Q()
     if store_id_query:
         query &= Q(store_id__icontains=store_id_query)
-    if lic_id_nm_query:
-        query &= Q(lic_id__lic_id_nm__icontains=lic_id_nm_query)
 
     if request.user.groups.filter(name='SC Director').exists() or request.user.is_superuser:
         models = StoreConsultant.objects.all().order_by('id')
     else:
         models = StoreConsultant.objects.filter(query).distinct().order_by('id')
 
-    # Filtering for users in the "Store Consultant" group
     if request.user.groups.filter(name='Store Consultant').exists():
         models = models.filter(sc_name__icontains=request.user.username)
 
-    # Additional filtering for users in the "Area" group
     if request.user.groups.filter(name='Area').exists():
         models = models.filter(team_mgr__icontains=request.user.username)
+
+    models = StoreConsultant.objects.filter(query)
 
     paginator = Paginator(models, 10)
     page_number = request.GET.get('page')
@@ -51,17 +51,63 @@ def index(request):
     return render(request, "store_consultant/show.html", {
         'page_obj': page_obj,
         'store_id_query': store_id_query,
-        'lic_id_nm_query': lic_id_nm_query,
         'user_name': request.user.username,
         'team_mgr': team_mgr
     })
 
 
 def sc_view(request, id):
-    model = StoreConsultant.objects.get(id=id)
-    st_model = StoreTrainer.objects.get(id=id)
+    try:
+        model = StoreConsultant.objects.get(id=id)
+        st_model = StoreTrainer.objects.get(id=id)
+    except (StoreConsultant.DoesNotExist, StoreTrainer.DoesNotExist):
+        raise Http404("Store not found")
 
-    return render(request, 'store_consultant/sc_index.html', {'model': model, 'st_model': st_model})
+    # Define paths for JPG, PNG, and JPEG images in the static directory
+    jpg_image_path = os.path.join(settings.STATIC_ROOT, 'store', f'{model.store_id}.jpg')
+    png_image_path = os.path.join(settings.STATIC_ROOT, 'store', f'{model.store_id}.png')
+    jpeg_image_path = os.path.join(settings.STATIC_ROOT, 'store', f'{model.store_id}.jpeg')
+
+    # Check if any of the image files exist
+    if os.path.exists(jpg_image_path):
+        store_image = f'store/{model.store_id}.jpg'
+    elif os.path.exists(png_image_path):
+        store_image = f'store/{model.store_id}.png'
+    elif os.path.exists(jpeg_image_path):
+        store_image = f'store/{model.store_id}.jpeg'
+    else:
+        store_image = None
+
+    return render(request, 'store_consultant/sc_index.html', {
+        'model': model,
+        'st_model': st_model,
+        'store_image': store_image,
+    })
+
+
+def store_view(request, id):
+    try:
+        store = StoreConsultant.objects.get(id=id)  # Use `id` to query the store
+    except StoreConsultant.DoesNotExist:
+        raise Http404("Store not found")
+
+    store_name = store.store_name
+
+    jpg_image_path = os.path.join(settings.STATIC_ROOT, 'images', 'stores', f'{store.store_id}.jpg')
+    png_image_path = os.path.join(settings.STATIC_ROOT, 'images', 'stores', f'{store.store_id}.png')
+
+    if os.path.exists(jpg_image_path):
+        store_image = static(f'images/stores/{store.store_id}.jpg')
+    elif os.path.exists(png_image_path):
+        store_image = static(f'images/stores/{store.store_id}.png')
+    else:
+        store_image = None
+
+    return render(request, 'store_consultant/sc_index.html', {
+        'store_image': store_image,
+        'store_id': store.store_id,
+        'store_name': store_name,
+    })
 
 
 def edit(request, id):
