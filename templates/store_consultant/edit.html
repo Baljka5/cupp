@@ -520,33 +520,19 @@
                             </option>
                         </select>
                     </div>
-
-
-                    {#                    <div class="form-group col-md-6">#}
-                    {#                        <label>Дэлгүүр хаагдсан шалтгаан: </label>#}
-                    {#                        <input type="text" class="form-control" name="close_reason" id="id_close_reason"#}
-                    {#                               value="{{ model.close_reason }}"/>#}
-                    {#                    </div>#}
-
-
-                    {#                    <div class="form-group col-md-6">#}
-                    {#                        <label>Ус буцалгагч тоо: </label>#}
-                    {#                        <input type="text" class="form-control" name="hot_water_disp" id="id_hot_water_disp"#}
-                    {#                               value="{{ model.hot_water_disp }}"/>#}
-                    {#                    </div>#}
+                    <div class="col-12">
+                        <h3>Channel</h3>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>TV дэлгэцийн тоо: </label>
+                        <input type="text" class="form-control" name="tv_screen" id="id_tv_screen"
+                               value="{{ model.tv_screen }}"/>
+                    </div>
 
 
                 </div>
-                <div class="col-12">
-                    <h3>Channel</h3>
-                </div>
-                <div class="form-group col-md-6">
-                    <label>TV дэлгэцийн тоо: </label>
-                    <input type="text" class="form-control" name="tv_screen" id="id_tv_screen"
-                           value="{{ model.tv_screen }}"/>
-                </div>
-
-                <div class="card-footer bg-transparent border-top-0 pt-0">
+                <br>
+                <div class="card-footer bg-transparent border-top-0 pt-0" style="margin: 20px">
                     <div align="right">
                         <a href="{% url 'store-index' %}" class="btn btn-link text-purple-300">
                             Cancel
