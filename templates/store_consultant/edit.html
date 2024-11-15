@@ -9,10 +9,11 @@
             {% csrf_token %}
             {{ form.as_p }}
             <div class="row">
-                <div class="col-12">
-                    <h3>General</h3>
-                </div>
+
                 <div class="row">
+                    <div class="col-12">
+                        <h3>General</h3>
+                    </div>
                     <div class="form-group col-md-6">
                         <label>Дугаар: </label>
                         <input type="text" class="form-control" name="id" id="id_id" disabled
@@ -263,22 +264,15 @@
                             </option>
                         </select>
                     </div>
-                    <div class="col-12">
-                        <h3>Competitor</h3>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Ойрхон GS-н тоо: </label>
-                        <input type="text" class="form-control" name="near_gs" id="id_near_gs"
-                               value="{{ model.near_gs }}"/>
-                    </div>
-                    <div class="col-12">
-                        <h3>Channel</h3>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>TV дэлгэцийн тоо: </label>
-                        <input type="text" class="form-control" name="tv_screen" id="id_tv_screen"
-                               value="{{ model.tv_screen }}"/>
-                    </div>
+                    {#                    <div class="col-12">#}
+                    {#                        <h3>Competitor</h3>#}
+                    {#                    </div>#}
+                    {#                    <div class="form-group col-md-6">#}
+                    {#                        <label>Ойрхон GS-н тоо: </label>#}
+                    {#                        <input type="text" class="form-control" name="near_gs" id="id_near_gs"#}
+                    {#                               value="{{ model.near_gs }}"/>#}
+                    {#                    </div>#}
+
                     <div class="col-12">
                         <h3>Environment</h3>
                     </div>
@@ -325,7 +319,7 @@
                         </select>
                     </div>
                     <div class="col-12">
-                        <h3>Rent</h3>
+                        <h3>Sub-Rent</h3>
                     </div>
                     <div class="form-group col-md-6">
                         <label>Дамжуулдаг түрээсэлдэг төрөл: <span
@@ -542,6 +536,14 @@
                     {#                    </div>#}
 
 
+                </div>
+                <div class="col-12">
+                    <h3>Channel</h3>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>TV дэлгэцийн тоо: </label>
+                    <input type="text" class="form-control" name="tv_screen" id="id_tv_screen"
+                           value="{{ model.tv_screen }}"/>
                 </div>
 
                 <div class="card-footer bg-transparent border-top-0 pt-0">

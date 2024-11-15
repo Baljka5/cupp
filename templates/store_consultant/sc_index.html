@@ -427,67 +427,48 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col" style="padding: 10px">
-                        <div class="card shadow-none border-0 m-0">
-                            <h5 class="card-title" style="padding: 10px; font-size: 20px;">
-                                Competitor
-                            </h5>
-                            <div class="card-body">
-                                <div class="row">
-                                    {#                                <div class="form-group col-md-3">#}
-                                    {#                                    <label>500 метр-д байгаа хүнсний дэлгүүрийн тоо: </label>#}
-                                    {#                                    <input type="number" class="form-control" name="near_store" id="id_near_store"#}
-                                    {#                                           readonly#}
-                                    {#                                           value="{{ model.near_store }}"/>#}
-                                    {#                                </div>#}
-                                    <div class="form-group col-md-3">
-                                        <label>Ойрхон GS-н тоо.: </label>
-                                        <input type="text" class="form-control" name="near_gs" id="id_near_gs" readonly
-                                               value="{{ model.near_gs }}"/>
-                                    </div>
-                                    {#                                <div class="form-group col-md-3">#}
-                                    {#                                    <label>Дэлгүүр хаагдсан огноо: </label>#}
-                                    {#                                    <input type="text" class="form-control" name="close_date" id="id_close_date"#}
-                                    {#                                           readonly#}
-                                    {#                                           value="{{ model.close_date|date:"Y-m-d" }}"/>#}
-                                    {#                                </div>#}
-                                    {#                                <div class="form-group col-md-3">#}
-                                    {#                                    <label>Дэлгүүр хаагдсан огноо: </label>#}
-                                    {#                                    <input type="date" class="form-control" name="close_date" id="id_close_date"#}
-                                    {#                                           readonly#}
-                                    {#                                           value="{{ model.close_date }}"/>#}
-                                    {#                                </div>#}
-                                    {#                                <div class="form-group col-md-3">#}
-                                    {#                                    <label>Дэлгүүр хаагдсан шалтгаан: </label>#}
-                                    {#                                    <input type="text" class="form-control" name="close_reason" id="id_close_reason"#}
-                                    {#                                           readonly#}
-                                    {#                                           value="{{ model.close_reason }}"/>#}
-                                    {#                                </div>#}
-                                </div>
+                    {#                    <div class="col" style="padding: 10px">#}
+                    {#                        <div class="card shadow-none border-0 m-0">#}
+                    {#                            <h5 class="card-title" style="padding: 10px; font-size: 20px;">#}
+                    {#                                Competitor#}
+                    {#                            </h5>#}
+                    {#                            <div class="card-body">#}
+                    {#                                <div class="row">#}
+                    {#                                <div class="form-group col-md-3">#}
+                    {#                                    <label>500 метр-д байгаа хүнсний дэлгүүрийн тоо: </label>#}
+                    {#                                    <input type="number" class="form-control" name="near_store" id="id_near_store"#}
+                    {#                                           readonly#}
+                    {#                                           value="{{ model.near_store }}"/>#}
+                    {#                                </div>#}
+                    {#                                    <div class="form-group col-md-3">#}
+                    {#                                        <label>Ойрхон GS-н тоо.: </label>#}
+                    {#                                        <input type="text" class="form-control" name="near_gs" id="id_near_gs" readonly#}
+                    {#                                               value="{{ model.near_gs }}"/>#}
+                    {#                                    </div>#}
+                    {#                                <div class="form-group col-md-3">#}
+                    {#                                    <label>Дэлгүүр хаагдсан огноо: </label>#}
+                    {#                                    <input type="text" class="form-control" name="close_date" id="id_close_date"#}
+                    {#                                           readonly#}
+                    {#                                           value="{{ model.close_date|date:"Y-m-d" }}"/>#}
+                    {#                                </div>#}
+                    {#                                <div class="form-group col-md-3">#}
+                    {#                                    <label>Дэлгүүр хаагдсан огноо: </label>#}
+                    {#                                    <input type="date" class="form-control" name="close_date" id="id_close_date"#}
+                    {#                                           readonly#}
+                    {#                                           value="{{ model.close_date }}"/>#}
+                    {#                                </div>#}
+                    {#                                <div class="form-group col-md-3">#}
+                    {#                                    <label>Дэлгүүр хаагдсан шалтгаан: </label>#}
+                    {#                                    <input type="text" class="form-control" name="close_reason" id="id_close_reason"#}
+                    {#                                           readonly#}
+                    {#                                           value="{{ model.close_reason }}"/>#}
+                    {#                                </div>#}
+                    {#                                </div>#}
+                    {##}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {#                    </div>#}
 
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card shadow-none border-0 m-0">
-
-                            <h5 class="card-title" style="padding: 10px; font-size: 20px;">
-                                Channel
-                            </h5>
-                            <div class="card-body">
-                                <div class="row">
-
-
-                                    <div class="form-group col-md-3">
-                                        <label>TV дэлгэцийн тоо: </label>
-                                        <input type="text" class="form-control" name="tv_screen" id="id_tv_screen"
-                                               readonly
-                                               value="{{ model.tv_screen }}"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="col" style="padding: 10px">
                         <div class="card shadow-none border-0 m-0">
                             <h5 class="card-title" style="padding: 10px; font-size: 20px;">
@@ -576,7 +557,7 @@
                     <div class="col">
                         <div class="card shadow-none border-0 m-0">
                             <h5 class="card-title" style="padding: 10px; font-size: 20px;">
-                                Rent
+                                Sub-Rent
                             </h5>
                             <div class="card-body">
                                 <div class="row">
@@ -843,6 +824,27 @@
                                                 Гарах
                                             </option>
                                         </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card shadow-none border-0 m-0">
+
+                                    <h5 class="card-title" style="padding: 10px; font-size: 20px;">
+                                        Channel
+                                    </h5>
+                                    <div class="card-body">
+                                        <div class="row">
+
+
+                                            <div class="form-group col-md-3">
+                                                <label>TV дэлгэцийн тоо: </label>
+                                                <input type="text" class="form-control" name="tv_screen"
+                                                       id="id_tv_screen"
+                                                       readonly
+                                                       value="{{ model.tv_screen }}"/>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
