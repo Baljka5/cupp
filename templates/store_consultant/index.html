@@ -9,22 +9,25 @@
     <div class="content">
         <div class="dropdown-section">
             <div class="dropdown-container">
-    <label for="year-select">YEAR</label>
-    <select id="year-select" name="year">
-        {% for year in next_three_years %}
-            <option value="{{ year }}" {% if year == last_year %}selected{% endif %}>{{ year }}</option>
-        {% endfor %}
-    </select>
-</div>
-<div class="dropdown-container">
-    <label for="month-select">MONTH</label>
-    <select id="month-select" name="month">
-        {% for month in months %}
-            <option value="{{ month.value }}" {% if month.value == last_month %}selected{% endif %}>{{ month.name }}</option>
-        {% endfor %}
-    </select>
-</div>
+                <div class="year-select">YEAR</div>
+                <select id="year-select" name="year">
+                    {% for year in next_three_years %}
+                        <option value="{{ year }}" {% if year == last_year %}selected{% endif %}>{{ year }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="dropdown-container">
+                <div class="month-select">MONTH</div>
+                <select id="month-select" name="month">
+                    {% for month in months %}
+                        <option value="{{ month.value }}" {% if month.value == last_month %}selected{% endif %}>{{ month.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
 
+        <div class="title">
+            <p>Team Allocation</p>
         </div>
 
         <div class="teams-container">
@@ -35,6 +38,11 @@
                             <div class="team-header"
                                  onclick="showTeamDetails('{{ area.id }}', '{{ area.team_no }}', event)">
                                 {{ area.team_no }}<span class="sc-count"></span>
+                            </div>
+                            <div class="team-manager">
+                                {% load static %}
+                                <img src="{% static 'images/user.png' %}" alt="user">
+                                <div class="name">{{ area.team_man_name }}</div class="name">
                             </div>
                         </div>
                         <div class="team-body-container">
@@ -50,36 +58,25 @@
                 <div class="popup-content">
                     <span class="close-btn" onclick="closePopup()">&times;</span>
                     <p id="popup-text">Team Details Go Here</p>
-
                 </div>
             </div>
             <div class="store-allocation-body" id="store-allocation" ondrop="drop(event)" ondragover="allowDrop(event)"
                  data-area-id="store-allocation">
                 <div class="store-allocation">
-                    <h2>SC Allocation (Not Allocated)</h2>
+                    <h2>Unallocated Store consultants</h2>
                 </div>
             </div>
+
             <div class="not-allocated-body" id="not-allocated" ondrop="drop(event)" ondragover="allowDrop(event)" data-area-id="not-allocated">
-    <div class="not-allocated">
-        {% for consultant in consultants %}
-            <div class="sc" id="sc{{ consultant.id }}" draggable="true" ondragstart="drag(event)" data-consultant-id="{{ consultant.id }}">
-                {{ consultant.sc_name }}
+                <div class="not-allocated">
+                {% for consultant in consultants %}
+                    <div class="sc" id="sc{{ consultant.id }}" draggable="true" ondragstart="drag(event)" data-consultant-id="{{ consultant.id }}">
+                        {{ consultant.sc_name }}
+                    </div>
+                {% endfor %}
+                </div>
             </div>
-        {% endfor %}
-    </div>
-</div>
-{#            <div class="not-allocated-body" id="not-allocated" ondrop="drop(event)" ondragover="allowDrop(event)"#}
-{#                 data-area-id="not-allocated">#}
-{##}
-{#                <div class="not-allocated">#}
-{#                    {% for consultant in consultants %}#}
-{#                        <div class="sc" id="sc{{ consultant.id }}" draggable="true" ondragstart="drag(event)"#}
-{#                             data-consultant-id="{{ consultant.id }}">#}
-{#                            {{ consultant.sc_name }}#}
-{#                        </div>#}
-{#                    {% endfor %}#}
-{#                </div>#}
-{#            </div>#}
+
             <div class="save-close-container">
                 <button id="saveCloseBtn" onclick="saveAllocations()">SAVE & CLOSE</button>
             </div>
@@ -128,8 +125,7 @@
         .teams-container {
             display: flex;
             flex-direction: column;
-            margin: 0 20px;
-
+            margin: 0 1rem;
         }
 
         .team-row {
@@ -140,7 +136,6 @@
 
         .team {
             transition: margin-top 0.3s ease;
-
             padding: 10px;
             margin: 10px;
             flex: 1;
@@ -153,23 +148,13 @@
 
         .team-header-container {
             width: 100%;
-            background-color: #666;
             color: white;
             margin-bottom: 10px;
-            border-radius: 20px;
-        }
-
-        .team-body-container {
-            {#background-color: #F4E2D0;#}
-            padding: 10px;
-            width: 100%;
-            box-sizing: border-box;
-            border-radius: 6px;
+            cursor: pointer;
         }
 
         .team-header, .team-body {
             width: 100%;
-            border-radius: 4px;
         }
 
         .team-header {
@@ -180,12 +165,42 @@
             text-align: center;
             width: 100%;
             box-sizing: border-box;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .team-manager {
+            background-color: darkcyan;
+            display: flex;
+            align-items: center;
+            border-radius: 0 0 4px 4px;
+            height: 0;
+            overflow: hidden;
+            transition: height 0.3s ease;
+        }
+        
+        .team-header-container:hover .team-manager {
+            height: 40px;
+            padding: 5px 10px;
+        }
+
+        .team-manager img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .team-manager .name {
+            margin-left: 10px;
+        }
+        
+        .team-body-container {
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .team-body {
             background-color: #cddeef;
             padding: 10px;
-
+            border-radius: 4px;
         }
 
         .sc {
@@ -196,11 +211,9 @@
         }
 
         .not-allocated-body {
-            {#background-color: #D1D0CF;#}
             padding: 10px;
             margin: 5px;
             border-radius: 10px;
-            {#transition: margin-top 0.3s ease;#}
             box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.1);
         }
 
@@ -227,13 +240,11 @@
 
         .dropdown-section {
             display: flex;
-            justify-content: start;
-            margin-bottom: 20px;
-            {#margin: 0 20px;#}
+            margin: 0 1rem;
         }
 
         .dropdown-container {
-            margin: 0 20px;
+            margin: 0 10px;
         }
 
         .dropdown-container select {
@@ -246,14 +257,23 @@
             background-color: #f8f8f8;
         }
 
-        .dropdown-container label {
+        .year-select, .month-select {
             display: block;
             text-align: center;
             background-color: #673ab7;
             color: white;
             padding: 5px;
-
+            border-radius: 4px;
             margin-bottom: 5px;
+        }
+
+        .title {
+            font-size: 20px;
+            margin-top: 1rem;
+            margin-left: 1rem;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
         }
 
         .team-details {
@@ -265,9 +285,8 @@
         }
 
         select option:disabled {
-    color: #ccc;
-}
-
+            color: #ccc;
+        }
 
         .team-details.visible {
             display: flex;
@@ -277,13 +296,10 @@
             background-color: #f4e2d0;
         }
 
-        .sc-detail, .stores-detail {
-        }
-
         .sc-container {
             display: flex;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         .detail-store {
@@ -292,6 +308,9 @@
             background-color: #EBEDF3;
             margin-right: 10px;
             border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .detail-body {
@@ -345,19 +364,19 @@
             }
         }
         .sc-count {
-        display: inline-block;
-        background-color: #4CAF50; /* Green background */
-        color: white;
-        padding: 5px;
-        border-radius: 4px;
-        font-size: 12px;
-        font-weight: bold;
-        margin-left: 10px;
-        text-align: center;
-        min-width: 40px;
-        min-height: 24px;
-        line-height: 24px;
-    }
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 5px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+            text-align: center;
+            min-width: 40px;
+            min-height: 24px;
+            line-height: 24px;
+        }
 
     .select2-selection__choice {
         background-color: #673ab7 !important;
@@ -379,112 +398,112 @@
             const selectedTeam = document.getElementById(`team-${teamId}`);
             selectedTeam.classList.add('highlighted');
         }
-
-
-function showTeamDetails(teamId, teamNo, event) {
-    event.stopPropagation();
-
-    fetch(`/get-scs-by-team/${teamId}/`)
-        .then(response => response.json())
-        .then(data => {
-            const popup = document.getElementById('popup');
-            const popupText = document.getElementById('popup-text');
-            let content = `<h2>Details for Team ${teamNo}</h2>`;
-
-            // Track already allocated stores
-            const allocatedStores = data.allocated_stores || [];
-
-            if (data.scs && data.scs.length > 0) {
-                data.scs.forEach(sc => {
-                    const storeCount = sc.store_ids ? sc.store_ids.length : 0; // Count of allocated stores
-                    content += `
-                        <div class="sc-container">
-                            <div class="detail-store sc" data-consultant-id="${sc.id}">
-                                ${sc.name}
-                                <span class="store-count" style="background-color: #4CAF50; color: white; border-radius: 4px; padding: 5px; margin-left: 10px;">
-                                    ${storeCount}
-                                </span>
-                            </div>
-                            <div class="detail-body">
-                             {#<div class="sc" data-consultant-id="${sc.id}">#}
-                             {#       ${sc.name}#}
-                             {#   </div>#}
-                                <select id="id_store_id_${sc.id}" class="form-control store-select" name="store_id[]" multiple="multiple">
-                                    <option value="" disabled>------</option>
-                                    {% for store_consultant in store_consultants %}
-                                        <option style=" background-color: #673ab7 !important;
-                                        color: white !important;
-                                        value="{{ store_consultant.store_id }}"
-                                            ${allocatedStores.includes('{{ store_consultant.store_id }}') ? 'disabled' : ''}>
-                                            {{ store_consultant.store_id }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>`;
-                });
-            } else {
-                content += `<p>No consultants assigned</p>`;
-            }
-
-            content += `<button id="saveBtn" style="background-color: #4CAF50; color: white; border-radius: 4px; padding: 5px; margin-left: 10px; padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 10px;" onclick="saveConsultantStores()">Save</button>`;
-            popupText.innerHTML = content;
-            popup.style.display = 'block';
-
-            // Initialize Select2 with allocated stores disabled
-            data.scs.forEach(sc => {
-                setTimeout(() => {
-                    $(`#id_store_id_${sc.id}`).select2({
-                        width: '100%',
-                        placeholder: "Select Store IDs",
-                        allowClear: true,
-                        tags: true
+        
+        
+        function showTeamDetails(teamId, teamNo, event) {
+            event.stopPropagation();
+        
+            fetch(`/get-scs-by-team/${teamId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    const popup = document.getElementById('popup');
+                    const popupText = document.getElementById('popup-text');
+                    let content = `<h2>STORE ALLOCATION OF ${teamNo}</h2>`;
+        
+                    // Track already allocated stores
+                    const allocatedStores = data.allocated_stores || [];
+        
+                    if (data.scs && data.scs.length > 0) {
+                        data.scs.forEach(sc => {
+                            const storeCount = sc.store_ids ? sc.store_ids.length : 0;
+                            content += `
+                                    <div class="sc-container">
+                                        <div class="detail-store sc" data-consultant-id="${sc.id}">
+                                            ${sc.name}
+                                            <span class="store-count" style="background-color: #4CAF50; color: white; border-radius: 4px; padding: 5px; margin-left: 10px;">
+                                                ${storeCount}
+                                            </span>
+                                        </div>
+                                        <div class="detail-body">
+                                        {#<div class="sc" data-consultant-id="${sc.id}">#}
+                                        {#       ${sc.name}#}
+                                        {#   </div>#}
+                                            <select id="id_store_id_${sc.id}" class="form-control store-select" name="store_id[]" multiple="multiple">
+                                                <option value="" disabled>------</option>
+                                                {% for store_consultant in store_consultants %}
+                                                    <option style=" background-color: #673ab7 !important;
+                                                    color: white !important;
+                                                    value="{{ store_consultant.store_id }}"
+                                                        ${allocatedStores.includes('{{ store_consultant.store_id }}') ? 'disabled' : ''}>
+                                                        {{ store_consultant.store_id }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>`;
+                        });
+                    } else {
+                        content += `<p>No consultants assigned</p>`;
+                    }
+        
+                    content += `<button id="saveBtn" style="background-color: #4CAF50; color: white; border-radius: 4px; padding: 5px; margin-left: 10px; padding: 10px 20px;
+                        background-color: #4CAF50;
+                        color: white;
+                        border: none;
+                        cursor: pointer;
+                        border-radius: 10px;" onclick="saveConsultantStores()">Save</button>`;
+                    popupText.innerHTML = content;
+                    popup.style.display = 'block';
+        
+                    // Initialize Select2 with allocated stores disabled
+                    data.scs.forEach(sc => {
+                        setTimeout(() => {
+                            $(`#id_store_id_${sc.id}`).select2({
+                                width: '100%',
+                                placeholder: "Select Store IDs",
+                                allowClear: true,
+                                tags: true
+                            });
+        
+                            // Pre-select the previously saved store IDs
+                            const savedStoreIds = sc.store_ids; // Store IDs returned from the server
+                            $(`#id_store_id_${sc.id}`).val(savedStoreIds).trigger('change'); // Pre-select the values
+                        }, 100); // Delay to ensure the element is available
                     });
-
-                    // Pre-select the previously saved store IDs
-                    const savedStoreIds = sc.store_ids;  // Store IDs returned from the server
-                    $(`#id_store_id_${sc.id}`).val(savedStoreIds).trigger('change');  // Pre-select the values
-                }, 100);  // Delay to ensure the element is available
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching SC details:', error);
-            alert('Failed to load SC details. Please try again.');
-        });
-}
-
-
+                })
+                .catch(error => {
+                    console.error('Error fetching SC details:', error);
+                    alert('Failed to load SC details. Please try again.');
+                });
+        }
+        
+        
         function closePopup() {
             document.getElementById('popup').style.display = 'none';
         }
-
-        window.onclick = function (event) {
+        
+        window.onclick = function(event) {
             const popup = document.getElementById('popup');
             if (event.target == popup) {
                 popup.style.display = 'none';
             }
         }
-
+        
         document.querySelectorAll('.team').forEach(team => {
-            team.addEventListener('click', function () {
+            team.addEventListener('click', function() {
                 showTeamDetails(this.dataset.teamId);
             });
         });
-
-        document.addEventListener('DOMContentLoaded', function () {
+        
+        document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.team').forEach(team => {
-                team.addEventListener('click', function () {
+                team.addEventListener('click', function() {
                     showTeamDetails(this.dataset.areaId);
                 });
                 fetchAllocationsAndRender().then(updateScCounts);
             });
         });
-
+        
         function fetchAllocationsAndRender() {
             return fetch('/get-allocations/')
                 .then(response => response.json())
@@ -497,19 +516,19 @@ function showTeamDetails(teamId, teamNo, event) {
                             targetContainer.appendChild(consultantElement);
                         }
                     });
-                    updateScCounts();  // Update counts after fetching and rendering
+                    updateScCounts();
                 })
                 .catch(error => console.error('Error fetching allocations:', error));
         }
-
+        
         function allowDrop(event) {
             event.preventDefault();
         }
-
+        
         function drag(event) {
             event.dataTransfer.setData("text", event.target.id);
         }
-
+        
         function drop(event) {
             event.preventDefault();
             const data = event.dataTransfer.getData("text");
@@ -520,11 +539,11 @@ function showTeamDetails(teamId, teamNo, event) {
             }
             if (target) {
                 target.appendChild(consultantElement);
-                updateScCounts();  // Update counts after dropping an SC
+                updateScCounts();
                 saveCurrentStateToLocal();
             }
         }
-
+        
         function saveCurrentStateToLocal() {
             const allocations = [];
             document.querySelectorAll('.team-body, .not-allocated-body').forEach(area => {
@@ -538,110 +557,113 @@ function showTeamDetails(teamId, teamNo, event) {
             });
             localStorage.setItem('allocations', JSON.stringify(allocations));
         }
-
-function saveAllocations() {
-    const year = document.getElementById('year-select').value;
-    const month = document.getElementById('month-select').value;
-    const allocations = [];
-
-    document.querySelectorAll('.team-body, .not-allocated-body').forEach(area => {
-        const areaId = area.getAttribute('data-area-id') || 'not-allocated';
-        area.querySelectorAll('.sc').forEach(consultant => {
-            allocations.push({
-                consultantId: consultant.getAttribute('data-consultant-id'),
-                areaId: areaId
+        
+        function saveAllocations() {
+            const year = document.getElementById('year-select').value;
+            const month = document.getElementById('month-select').value;
+            const allocations = [];
+        
+            document.querySelectorAll('.team-body, .not-allocated-body').forEach(area => {
+                const areaId = area.getAttribute('data-area-id') || 'not-allocated';
+                area.querySelectorAll('.sc').forEach(consultant => {
+                    allocations.push({
+                        consultantId: consultant.getAttribute('data-consultant-id'),
+                        areaId: areaId
+                    });
+                });
             });
-        });
-    });
-
-    fetch('/save-allocations/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken'),
-        },
-        body: JSON.stringify({ allocations, year, month })
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-        alert('Allocations saved successfully!');
-
-        // Optionally update the dropdowns to show the last saved year and month
-        document.getElementById('year-select').value = year;
-        document.getElementById('month-select').value = month;
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Failed to save the allocations. Please try again.');
-    });
-}
-
-
-
-function saveConsultantStores() {
-    console.log('Save button clicked!');
-
-    const storeAllocations = [];
-    document.querySelectorAll('.sc-container').forEach(container => {
-
-
-        const scElement = container.querySelector('.sc');
-        const storeSelect = container.querySelector('.store-select');
-
-        console.log('Found scElement:', scElement);
-        console.log('Found storeSelect:', storeSelect);
-
-        if (!scElement) {
-            console.error('Missing .sc element in container:', container);
-        } else if (!storeSelect) {
-            console.error('Missing .store-select element in container:', container);
-        } else {
-            const scId = scElement.dataset.consultantId;
-            const storeIds = Array.from(storeSelect.selectedOptions).map(opt => opt.value);
-
-            console.log(`Consultant ID: ${scId}`);
-            console.log(`Store IDs: ${storeIds}`);
-
-            storeAllocations.push({
-                consultantId: scId,
-                storeIds: storeIds
+        
+            fetch('/save-allocations/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                    body: JSON.stringify({
+                        allocations,
+                        year,
+                        month
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                    alert('Allocations saved successfully!');
+        
+                    document.getElementById('year-select').value = year;
+                    document.getElementById('month-select').value = month;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to save the allocations. Please try again.');
+                });
+        }
+        
+        function saveConsultantStores() {
+            console.log('Save button clicked!');
+        
+            const storeAllocations = [];
+            document.querySelectorAll('.sc-container').forEach(container => {
+        
+        
+                const scElement = container.querySelector('.sc');
+                const storeSelect = container.querySelector('.store-select');
+        
+                console.log('Found scElement:', scElement);
+                console.log('Found storeSelect:', storeSelect);
+        
+                if (!scElement) {
+                    console.error('Missing .sc element in container:', container);
+                } else if (!storeSelect) {
+                    console.error('Missing .store-select element in container:', container);
+                } else {
+                    const scId = scElement.dataset.consultantId;
+                    const storeIds = Array.from(storeSelect.selectedOptions).map(opt => opt.value);
+        
+                    console.log(`Consultant ID: ${scId}`);
+                    console.log(`Store IDs: ${storeIds}`);
+        
+                    storeAllocations.push({
+                        consultantId: scId,
+                        storeIds: storeIds
+                    });
+                }
             });
+        
+            if (storeAllocations.length === 0) {
+                console.error('No valid store allocations to save.');
+                alert('No valid store allocations to save.');
+                return;
+            }
+        
+            console.log('Store allocations to save:', storeAllocations);
+        
+            fetch('/save-consultant-stores/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                    body: JSON.stringify({
+                        storeAllocations
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Server response:', data);
+                    if (data.results.every(res => res.status === 'success')) {
+                        alert('Store allocations saved successfully!');
+                    } else {
+                        alert('Failed to save store allocations.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during fetch:', error);
+                    alert('Failed to save the store allocations. Please try again.');
+                });
         }
-    });
-
-    if (storeAllocations.length === 0) {
-        console.error('No valid store allocations to save.');
-        alert('No valid store allocations to save.');
-        return;
-    }
-
-    console.log('Store allocations to save:', storeAllocations);
-
-    fetch('/save-consultant-stores/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken'),
-        },
-        body: JSON.stringify({ storeAllocations })
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Server response:', data);
-        if (data.results.every(res => res.status === 'success')) {
-            alert('Store allocations saved successfully!');
-        } else {
-            alert('Failed to save store allocations.');
-        }
-    })
-    .catch(error => {
-        console.error('Error during fetch:', error);
-        alert('Failed to save the store allocations. Please try again.');
-    });
-}
-
-
+        
+        
         function gatherStoreAllocations() {
             const storeAllocations = [];
             document.querySelectorAll('.allocation-form').forEach(form => {
@@ -656,55 +678,58 @@ function saveConsultantStores() {
             });
             return storeAllocations;
         }
-
+        
         function saveYearMonthAllocation() {
-    const year = document.getElementById('year-select').value;
-    const month = document.getElementById('month-select').value;
-
-    fetch('/save-allocation/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken'),
-        },
-        body: JSON.stringify({ year, month })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
-            alert('Allocation saved successfully!');
-        } else {
-            alert('Failed to save allocation.');
+            const year = document.getElementById('year-select').value;
+            const month = document.getElementById('month-select').value;
+        
+            fetch('/save-allocation/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                    body: JSON.stringify({
+                        year,
+                        month
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert('Allocation saved successfully!');
+                    } else {
+                        alert('Failed to save allocation.');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         }
-    })
-    .catch(error => console.error('Error:', error));
-}
-
-
-
-
+        
+        
+        
+        
         function updateScCounts() {
-    document.querySelectorAll('.team').forEach(team => {
-        const count = team.querySelectorAll('.sc').length;
-        team.querySelector('.sc-count').textContent = count;
-    });
-}
-
-        function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
+            document.querySelectorAll('.team').forEach(team => {
+                const count = team.querySelectorAll('.sc').length;
+                team.querySelector('.sc-count').textContent = count;
+            });
         }
-    }
-    return cookieValue;
-}
-
+        
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
         function hideSelectedOptions() {
             const selectedOptions = [];
             document.querySelectorAll('.store-select').forEach(select => {
@@ -712,7 +737,7 @@ function saveConsultantStores() {
                     selectedOptions.push($(this).val());
                 });
             });
-
+        
             document.querySelectorAll('.store-select').forEach(select => {
                 $(select).find('option').each(function() {
                     if (selectedOptions.includes($(this).val())) {
@@ -722,13 +747,13 @@ function saveConsultantStores() {
                     }
                 });
             });
-
+        
             document.querySelectorAll('.store-select').forEach(select => {
                 $(select).select2();
             });
         }
-
-        $(document).ready(function () {
+        
+        $(document).ready(function() {
             $('.store-select').select2({
                 width: '100%',
                 placeholder: "Select Store IDs",

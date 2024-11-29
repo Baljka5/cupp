@@ -142,9 +142,12 @@ def update(request, id):
 
 
 def scIndex(request):
+    import datetime
+
     current_year = datetime.datetime.now().year
+    current_month_index = datetime.datetime.now().month - 1  # Zero-based index
     next_three_years = [current_year + i for i in range(3)]
-    months = [
+    all_months = [
         {'value': 'jan', 'name': 'January'},
         {'value': 'feb', 'name': 'February'},
         {'value': 'mar', 'name': 'March'},
@@ -158,13 +161,13 @@ def scIndex(request):
         {'value': 'nov', 'name': 'November'},
         {'value': 'dec', 'name': 'December'},
     ]
+    # Keep only the remaining months of the current year
+    months = all_months[current_month_index:]
 
-    # Fetch the last saved allocation's year and month
     last_allocation = Allocation.objects.order_by('-created_date').first()
     last_year = last_allocation.year if last_allocation else current_year
     last_month = last_allocation.month if last_allocation else 'jan'
 
-    # Fetch areas, consultants, and store consultants
     areas = Area.objects.all()
     consultants = Consultants.objects.all()
     store_consultants = StoreConsultant.objects.all()
@@ -175,8 +178,8 @@ def scIndex(request):
         'store_consultants': store_consultants,
         'next_three_years': next_three_years,
         'months': months,
-        'last_year': last_year,  # Pass the last saved year to the template
-        'last_month': last_month,  # Pass the last saved month to the template
+        'last_year': last_year,
+        'last_month': last_month,
     }
 
     return render(request, 'store_consultant/index.html', context)

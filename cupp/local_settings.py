@@ -1,5 +1,5 @@
-DB_HOST = '10.10.90.34'
+DB_HOST = '10.10.90.237'
 DB_NAME = 'cupp'
-DB_USER = 'cumongol_remote'
-DB_PASSWORD = 'Change_123&'
+DB_USER = 'cupp_test'
+DB_PASSWORD = 'Change_123'
 DEBUG = True

@@ -15,3 +15,5 @@ bin/
 .env/
 .vscode/
 .store/
+.prettierrc
+.prettierignore
