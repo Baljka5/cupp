@@ -1,4 +1,5 @@
 {% load event_tags %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,6 +18,13 @@
     <link href="/static/css/colors.min.css" rel="stylesheet" type="text/css">
     <link href="/static/css/custom.css" rel="stylesheet" type="text/css">
     <!-- /stylesheets -->
+
+    {#    <link href="/static/style/style.css" rel="stylesheet" type="text/css">#}
+    {#    <script src="/static/style/script.js"></script>#}
+    {#    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet"/>#}
+    {#    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>#}
+    {#    <link rel="stylesheet" href="{% static 'style/styles.css' %}">#}
+    {#    <script src="{% static 'style/script.js' %}"></script>#}
 
     <!-- Core JS files -->
     <script src="/static/js/main/jquery.min.js"></script>
@@ -39,6 +47,38 @@
     <script src="/static/js/app.js"></script>
     <script src="/static/js/custom.js"></script>
     <!-- /theme JS files -->
+
+    <style>
+        /* Full-screen overlay */
+        #loading-spinner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+            z-index: 9999; /* High z-index to overlay everything */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* The spinner */
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(0, 0, 0, 0.1);
+            border-top-color: #333;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 </head>
 
 <body class="navbar-top">
@@ -54,6 +94,7 @@
             {% is_in_area_group as user_in_area_group %}
             {% is_in_sc_direct_group as user_in_sc_direct_group %}
             {% is_in_st_manager_group as user_in_st_manager_group %}
+            {% is_in_planning_manager as user_in_planning_manager_group %}
             {% if user.is_superuser %}
                 <a href="{% url 'map' %}" class="d-inline-block">
                     <img src="/static/images/logo.png" alt="xbook logo">
@@ -76,6 +117,10 @@
                 </a>
             {% elif user_in_store_consultant_group or user_in_area_group or user_in_sc_direct_group %}
                 <a href="{% url 'store-index' %}" class="d-inline-block">
+                    <img src="/static/images/logo.png" alt="xbook logo">
+                </a>
+            {% elif user_in_planning_manager_group %}
+                <a href="{% url 'sc-index' %}" class="d-inline-block">
                     <img src="/static/images/logo.png" alt="xbook logo">
                 </a>
             {% else %}
@@ -195,12 +240,15 @@
                             <span>Settings</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="{% url 'sc-index' %}" class="navbar-nav-link">
-                            <i class="icon-database-edit2 mr-1"></i>
-                            <span>SC & Store Allocation</span>
-                        </a>
-                    </li>
+                    {% is_in_planning_manager as user_in_planning_manager_group %}
+                    {% if user_in_store_planner_group %}
+                        <li class="nav-item">
+                            <a href="{% url 'sc-index' %}" class="navbar-nav-link">
+                                <i class="icon-database-edit2 mr-1"></i>
+                                <span>SC & Store Allocation</span>
+                            </a>
+                        </li>
+                    {% endif %}
                 {% endif %}
                 <li class="nav-item">
                     <a href="{% url 'password_change' %}" class="navbar-nav-link">
@@ -217,7 +265,36 @@
             </ul>
         {% endif %}
     </div>
+    <div id="loading-spinner" style="display: none;">
+        <div class="spinner"></div>
+    </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const spinner = document.getElementById('loading-spinner');
+
+        // Show spinner when navigating to a new page
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', (event) => {
+                if (link.href && link.target !== '_blank') {
+                    spinner.style.display = 'flex';
+                }
+            });
+        });
+
+        // Show spinner on form submission
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', () => {
+                spinner.style.display = 'flex';
+            });
+        });
+
+        // Hide spinner once the page has fully loaded
+        window.addEventListener('load', () => {
+            spinner.style.display = 'none';
+        });
+    });
+</script>
 <!-- /main navbar -->
 
 <!-- Page content -->
