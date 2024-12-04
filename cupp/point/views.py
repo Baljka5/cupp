@@ -142,8 +142,13 @@ class AjaxInfo(GroupMixin, StorePlannerMixin, g.DetailView):
 
 class Detail(LoginRequiredMixin, g.DetailView):
     model = Point
-
     template_name = 'point/detail.html'
+
+
+def sp_data(request, point):
+    model = StorePlanning.objects.get(point=point)
+    print(model)
+    return render(request, 'point/detail.html', {'model': model})
 
 
 class AjaxList(LoginRequiredMixin, g.ListView):
@@ -287,5 +292,7 @@ def custom_login_redirect(request):
         return redirect('/store-index/')
     elif request.user.groups.filter(name='ST Manager').exists():
         return redirect('/st-index/')
+    elif request.user.groups.filter(name='planning_manager').exists():
+        return redirect('/sc-index/')
     else:
         return redirect('/default-redirect/')

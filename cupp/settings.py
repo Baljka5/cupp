@@ -25,10 +25,16 @@ def get_local(attr_name, default_value=None):
     return default_value
 
 
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '9#t_q7u0jrtfbah!5h-e^krp)+gyv^yx8y+wlhdq7tz(!)6@(='
 
+# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = get_local('DEBUG', False)
 
 ALLOWED_HOSTS = ['*']
@@ -36,6 +42,8 @@ ALLOWED_HOSTS = ['*']
 ADMINS = [
     ('Sansarbayar', 'sansarbayar.s@gmail.com'),
 ]
+
+# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -74,6 +82,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'cupp.common.middleware.OneSessionPerUserMiddleware',
     'cupp.common.middleware.AutoLogout'
 ]
 
@@ -182,10 +191,6 @@ DATETIME_INPUT_FORMATS = [
 
 # Logging
 
-log_dir = os.path.join(BASE_DIR, '.store')
-if not os.path.exists(log_dir):
-    os.makedirs(log_dir)
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -203,15 +208,15 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(log_dir, 'main.log'),  # Ensure the directory exists
+            'filename': os.path.join(BASE_DIR, '.store', 'main.log'),
             'formatter': 'simple',
-            'encoding': 'utf8',
+            'encoding': 'utf8'
         },
         'console': {
             'level': 'DEBUG',
             'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
-            'formatter': 'simple',
+            'formatter': 'simple'
         },
         'mail_admins': {
             'level': 'ERROR',
